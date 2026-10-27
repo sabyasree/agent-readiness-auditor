@@ -34,6 +34,10 @@ Status per check: 95 and above passes, 70–94 is a warning, below 70 is failing
 
 Overall grade: 90+ Agent-ready, 75–89 Mostly ready, 50–74 Needs work, below 50 Hard for agents.
 
+## Export
+
+The **Export** menu copies or downloads the report as Markdown or JSON. **Copy report as prompt** copies the failing and warning checks as a task for a coding agent (Claude Code, Cursor, Copilot and others): a goal, a checklist, and a locate → fix → test → verify loop the agent repeats until every issue is fixed and covered by a test. Paste it into the agent running in the site's repository.
+
 The checks are heuristics. They find likely problems quickly; confirming with a real agent run is still the final test.
 
 ## Permissions

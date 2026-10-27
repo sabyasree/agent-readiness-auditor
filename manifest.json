@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Agent-Readiness Auditor",
   "short_name": "Agent Audit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "See how well AI agents can read and operate any web page, with a score and specific fixes.",
   "minimum_chrome_version": "116",
   "icons": {
