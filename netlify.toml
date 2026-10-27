@@ -1,0 +1,3 @@
+# Netlify: publish only the website folder, not the extension source.
+[build]
+  publish = "site"
