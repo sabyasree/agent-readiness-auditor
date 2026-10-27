@@ -83,7 +83,7 @@ icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
 netlify.toml           Netlify settings: publishes site/ only
 store/                 Chrome Web Store description and 1280×800 screenshots; not part of the extension zip
-site/                  Static website (privacy-policy.html) deployed to Netlify; not part of the extension zip
+site/                  Static website (index.html homepage, privacy-policy.html) deployed to Netlify; not part of the extension zip
 ```
 
 The engine (`content/auditor.js`) has no dependencies and exposes `window.__ARA.run()`, which returns a plain JSON report. That makes it easy to reuse later in a CLI, a crawler or a CI step (for example with Playwright: inject the file, call `window.__ARA.run()`, fail the build below a threshold).
