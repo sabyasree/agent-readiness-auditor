@@ -82,7 +82,8 @@ sidepanel/panel.js     UI: running audits, rendering, highlighting, export
 icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
 netlify.toml           Netlify settings: publishes site/ only
-site/                  Static website (privacy-policy.html) deployed to Netlify; not part of the extension zip
+store/                 Chrome Web Store description and 1280×800 screenshots; not part of the extension zip
+site/                  Static website (index.html homepage, privacy-policy.html) deployed to Netlify; not part of the extension zip
 ```
 
 The engine (`content/auditor.js`) has no dependencies and exposes `window.__ARA.run()`, which returns a plain JSON report. That makes it easy to reuse later in a CLI, a crawler or a CI step (for example with Playwright: inject the file, call `window.__ARA.run()`, fail the build below a threshold).
@@ -114,7 +115,7 @@ Add an object to the `CHECKS` array in `content/auditor.js`:
 ## Publishing to the Chrome Web Store
 
 1. Bump `version` in `manifest.json`.
-2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x 'site/*' -x netlify.toml`.
+2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x 'site/*' -x netlify.toml -x 'store/*'`.
 3. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), create a new item and upload the zip.
 4. Listing assets you'll need: at least one 1280×800 screenshot of the side panel next to a page, a 440×280 small promo tile, and the 128 px icon from `icons/`.
 5. Privacy tab: single purpose is "Audit web pages for AI-agent usability". Justify each permission using the table above. Declare that no user data is collected, and link to the hosted privacy policy (`site/privacy-policy.html`, deployed to Netlify).
