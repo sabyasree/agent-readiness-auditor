@@ -1,17 +1,21 @@
 /*
  * Agent-Readiness Auditor: audit engine.
  * Injected on demand into the active tab. Runs entirely inside the page;
- * the only network requests are to /llms.txt and /robots.txt on the page's own origin.
+ * the only network requests go to the page's own origin: the page URL itself
+ * (to compare the server HTML with the rendered page, and to ask for Markdown),
+ * /llms.txt, /robots.txt, /sitemap.xml and a few /.well-known/ discovery files.
  */
 (() => {
   'use strict';
 
-  const VERSION = '1.0.0';
+  const VERSION = '1.2.0';
   if (window.__ARA && window.__ARA.version === VERSION) return;
 
   const FINDING_CAP = 50;
   const SCAN_CAP = 15000;
   const FETCH_TIMEOUT_MS = 4000;
+  const VIEW_CAP = 4000;
+  const VIEW_SCAN_CAP = 40000;
 
   const CATEGORIES = [
     { id: 'semantics', name: 'Real controls', weight: 20,
@@ -26,8 +30,12 @@
       description: 'Agents and automations re-find elements by their attributes. Generated class names and IDs change with every build.' },
     { id: 'structure', name: 'Page structure', weight: 12,
       description: 'Titles, landmarks and headings give agents a map of the page, and a lean DOM keeps it readable.' },
+    { id: 'safety', name: 'Agent safety', weight: 6,
+      description: 'Hidden text that tries to give agents instructions. Agents may follow it, or flag the whole site as unsafe.' },
     { id: 'signals', name: 'Machine-readable signals', weight: 6,
       description: 'Metadata, structured data and site files that tell agents what the page is about.' },
+    { id: 'protocols', name: 'Agent protocols', weight: 0, scored: false,
+      description: 'Newer standards that let agents discover Markdown, APIs and tools. Few sites publish them and few agents read them yet, so they’re shown for information and don’t affect the score.' },
   ];
 
   // ---------------------------------------------------------------- helpers
@@ -231,21 +239,114 @@
 
   function role(el) { return (el.getAttribute('role') || '').trim().toLowerCase().split(/\s+/)[0]; }
 
-  async function fetchText(path) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
-    try {
-      const res = await fetch(location.origin + path, {
-        signal: ctrl.signal, credentials: 'omit', cache: 'no-store', redirect: 'follow',
-      });
-      if (!res.ok) return { found: false, status: res.status };
-      const type = res.headers.get('content-type') || '';
-      const text = (await res.text()).slice(0, 200000);
-      if (/text\/html/i.test(type) || /^\s*</.test(text)) return { found: false, status: res.status, html: true };
-      return { found: true, text };
-    } finally {
-      clearTimeout(timer);
+  const pageUrl = () => location.href.split('#')[0];
+
+  // One request per URL and Accept header per run, shared between checks.
+  const fetchCache = new Map();
+  function fetchRes(url, { accept = '', credentials = 'omit', timeout = FETCH_TIMEOUT_MS, max = 200000 } = {}) {
+    const key = `${url}|${accept}|${credentials}`;
+    if (!fetchCache.has(key)) {
+      fetchCache.set(key, (async () => {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), timeout);
+        try {
+          const res = await fetch(url, {
+            signal: ctrl.signal, credentials, cache: 'no-store', redirect: 'follow',
+            headers: accept ? { Accept: accept } : undefined,
+          });
+          const text = (await res.text()).slice(0, max);
+          return {
+            ok: res.ok, status: res.status, text,
+            type: res.headers.get('content-type') || '',
+            link: res.headers.get('link') || '',
+          };
+        } finally {
+          clearTimeout(timer);
+        }
+      })());
     }
+    return fetchCache.get(key);
+  }
+
+  async function fetchText(path) {
+    const r = await fetchRes(location.origin + path);
+    if (!r.ok) return { found: false, status: r.status };
+    if (/text\/html/i.test(r.type) || /^\s*</.test(r.text)) return { found: false, status: r.status, html: true };
+    return { found: true, text: r.text };
+  }
+
+  /** A JSON file at `path`, or null. Sites that answer every URL with their HTML app shell don't count. */
+  async function fetchJson(path) {
+    let r;
+    try { r = await fetchRes(location.origin + path); } catch { return null; }
+    if (!r.ok || /text\/html/i.test(r.type) || !/^\s*[[{]/.test(r.text)) return null;
+    try { return { data: JSON.parse(r.text) }; } catch { return { invalid: true }; }
+  }
+
+  /** Text content a no-JavaScript reader would get, skipping scripts and styles. */
+  function textOf(root, live) {
+    if (!root) return '';
+    const skip = live ? 'script, style, template, noscript, [data-agent-readiness-highlight]' : 'script, style, template';
+    const parts = [];
+    const walker = root.ownerDocument.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+      if (t.parentElement && !t.parentElement.closest(skip)) parts.push(t.data);
+    }
+    return parts.join(' ');
+  }
+  const wordCount = (t) => (t.match(/[\p{L}\p{N}]+/gu) || []).length;
+  const squashText = (t) => norm(t).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+
+  /** Buffered layout-shift entries since the page loaded, or null if unsupported. */
+  function layoutShifts() {
+    return new Promise((resolve) => {
+      if (!window.PerformanceObserver || !(PerformanceObserver.supportedEntryTypes || []).includes('layout-shift')) return resolve(null);
+      const list = [];
+      let po;
+      try {
+        po = new PerformanceObserver((l) => list.push(...l.getEntries()));
+        po.observe({ type: 'layout-shift', buffered: true });
+      } catch { return resolve(null); }
+      setTimeout(() => {
+        try { list.push(...po.takeRecords()); po.disconnect(); } catch { /* ignore */ }
+        resolve(list);
+      }, 150);
+    });
+  }
+
+  // Wording typical of prompt injection: overriding instructions, or addressing the AI directly.
+  const INJECTION = [
+    /\b(ignore|disregard|forget|override)\b[^.\n]{0,40}\b(previous|prior|above|earlier|all|any|your|other)\b[^.\n]{0,30}\b(instructions?|prompts?|rules|directions|guidelines|context)\b/i,
+    /\b(you are|you're|act as|pretend to be|role-?play as)\s+(an?\s+)?(ai|artificial intelligence|assistant|language model|llm|chatbot|agent|gpt|chatgpt|claude|gemini)\b/i,
+    /\b(note|message|instructions?|attention)\s+(to|for)\s+(the\s+)?(ai|llms?|language models?|assistants?|agents?|chatgpt|claude|gemini|bots?)\b/i,
+    /\b(if|when)\s+(you are|you're)\s+an?\s+(ai|llm|language model|assistant|agent|bot)\b/i,
+    /\b(ai|llm|language model|ai assistant|ai agent|chatgpt|claude|gemini)s?\s*[,:]\s*(you\s+)?(must|should|need to|do not|don't|never|always|instead)\b/i,
+    /\b(system prompt|developer message|new instructions|hidden instructions)\b/i,
+    /<\|?(im_start|im_end|endoftext)\|?>|\[\/?INST\]|<<SYS>>/i,
+    /\b(reveal|print|repeat)\s+(your|the)\s+(system\s+)?(prompt|instructions)\b/i,
+  ];
+
+  /** How an element's text is hidden from people, or '' if they can see it. */
+  function hiddenHow(el) {
+    if (!rendered(el)) return 'Hidden text';
+    const cs = getComputedStyle(el);
+    if (parseFloat(cs.opacity) === 0 || (typeof el.checkVisibility === 'function' && !el.checkVisibility({ opacityProperty: true }))) return 'Transparent text';
+    if (parseFloat(cs.fontSize) < 3) return 'Tiny text';
+    const rgba = (c) => (c.match(/[\d.]+/g) || []).map(Number);
+    const fg = rgba(cs.color);
+    if (fg.length === 4 && fg[3] === 0) return 'Transparent text';
+    const r = el.getBoundingClientRect();
+    if (r.width <= 1 || r.height <= 1 || /rect\(0(px)?,? 0(px)?,? 0(px)?,? 0(px)?\)|inset\(50%\)/.test(cs.clip + cs.clipPath)) return 'Visually hidden text';
+    const docW = document.documentElement.scrollWidth;
+    if (r.right < 0 || r.bottom < -window.scrollY || r.left > docW) return 'Text positioned off-screen';
+    for (let a = el; a; a = a.parentElement) {
+      const bg = rgba(getComputedStyle(a).backgroundColor);
+      if (bg.length === 3 || (bg.length === 4 && bg[3] > 0.9)) {
+        if (fg.slice(0, 3).every((v, i) => Math.abs(v - bg[i]) < 12)) return 'Text the same color as its background';
+        break;
+      }
+    }
+    return '';
   }
 
   // ------------------------------------------------------------- page scan
@@ -303,6 +404,199 @@
       }
     }
     return ctx;
+  }
+
+  // ------------------------------------------------------------- agent view
+
+  const ARIA_ROLES = new Set(('alert alertdialog application article banner blockquote button caption cell ' +
+    'checkbox code columnheader combobox comment complementary contentinfo definition deletion dialog directory ' +
+    'document emphasis feed figure form generic grid gridcell group heading img image insertion link list listbox ' +
+    'listitem log main mark marquee math menu menubar menuitem menuitemcheckbox menuitemradio meter navigation none ' +
+    'note option paragraph presentation progressbar radio radiogroup region row rowgroup rowheader scrollbar search ' +
+    'searchbox separator slider spinbutton status strong subscript suggestion superscript switch tab table tablist ' +
+    'tabpanel term textbox time timer toolbar tooltip tree treegrid treeitem').split(' '));
+  const validRole = (r) => ARIA_ROLES.has(r) || /^(doc|graphics)-[a-z]+$/.test(r);
+
+  // Roles an agent reads as one item: the name says it all, so children aren't listed.
+  const LEAF_ROLES = new Set(['link', 'button', 'heading', 'checkbox', 'radio', 'switch', 'tab', 'menuitem',
+    'menuitemcheckbox', 'menuitemradio', 'option', 'treeitem', 'textbox', 'searchbox', 'combobox', 'spinbutton',
+    'slider', 'img', 'image', 'progressbar', 'meter', 'separator', 'iframe']);
+  const CONTAINER_ROLES = new Set(['banner', 'navigation', 'main', 'complementary', 'contentinfo', 'search', 'form',
+    'region', 'dialog', 'alertdialog', 'list', 'listitem', 'table', 'row', 'cell', 'gridcell', 'columnheader',
+    'rowheader', 'group', 'radiogroup', 'tablist', 'tabpanel', 'menu', 'menubar', 'toolbar', 'tree', 'grid',
+    'treegrid', 'listbox', 'paragraph', 'article', 'figure', 'alert', 'status', 'blockquote', 'note', 'feed', 'log']);
+  const NEEDS_NAME = new Set([...CONTROL_ROLES, ...FIELD_ROLES, 'img', 'image', 'iframe', 'dialog', 'alertdialog']);
+  const SECTIONING = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+
+  function explicitName(el) {
+    const lb = el.getAttribute('aria-labelledby');
+    return (lb && textFromIds(lb)) || norm(el.getAttribute('aria-label'));
+  }
+
+  function implicitRole(el) {
+    const t = el.tagName;
+    switch (t) {
+      case 'A': case 'AREA': return el.hasAttribute('href') ? 'link' : '';
+      case 'BUTTON': case 'SUMMARY': return 'button';
+      case 'INPUT': {
+        const type = (el.getAttribute('type') || 'text').toLowerCase();
+        const map = { button: 'button', submit: 'button', reset: 'button', image: 'button', file: 'button',
+          color: 'button', checkbox: 'checkbox', radio: 'radio', range: 'slider', number: 'spinbutton', hidden: '' };
+        if (type in map) return map[type];
+        if (el.hasAttribute('list')) return 'combobox';
+        return type === 'search' ? 'searchbox' : 'textbox';
+      }
+      case 'SELECT': return el.multiple || el.size > 1 ? 'listbox' : 'combobox';
+      case 'TEXTAREA': return 'textbox';
+      case 'OPTION': return 'option';
+      case 'H1': case 'H2': case 'H3': case 'H4': case 'H5': case 'H6': return 'heading';
+      case 'IMG': return el.getAttribute('alt') === '' ? '' : 'img';
+      case 'NAV': return 'navigation';
+      case 'MAIN': return 'main';
+      case 'ASIDE': return 'complementary';
+      case 'HEADER': return el.parentElement && el.parentElement.closest(SECTIONING) ? '' : 'banner';
+      case 'FOOTER': return el.parentElement && el.parentElement.closest(SECTIONING) ? '' : 'contentinfo';
+      case 'FORM': return explicitName(el) ? 'form' : '';
+      case 'SECTION': return explicitName(el) ? 'region' : '';
+      case 'SEARCH': return 'search';
+      case 'ARTICLE': return 'article';
+      case 'UL': case 'OL': case 'MENU': return 'list';
+      case 'LI': return 'listitem';
+      case 'TABLE': return 'table';
+      case 'TR': return 'row';
+      case 'TD': return 'cell';
+      case 'TH': return 'columnheader';
+      case 'DIALOG': return 'dialog';
+      case 'P': return 'paragraph';
+      case 'IFRAME': return 'iframe';
+      case 'HR': return 'separator';
+      case 'FIELDSET': case 'DETAILS': return 'group';
+      case 'FIGURE': return 'figure';
+      case 'BLOCKQUOTE': return 'blockquote';
+      case 'PROGRESS': return 'progressbar';
+      case 'METER': return 'meter';
+      default: return '';
+    }
+  }
+
+  const FOCUSABLE_SEL = 'a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), ' +
+    'select:not([disabled]), textarea:not([disabled]), summary, iframe, [contenteditable=""], [contenteditable="true"], ' +
+    '[tabindex]:not([tabindex^="-"])';
+
+  function computedRole(el) {
+    const explicit = (el.getAttribute('role') || '').trim().toLowerCase().split(/\s+/).find(validRole);
+    if (explicit && explicit !== 'none' && explicit !== 'presentation' && explicit !== 'generic') return explicit;
+    // Focusable elements ignore role="none", as browsers do.
+    if (explicit && !el.matches(FOCUSABLE_SEL)) return '';
+    if (el.tagName === 'svg' || el instanceof SVGElement) {
+      return el.tagName === 'svg' && (el.getAttribute('aria-label') || el.querySelector(':scope > title')) ? 'img' : '';
+    }
+    return implicitRole(el);
+  }
+
+  /** Rendered and in the accessibility tree. display: contents has no box but its children do. */
+  function rendered(el) {
+    if (typeof el.checkVisibility === 'function') {
+      if (el.checkVisibility({ visibilityProperty: true })) return true;
+      return getComputedStyle(el).display === 'contents';
+    }
+    const cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden';
+  }
+
+  function stateProps(el, r) {
+    const p = [];
+    const aria = (n) => el.getAttribute(`aria-${n}`);
+    if (r === 'heading') p.push(`level=${/^H[1-6]$/.test(el.tagName) ? el.tagName[1] : Number(aria('level')) || 2}`);
+    if (['checkbox', 'radio', 'switch', 'menuitemcheckbox', 'menuitemradio'].includes(r)) {
+      const c = el.tagName === 'INPUT' ? (el.indeterminate ? 'mixed' : String(el.checked)) : aria('checked');
+      if (c === 'true') p.push('checked'); else if (c === 'mixed') p.push('checked=mixed');
+    }
+    if (aria('expanded') === 'true' || aria('expanded') === 'false') p.push(`expanded=${aria('expanded')}`);
+    if (aria('pressed') === 'true') p.push('pressed');
+    if (aria('selected') === 'true') p.push('selected');
+    if (el.disabled || aria('disabled') === 'true') p.push('disabled');
+    if (el.required || aria('required') === 'true') p.push('required');
+    return p.join(', ');
+  }
+
+  /**
+   * A text snapshot of the accessibility tree, close to what agents built on
+   * Playwright or CDP read: landmarks and lists as containers, controls and
+   * headings as named leaves, and the text between them.
+   */
+  function buildAgentView() {
+    const nodes = [];
+    let chars = 0;
+    let truncated = false;
+    let visited = 0;
+    let unnamed = 0;
+    let mainAt = null;
+    let h1At = null;
+    let pending = '';
+    let pendingDepth = 0;
+
+    const add = (n) => {
+      n.w = n.role.length + n.name.length + (n.props ? n.props.length + 3 : 0) + n.d * 2 + 6;
+      chars += n.w;
+      if (n.name.length > 160) n.name = n.name.slice(0, 159) + '…';
+      if (nodes.length < VIEW_CAP) nodes.push(n); else truncated = true;
+    };
+    const flush = () => {
+      const t = norm(pending);
+      pending = '';
+      if (t) add({ d: pendingDepth, role: 'text', name: t });
+    };
+    const kids = (el) => {
+      if (el.shadowRoot) return el.shadowRoot.childNodes;
+      if (el.tagName === 'SLOT') {
+        const assigned = el.assignedNodes({ flatten: true });
+        return assigned.length ? assigned : el.childNodes;
+      }
+      return el.childNodes;
+    };
+
+    const walk = (node, d) => {
+      if (visited++ > VIEW_SCAN_CAP) { truncated = true; return; }
+      if (node.nodeType === 3) {
+        if (!pending.trim()) pendingDepth = d;
+        pending += node.data;
+        return;
+      }
+      if (node.nodeType !== 1) return;
+      const el = node;
+      if (SKIP_TAGS.has(el.tagName) || el.hasAttribute('data-agent-readiness-highlight')) return;
+      if (el.getAttribute('aria-hidden') === 'true' || el.hasAttribute('inert')) return;
+      if (!rendered(el)) return;
+      const r = computedRole(el);
+      if (LEAF_ROLES.has(r)) {
+        flush();
+        const name = r === 'separator' ? '' : accName(el);
+        if (r === 'heading' && h1At == null && el.tagName === 'H1') h1At = chars;
+        const flag = NEEDS_NAME.has(r) && !name ? 'unnamed' : '';
+        if (flag) unnamed++;
+        add({ d, role: r, name, props: stateProps(el, r), ref: refs.push(el) - 1, flag });
+        return;
+      }
+      if (CONTAINER_ROLES.has(r)) {
+        flush();
+        if (r === 'main' && mainAt == null) mainAt = chars;
+        const name = explicitName(el);
+        const flag = NEEDS_NAME.has(r) && !name ? 'unnamed' : '';
+        add({ d, role: r, name, props: r === 'listbox' ? stateProps(el, r) : '', ref: refs.push(el) - 1, flag });
+        for (const k of kids(el)) walk(k, d + 1);
+        flush();
+        return;
+      }
+      if (el.tagName === 'svg' || el instanceof SVGElement) return;
+      pending += ' ';
+      for (const k of kids(el)) walk(k, d);
+      pending += ' ';
+    };
+
+    if (document.body) for (const k of kids(document.body)) walk(k, 0);
+    flush();
+    return { nodes, chars, tokens: Math.round(chars / 4), truncated, unnamed, mainAt, h1At };
   }
 
   // ----------------------------------------------------------------- checks
@@ -472,6 +766,71 @@
             const src = (i.currentSrc || i.src || '').split('/').pop().split('?')[0];
             return src ? `No alt attribute (${src.slice(0, 40)})` : 'No alt attribute';
           }),
+        };
+      },
+    },
+    {
+      id: 'aria-misuse', category: 'names', weight: 3,
+      title: 'ARIA that gives agents wrong information',
+      why: 'Agents trust ARIA completely. A focusable element marked aria-hidden, a label that points at a missing id, or an aria-label that doesn’t match the visible text tells the agent something false, and it can’t tell that anything is wrong.',
+      fix: 'Remove aria-hidden from anything focusable, point aria-labelledby and aria-describedby at ids that exist, use valid roles and true/false values, and start each aria-label with the control’s visible text.',
+      run(ctx) {
+        const out = [];
+        const seen = new Set();
+        const flag = (el, note) => { if (!seen.has(el)) { seen.add(el); out.push({ el, note }); } };
+
+        for (const host of $$('[aria-hidden="true"]')) {
+          if (host.closest('[inert]')) continue;
+          const els = host.matches(FOCUSABLE_SEL) ? [host] : [];
+          els.push(...$$(FOCUSABLE_SEL, host));
+          for (const el of els.slice(0, 20)) {
+            if (/^\s*-/.test(el.getAttribute('tabindex') || '')) continue; // aria-hidden + tabindex="-1" is correct
+            if (visible(el)) flag(el, 'Focusable, but hidden from agents with aria-hidden="true"');
+          }
+        }
+        for (const el of $$('[aria-labelledby], [aria-describedby], [aria-errormessage]')) {
+          if (!visible(el)) continue;
+          for (const attr of ['aria-labelledby', 'aria-describedby', 'aria-errormessage']) {
+            const ids = norm(el.getAttribute(attr)).split(' ').filter(Boolean);
+            const missing = ids.filter((id) => !document.getElementById(id));
+            if (missing.length) { flag(el, `${attr} points at a missing id: ${missing.slice(0, 2).join(', ')}`); break; }
+          }
+        }
+        for (const el of $$('[role]')) {
+          const tokens = norm(el.getAttribute('role')).toLowerCase().split(' ').filter(Boolean);
+          if (tokens.length && !tokens.some(validRole) && visible(el)) flag(el, `role="${tokens.join(' ').slice(0, 30)}" isn’t a real ARIA role`);
+        }
+        for (const el of $$('[role="button"], [role="link"], [role="checkbox"], [role="switch"], [role="tab"]')) {
+          if (el.matches(FOCUSABLE_SEL) || el.hasAttribute('tabindex') || el.closest('[aria-activedescendant]')) continue;
+          if (visible(el)) flag(el, `role="${role(el)}" but it can’t be reached with the keyboard (add tabindex="0")`);
+        }
+        const BOOL = { expanded: 'tf', selected: 'tf', disabled: 'tf', required: 'tf', hidden: 'tf', pressed: 'tfm', checked: 'tfm' };
+        for (const [attr, kind] of Object.entries(BOOL)) {
+          for (const el of $$(`[aria-${attr}]`)) {
+            const v = el.getAttribute(`aria-${attr}`).trim().toLowerCase();
+            const ok = v === '' || v === 'true' || v === 'false' || v === 'undefined' || (kind === 'tfm' && v === 'mixed');
+            if (!ok && visible(el)) flag(el, `aria-${attr}="${v.slice(0, 20)}" isn’t valid (use true or false)`);
+          }
+        }
+        const squash = (t) => t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+        for (const c of ctx.controls) {
+          if (!c.name || !(c.el.hasAttribute('aria-label') || c.el.hasAttribute('aria-labelledby'))) continue;
+          const shown = norm(c.el.innerText);
+          if (shown.length < 2 || shown.length > 60 || !/\p{L}/u.test(shown)) continue;
+          const name = squash(c.name);
+          const vis = squash(shown);
+          const repeated = name && vis.split(name).every((part) => !part.trim()); // "Sign in Sign in" from text-swap animations
+          if (!name.includes(vis) && !repeated) {
+            flag(c.el, `Shows “${shown.slice(0, 30)}” but is named “${c.name.slice(0, 40)}”`);
+          }
+        }
+
+        const n = out.length;
+        return {
+          score: ratioScore(n, Math.max(ctx.interactive.length, 10), 0.15),
+          issues: n,
+          summary: n ? `${pl(n, 'element')} ${vb(n, 'has', 'have')} ARIA that misleads agents.` : 'No misleading or broken ARIA found.',
+          findings: findings(out, (o) => o.note),
         };
       },
     },
@@ -700,6 +1059,46 @@
       },
     },
     {
+      id: 'layout-shifts', category: 'interaction', weight: 1,
+      title: 'Layout shifts while loading',
+      why: 'Agents read the page, decide where to click, then click. If buttons move in between, because images, ads or banners load late, the click lands on the wrong thing.',
+      fix: 'Reserve space for images, ads, embeds and banners with width and height or aspect-ratio, and don’t insert content above what’s already on screen.',
+      async run(ctx) {
+        const entries = await layoutShifts();
+        if (!entries) return { score: null, status: 'na', summary: 'This browser doesn’t report layout shifts.' };
+        const shifts = entries.filter((e) => !e.hadRecentInput).sort((a, b) => a.startTime - b.startTime);
+        // CLS: the largest burst of shifts (gaps under 1 s, at most 5 s long).
+        let cls = 0; let cur = 0; let first = 0; let last = 0;
+        for (const e of shifts) {
+          if (cur && e.startTime - last < 1000 && e.startTime - first < 5000) cur += e.value;
+          else { cur = e.value; first = e.startTime; }
+          last = e.startTime;
+          cls = Math.max(cls, cur);
+        }
+        const moved = new Map();
+        for (const e of shifts) {
+          for (const s of e.sources || []) {
+            const el = s.node;
+            if (!el || el.nodeType !== 1 || !el.isConnected) continue;
+            if (!ctx.interactiveSet.has(el) && !el.querySelector(HAS_CONTROL_SEL)) continue;
+            const a = s.previousRect; const b = s.currentRect;
+            const dist = Math.hypot(b.x - a.x, b.y - a.y);
+            if (dist >= 10) moved.set(el, Math.max(moved.get(el) || 0, dist));
+          }
+        }
+        const list = [...moved].map(([el, dist]) => ({ el, dist })).sort((a, b) => b.dist - a.dist);
+        const score = cls <= 0.1 ? 1 : cls <= 0.25 ? 0.75 : cls <= 0.5 ? 0.55 : 0.3;
+        const bad = cls > 0.1;
+        return {
+          score,
+          issues: bad ? Math.max(1, list.length) : 0,
+          summary: `Layout shift score ${cls.toFixed(2)} since the page loaded (0.1 or less is good).` +
+            (bad && list.length ? ` ${pl(list.length, 'control')} moved.` : ''),
+          findings: bad ? findings(list, (m) => `Moved ${Math.round(m.dist)} px while the page loaded`) : [],
+        };
+      },
+    },
+    {
       id: 'shadow-dom', category: 'interaction', weight: 0, info: true,
       title: 'Controls inside shadow DOM',
       why: 'Shadow DOM hides elements from ordinary selectors. Many agents handle open shadow roots, but scripts and some tools don’t, and closed shadow roots are hidden from all of them.',
@@ -855,7 +1254,134 @@
         return {
           score,
           issues: score < 0.95 ? 1 : 0,
-          summary: `${pl(c, 'element')}, nested up to ${ctx.maxDepth} levels deep.`,
+          summary: `${pl(c, 'element')}, nested up to ${ctx.maxDepth} levels deep. As an accessibility snapshot it’s about ${ctx.view.tokens.toLocaleString()} tokens.`,
+        };
+      },
+    },
+    {
+      id: 'nojs-content', category: 'structure', weight: 2,
+      title: 'Content that needs JavaScript',
+      why: 'Many agents and AI crawlers fetch a page without running its scripts. Anything added by JavaScript, such as prices, product details or a whole single-page app, is missing for them.',
+      fix: 'Render the main content, headings, prices and primary actions on the server (server-side rendering or static generation), and include structured data in the HTML rather than adding it with a tag manager.',
+      async run() {
+        let r;
+        try { r = await fetchRes(pageUrl(), { accept: 'text/html', credentials: 'include', timeout: 8000, max: 4000000 }); } catch {
+          return { score: null, status: 'na', summary: 'Couldn’t fetch this page’s HTML to compare.' };
+        }
+        if (!r.ok || !/html/i.test(r.type)) return { score: null, status: 'na', summary: `Couldn’t compare: the page URL returned ${r.ok ? r.type || 'no content type' : `status ${r.status}`}.` };
+        const raw = new DOMParser().parseFromString(r.text, 'text/html');
+        const liveText = textOf(document.body, true);
+        const rawText = textOf(raw.body, false);
+        const liveWords = wordCount(liveText);
+        if (liveWords < 40) return { score: null, status: 'na', summary: 'Too little text on this page to compare.' };
+        const ratio = Math.min(1, wordCount(rawText) / liveWords);
+        const hay = ' ' + squashText(rawText) + ' ';
+        const missing = [];
+        for (const el of $$('h1, h2, h3').filter(usable)) {
+          const t = squashText(el.innerText);
+          if (t.length >= 3 && !hay.includes(t)) missing.push({ el, note: `${el.tagName.toLowerCase()} only appears after JavaScript runs` });
+        }
+        const PRICE = /(?:[$€£¥₹]\s?\d[\d.,]*|\d[\d.,]*\s?(?:USD|EUR|GBP|INR|€))/;
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        let prices = 0;
+        for (let t = walker.nextNode(); t && prices < 10; t = walker.nextNode()) {
+          const m = t.data.match(PRICE);
+          if (!m || !t.parentElement || !usable(t.parentElement)) continue;
+          if (!hay.includes(squashText(m[0]))) { missing.push({ el: t.parentElement, note: `Price “${m[0].trim()}” only appears after JavaScript runs` }); prices++; }
+        }
+        const ldRaw = raw.querySelectorAll('script[type="application/ld+json"]').length;
+        const ldLive = $$('script[type="application/ld+json"]').length;
+        const ldLate = ldLive > ldRaw;
+        let score = ratio >= 0.85 ? 1 : clamp01((ratio - 0.15) / 0.7);
+        if (missing.some((m) => /^h1/.test(m.note))) score *= 0.8;
+        if (missing.length) score = Math.min(score, 0.9);
+        if (ldLate) score *= 0.9;
+        const parts = [`The HTML the server sends contains ${Math.round(ratio * 100)}% of the text on the rendered page.`];
+        if (missing.length) parts.push(`${pl(missing.length, 'heading or price', 'headings and prices')} only ${vb(missing.length, 'appears', 'appear')} after JavaScript runs.`);
+        if (ldLate) parts.push(`${pl(ldLive - ldRaw, 'structured data block')} ${vb(ldLive - ldRaw, 'is', 'are')} added by script.`);
+        return {
+          score,
+          issues: (ratio < 0.85 ? 1 : 0) + missing.length + (ldLate ? 1 : 0),
+          summary: parts.join(' '),
+          findings: findings(missing, (m) => m.note),
+        };
+      },
+    },
+    {
+      id: 'content-start', category: 'structure', weight: 1,
+      title: 'Where the main content starts',
+      why: 'Agents read the page from the top and often cut it off to fit their context. If menus, mega-navigation and banners come first, the agent spends its budget on them and may never reach the content.',
+      fix: 'Keep the header and navigation lean, put long menus behind a button that expands them, move secondary blocks after <main>, and mark the main content with <main>.',
+      run(ctx) {
+        const v = ctx.view;
+        const start = v.mainAt ?? v.h1At;
+        if (start == null) return { score: null, status: 'na', summary: 'No main landmark or h1 to measure from.' };
+        const preTok = Math.round(start / 4);
+        const share = start / Math.max(1, v.chars);
+        let score = preTok <= 1500 ? 1 : preTok <= 4000 ? 0.8 : preTok <= 8000 ? 0.6 : 0.35;
+        if (share > 0.5 && preTok > 500) score = Math.min(score, 0.6);
+        const blocks = [];
+        let at = 0;
+        let top = null;
+        for (const n of v.nodes) {
+          if (at >= start) break;
+          if (n.d === 0) { top = { el: refs[n.ref], role: n.role, name: n.name, w: 0 }; if (top.el) blocks.push(top); }
+          if (top) top.w += n.w;
+          at += n.w;
+        }
+        const big = blocks.filter((b) => b.el && b.w / 4 >= 300 && b.w >= start * 0.1).sort((a, b) => b.w - a.w).slice(0, 5);
+        return {
+          score,
+          issues: score < 0.95 ? 1 : 0,
+          summary: `The main content starts about ${preTok.toLocaleString()} tokens into the page (${Math.round(share * 100)}% of roughly ${v.tokens.toLocaleString()}).`,
+          findings: score < 0.95 ? findings(big, (b) => `${b.role === 'text' ? 'Text' : b.role}${b.name ? ` “${b.name.slice(0, 30)}”` : ''}: about ${Math.round(b.w / 4).toLocaleString()} tokens before the main content`) : [],
+        };
+      },
+    },
+
+    // ---- Agent safety
+    {
+      id: 'hidden-instructions', category: 'safety', weight: 3,
+      title: 'Hidden instructions aimed at agents',
+      why: 'Text that people can’t see but agents read, such as invisible spans, off-screen blocks, aria-labels or HTML comments saying “ignore previous instructions”, is a prompt injection. Agents may follow it, and agent browsers increasingly warn about or refuse sites that contain it.',
+      fix: 'Remove hidden text that addresses AI agents. If you want to guide agents, say it openly: in visible text, in llms.txt, or in structured data.',
+      run() {
+        const out = [];
+        const root = document.body || document.documentElement;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let scanned = 0;
+        for (let t = walker.nextNode(); t && scanned < 60000; t = walker.nextNode()) {
+          scanned++;
+          const el = t.parentElement;
+          if (!el || t.data.length < 12 || el.closest('script, style, template, noscript, code, pre, textarea')) continue;
+          if (!INJECTION.some((re) => re.test(t.data))) continue;
+          const how = hiddenHow(el);
+          if (how && !out.some((o) => o.el === el)) out.push({ el, note: `${how}: “${norm(t.data).slice(0, 80)}”` });
+        }
+        for (const el of $$('[aria-label], [aria-description], [alt], [title]')) {
+          for (const attr of ['aria-label', 'aria-description', 'alt', 'title']) {
+            const v = el.getAttribute(attr);
+            if (v && v.length >= 12 && INJECTION.some((re) => re.test(v))) {
+              out.push({ el, note: `In ${attr}, which agents read but people don’t see: “${norm(v).slice(0, 80)}”` });
+              break;
+            }
+          }
+        }
+        let comments = 0;
+        const cw = document.createTreeWalker(document.documentElement, NodeFilter.SHOW_COMMENT);
+        for (let c = cw.nextNode(); c && comments < 20; c = cw.nextNode()) {
+          if (c.data.length >= 12 && INJECTION.some((re) => re.test(c.data))) {
+            comments++;
+            out.push({ el: c.parentElement || document.documentElement, note: `HTML comment: “${norm(c.data).slice(0, 80)}”`, comment: true });
+          }
+        }
+        const n = out.length;
+        const hard = n - comments;
+        return {
+          score: countScore(hard, 0.5) * countScore(comments, 0.2),
+          issues: n,
+          summary: n ? `Found ${pl(n, 'piece', 'pieces')} of hidden text that ${vb(n, 'reads', 'read')} like instructions to an AI agent.` : 'No hidden instructions aimed at agents found.',
+          findings: findings(out, (o) => o.note),
         };
       },
     },
@@ -971,6 +1497,148 @@
         };
       },
     },
+
+    // ---- Agent protocols (informational, not scored)
+    {
+      id: 'markdown-negotiation', category: 'protocols', weight: 0, info: true,
+      title: 'Markdown version for agents',
+      why: 'Some agents ask for a page with Accept: text/markdown. Serving Markdown saves them the tokens spent on markup, scripts and navigation.',
+      fix: 'Return a Markdown rendering when a request sends Accept: text/markdown (and send Vary: Accept), or link one with <link rel="alternate" type="text/markdown" href="…">.',
+      async run() {
+        const alt = document.querySelector('link[rel~="alternate" i][type="text/markdown" i], link[rel~="alternate" i][type="text/x-markdown" i]');
+        let negotiated = false;
+        try {
+          const r = await fetchRes(pageUrl(), { accept: 'text/markdown' });
+          negotiated = r.ok && /text\/(x-)?markdown/i.test(r.type);
+        } catch { /* treat as not offered */ }
+        if (!negotiated && !alt) return { score: null, status: 'info', issues: 0, summary: 'The page doesn’t answer Accept: text/markdown and doesn’t link a Markdown version.' };
+        const parts = [];
+        if (negotiated) parts.push('Returns Markdown for Accept: text/markdown.');
+        if (alt) parts.push(`Links a Markdown version: ${alt.getAttribute('href')}.`);
+        return { score: null, status: 'pass', issues: 0, summary: parts.join(' ') };
+      },
+    },
+    {
+      id: 'discovery-links', category: 'protocols', weight: 0, info: true,
+      title: 'Sitemap and Link headers',
+      why: 'A sitemap lists the pages an agent can visit. Link response headers (RFC 8288) can point an agent straight to an API catalog, documentation or a Markdown version.',
+      fix: 'Publish /sitemap.xml and reference it from robots.txt with a Sitemap: line. If you have an API or docs, add Link headers such as rel="api-catalog" or rel="service-doc".',
+      async run() {
+        let sitemap = '';
+        try {
+          const robots = await fetchText('/robots.txt');
+          const m = robots.found && robots.text.match(/^\s*sitemap\s*:\s*(\S+)/im);
+          if (m) sitemap = `${m[1]} (from robots.txt)`;
+        } catch { /* ignore */ }
+        if (!sitemap) {
+          try {
+            const r = await fetchRes(location.origin + '/sitemap.xml');
+            if (r.ok && /<(urlset|sitemapindex)\b/i.test(r.text.slice(0, 2000))) sitemap = `${location.origin}/sitemap.xml`;
+          } catch { /* ignore */ }
+        }
+        let rels = [];
+        try {
+          const r = await fetchRes(pageUrl(), { accept: 'text/html', credentials: 'include', timeout: 8000, max: 4000000 });
+          rels = [...r.link.matchAll(/rel\s*=\s*"?([^";,]+)"?/gi)].flatMap((m) => m[1].trim().split(/\s+/));
+          rels = [...new Set(rels.filter((x) => !/^(preload|preconnect|dns-prefetch|modulepreload|prefetch|stylesheet)$/i.test(x)))];
+        } catch { /* ignore */ }
+        const parts = [sitemap ? `Sitemap: ${sitemap}.` : 'No sitemap found.'];
+        parts.push(rels.length ? `Link header relations: ${rels.slice(0, 6).join(', ')}.` : 'No Link headers for agents.');
+        return { score: null, status: sitemap ? 'pass' : 'info', issues: 0, summary: parts.join(' ') };
+      },
+    },
+    {
+      id: 'mcp-discovery', category: 'protocols', weight: 0, info: true,
+      title: 'MCP server card',
+      why: 'An MCP server card at /.well-known/mcp/server-card.json tells agents the site offers tools over the Model Context Protocol, and how to connect and sign in. It’s a draft with very little adoption so far.',
+      fix: 'If you run an MCP server, publish its card at /.well-known/mcp/server-card.json with its name, transport URL and authentication details.',
+      async run() {
+        const paths = ['/.well-known/mcp/server-card.json', '/.well-known/mcp.json'];
+        const got = await Promise.all(paths.map(fetchJson));
+        const i = got.findIndex((g) => g && g.data);
+        if (i >= 0) {
+          const d = got[i].data;
+          const name = (d.serverInfo && d.serverInfo.name) || d.name || d.title || '';
+          return { score: null, status: 'pass', issues: 0, summary: `Found ${paths[i]}${name ? ` for “${String(name).slice(0, 60)}”` : ''}.` };
+        }
+        const bad = got.findIndex((g) => g && g.invalid);
+        if (bad >= 0) return { score: null, status: 'warn', issues: 1, summary: `${paths[bad]} exists but isn’t valid JSON.` };
+        return { score: null, status: 'info', issues: 0, summary: 'No MCP server card found.' };
+      },
+    },
+    {
+      id: 'api-discovery', category: 'protocols', weight: 0, info: true,
+      title: 'API, sign-in and skills discovery',
+      why: 'Sites with an API or accounts can tell agents where things are: an API catalog (RFC 9727), OAuth metadata (RFC 8414 and RFC 9728) so agents can ask for access instead of borrowing a person’s session, and an Agent Skills index.',
+      fix: 'If you offer an API, publish /.well-known/api-catalog. If agents should sign in, publish OAuth authorization-server and protected-resource metadata. Content-only sites can skip this.',
+      async run() {
+        const items = [
+          ['API catalog', '/.well-known/api-catalog'],
+          ['OAuth server metadata', '/.well-known/oauth-authorization-server'],
+          ['OpenID configuration', '/.well-known/openid-configuration'],
+          ['OAuth protected-resource metadata', '/.well-known/oauth-protected-resource'],
+          ['Agent Skills index', '/.well-known/agent-skills/index.json'],
+        ];
+        const got = await Promise.all(items.map(([, p]) => fetchJson(p)));
+        const found = items.filter((_, i) => got[i] && got[i].data).map(([label]) => label);
+        const invalid = items.filter((_, i) => got[i] && got[i].invalid).map(([, p]) => p);
+        const parts = [found.length ? `Found: ${found.join(', ')}.` : 'No API catalog, OAuth metadata or Agent Skills index found.'];
+        if (invalid.length) parts.push(`Not valid JSON: ${invalid.join(', ')}.`);
+        return { score: null, status: invalid.length ? 'warn' : found.length ? 'pass' : 'info', issues: invalid.length, summary: parts.join(' ') };
+      },
+    },
+    {
+      id: 'content-signals', category: 'protocols', weight: 0, info: true,
+      title: 'Content Signals in robots.txt',
+      why: 'Content Signals let a site say separately whether its content may be used for search, for AI answers (ai-input) and for AI training (ai-train), instead of blocking crawlers outright.',
+      fix: 'Add a line such as Content-Signal: search=yes, ai-input=yes, ai-train=no to robots.txt.',
+      async run() {
+        let r;
+        try { r = await fetchText('/robots.txt'); } catch {
+          return { score: null, status: 'na', summary: 'Couldn’t read robots.txt from this page.' };
+        }
+        const lines = r.found ? [...r.text.matchAll(/^\s*content-signal\s*:\s*(.+)$/gim)].map((m) => m[1].trim()) : [];
+        if (!lines.length) return { score: null, status: 'info', issues: 0, summary: r.found ? 'robots.txt has no Content-Signal lines.' : 'No robots.txt found.' };
+        return { score: null, status: 'pass', issues: 0, summary: `Content-Signal: ${lines[0].slice(0, 100)}${lines.length > 1 ? ` (and ${lines.length - 1} more)` : ''}.` };
+      },
+    },
+    {
+      id: 'webmcp', category: 'protocols', weight: 0, info: true,
+      title: 'WebMCP tools',
+      why: 'WebMCP lets a page offer agents named tools, like “search_flights”, instead of making them click through the interface. It’s an origin trial in Chrome with almost no adoption yet, so it’s optional.',
+      fix: 'Add toolname and tooldescription to key forms, give every field a name and a label, or register tools in script with the registerTool() method of document.modelContext.',
+      run(ctx) {
+        const probe = ctx.probe || {};
+        const tools = Array.isArray(probe.tools) ? probe.tools : [];
+        const forms = $$('form[toolname]');
+        const problems = [];
+        for (const f of forms) {
+          const name = norm(f.getAttribute('toolname'));
+          if (!/^[A-Za-z0-9_.-]{1,64}$/.test(name)) problems.push({ el: f, note: `toolname “${name.slice(0, 40)}” should be 1–64 letters, digits, _ . or -` });
+          if (!norm(f.getAttribute('tooldescription'))) problems.push({ el: f, note: `Tool “${name.slice(0, 40)}” has no tooldescription` });
+          for (const field of $$('input, select, textarea', f)) {
+            const type = (field.getAttribute('type') || '').toLowerCase();
+            if (['hidden', 'submit', 'button', 'reset', 'image'].includes(type)) continue;
+            if (!field.getAttribute('name')) problems.push({ el: field, note: 'No name attribute, so it can’t become a tool parameter' });
+            else if (!accName(field) && !norm(field.getAttribute('toolparamdescription'))) problems.push({ el: field, note: 'No label or toolparamdescription' });
+          }
+        }
+        const undescribed = tools.filter((t) => !norm(t.description)).map((t) => t.name);
+        const scriptHint = !tools.length && !forms.length &&
+          $$('script:not([src])').some((s) => /modelContext\s*\.\s*(registerTool|provideContext)\s*\(/.test(s.textContent.slice(0, 500000)));
+        if (!forms.length && !tools.length && !scriptHint) {
+          return { score: null, status: 'info', issues: 0, summary: probe.supported ? 'No WebMCP tools found. This browser supports WebMCP.' : 'No WebMCP tools found.' };
+        }
+        const parts = [];
+        if (tools.length) parts.push(`Registered tools: ${tools.slice(0, 8).map((t) => t.name).join(', ')}.`);
+        if (forms.length) parts.push(`${pl(forms.length, 'form')} declared as ${vb(forms.length, 'a tool', 'tools')}: ${forms.slice(0, 6).map((f) => f.getAttribute('toolname')).join(', ')}.`);
+        if (scriptHint) parts.push('Inline scripts appear to register WebMCP tools, but this browser couldn’t list them.');
+        if (undescribed.length) parts.push(`No description: ${undescribed.slice(0, 5).join(', ')}.`);
+        if (problems.length) parts.push(`${pl(problems.length, 'problem')} with declared tools.`);
+        const issues = problems.length + undescribed.length;
+        return { score: null, status: issues ? 'warn' : 'pass', issues, summary: parts.join(' '), findings: findings(problems, (p) => p.note) };
+      },
+    },
   ];
 
   function parseRobots(text) {
@@ -1030,13 +1698,16 @@
     return s;
   }
 
-  async function run() {
+  async function run(opts = {}) {
     const started = performance.now();
     refs.length = 0;
+    fetchCache.clear();
     const runId = Math.random().toString(36).slice(2, 10);
     window.__ARA.runId = runId;
 
     const ctx = gather();
+    ctx.view = buildAgentView();
+    ctx.probe = opts.probe || null;
 
     const checks = await Promise.all(CHECKS.map(async (c) => {
       let out;
@@ -1062,10 +1733,10 @@
       const scored = own.filter((c) => c.score != null && c.weight > 0 && (c.status === 'pass' || c.status === 'warn' || c.status === 'fail'));
       const wsum = scored.reduce((a, c) => a + c.weight, 0);
       const score = wsum ? Math.round(scored.reduce((a, c) => a + c.score * c.weight, 0) / wsum) : null;
-      return { id: cat.id, name: cat.name, description: cat.description, weight: cat.weight, score, checks: own };
+      return { id: cat.id, name: cat.name, description: cat.description, weight: cat.weight, scored: cat.scored !== false, score, checks: own };
     });
 
-    const scoredCats = categories.filter((c) => c.score != null);
+    const scoredCats = categories.filter((c) => c.score != null && c.scored);
     const cw = scoredCats.reduce((a, c) => a + c.weight, 0);
     const score = cw ? Math.round(scoredCats.reduce((a, c) => a + c.score * c.weight, 0) / cw) : 0;
     const grade = GRADES.find((g) => score >= g[0]);
@@ -1090,8 +1761,15 @@
         depth: ctx.maxDepth,
         controls: ctx.controls.length,
         fields: ctx.fields.length,
+        tokens: ctx.view.tokens,
       },
       categories,
+      agentView: {
+        nodes: ctx.view.nodes.map(({ w, ...n }) => n),
+        tokens: ctx.view.tokens,
+        unnamed: ctx.view.unnamed,
+        truncated: ctx.view.truncated,
+      },
     };
   }
 

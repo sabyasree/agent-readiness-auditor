@@ -2,6 +2,14 @@
 
 A Chrome extension that audits any web page for how well AI agents (Claude in Chrome, Gemini in Chrome, ChatGPT agent, Perplexity Comet and others) can read and operate it. It gives a 0–100 score, a breakdown by category, and specific fixes, with a **Show on page** button that scrolls to and highlights each problem element.
 
+Most "agent-ready" tools only check whether crawler files like robots.txt and llms.txt exist. This one asks whether an agent can actually *use* the page: find its controls by name, fill its forms, get past overlays, and read the content without being misled. Newer protocol files are shown too, but kept out of the score.
+
+Features:
+
+- **Agent view.** The page as an agent reads it: its accessibility tree as text, with a token estimate. Controls with no name are flagged, every line can be found on the page, and the whole snapshot can be copied.
+- **Changes since the last audit.** Re-run after a fix to see the score change and which checks were fixed, are new, or have fewer or more issues.
+- **Prompts for coding agents.** Copy the whole report, or one check, as a task for Claude Code, Cursor or Copilot, with a fix → test → verify loop.
+
 Everything runs locally in the browser. No accounts, no servers, no analytics.
 
 ## Install for development
@@ -19,12 +27,16 @@ Requires Chrome 116 or later (side panel API).
 | Category | Weight | Checks |
 | --- | --- | --- |
 | Real controls | 20 | Clickable divs and spans with no control role, links with no real destination, positive tabindex |
-| Labels and names | 20 | Controls with no accessible name, vague or duplicated names, images without alt |
+| Labels and names | 20 | Controls with no accessible name, vague or duplicated names, images without alt, misleading ARIA (focusable elements under `aria-hidden`, references to missing ids, invalid roles and values, keyboard-unreachable ARIA controls, `aria-label` that doesn't contain the visible text) |
 | Forms | 15 | Unlabeled or placeholder-only fields, missing input types and autocomplete tokens, required fields not marked required |
-| Interaction traps | 15 | Overlays and cookie banners covering the page, unnamed dialogs, CAPTCHAs and bot challenges, cross-origin iframes, tiny click targets, shadow DOM (informational) |
+| Interaction traps | 15 | Overlays and cookie banners covering the page, unnamed dialogs, CAPTCHAs and bot challenges, cross-origin iframes, tiny click targets, layout shifts that move controls while loading, shadow DOM (informational) |
 | Stable targeting | 12 | Controls reachable only through generated class names, auto-generated IDs |
-| Page structure | 12 | Page title, `lang`, main and nav landmarks, heading outline, DOM size and depth |
+| Page structure | 12 | Page title, `lang`, main and nav landmarks, heading outline, DOM size and depth, text, headings and prices that only appear after JavaScript runs, how far into the page the main content starts |
+| Agent safety | 6 | Hidden text that reads like instructions to an AI agent (prompt injection): invisible, off-screen, tiny or same-color text, `aria-label`, `alt` and `title` attributes, HTML comments |
 | Machine-readable signals | 6 | Meta description, Open Graph and canonical, JSON-LD and microdata, `/llms.txt`, `robots.txt` rules for AI user agents and crawlers |
+| Agent protocols | not scored | Markdown for `Accept: text/markdown`, sitemap and `Link` headers, MCP server card, API catalog, OAuth metadata and Agent Skills index, Content Signals, WebMCP tools (declarative `toolname` forms and registered tools) |
+
+Agent protocols are shown for information only. Few sites publish them and few agents read them yet, so a site isn't marked down for skipping them. Their checks show **Passed** when found and **Note** when not, and **Warning** only when something is published but broken.
 
 ### Scoring
 
@@ -34,6 +46,16 @@ Status per check: 95 and above passes, 70–94 is a warning, below 70 is failing
 
 Overall grade: 90+ Agent-ready, 75–89 Mostly ready, 50–74 Needs work, below 50 Hard for agents.
 
+## Agent view
+
+The **Agent view** tab lists the page the way agents built on Playwright or the Chrome DevTools Protocol read it: landmarks, lists and tables as containers; links, buttons, fields and headings as named items with their state (`level=1`, `checked`, `expanded=false`, `disabled`); and the text in between. Filter to controls or to controls with no name, search by name or role, select a line to highlight it on the page, or **Copy as text** for an indented snapshot in the style of a Playwright ARIA snapshot. The token count is an estimate (characters ÷ 4).
+
+## Export
+
+The **Export** menu copies or downloads the report as Markdown or JSON. **Copy report as prompt** copies the failing and warning checks as a task for a coding agent (Claude Code, Cursor, Copilot and others): a goal, a checklist, and a locate → fix → test → verify loop the agent repeats until every issue is fixed and covered by a test. Paste it into the agent running in the site's repository. Each failing check also has its own **Copy fix prompt** button.
+
+Each audit remembers a short summary of the last result for that URL (score and per-check status, no page content) in local storage, so the next audit can show what changed. **Export → Clear audit history** deletes it.
+
 The checks are heuristics. They find likely problems quickly; confirming with a real agent run is still the final test.
 
 ## Permissions
@@ -41,9 +63,9 @@ The checks are heuristics. They find likely problems quickly; confirming with a 
 | Permission | Why |
 | --- | --- |
 | `activeTab` | Clicking the toolbar icon grants one-time access to the current page, which is all a single audit needs. |
-| `scripting` | Injects the audit engine into the page and runs the element highlighter. |
+| `scripting` | Injects the audit engine into the page, runs the element highlighter, and lists WebMCP tools the page has registered. |
 | `sidePanel` | Shows the results in Chrome's side panel. |
-| `storage` | Keeps the latest report for each tab in session storage so it survives closing and reopening the panel. Cleared when the tab navigates or closes. |
+| `storage` | Keeps the latest report for each tab in session storage so it survives closing and reopening the panel (cleared when the tab navigates or closes), and a short score summary per URL in local storage to show changes between audits. |
 | `<all_urls>` (optional) | Only requested if the person clicks **Allow on all sites**, so audits work without clicking the toolbar icon first. Not granted at install. |
 
 No host permissions are requested at install, which keeps the Chrome Web Store warning to a minimum and speeds up review.
@@ -99,8 +121,12 @@ Add an object to the `CHECKS` array in `content/auditor.js`:
 
 - Audits the top frame only. Content inside iframes and shadow roots is reported but not checked.
 - Hover-only menus, infinite scroll and drag-and-drop can't be detected reliably from a static scan, so they aren't scored.
-- `llms.txt` and `robots.txt` are fetched from the page's own origin. If the site blocks those requests, the checks are marked not applicable.
+- `llms.txt`, `robots.txt`, `sitemap.xml` and the `/.well-known/` files are fetched from the page's own origin. If the site blocks those requests, the checks are marked not applicable or not found.
+- The JavaScript check fetches the page URL again with your cookies and compares it to the rendered page, so it compares like with like on signed-in pages. Pages that answer differently on a second request (for example, one-time links) can give odd results.
+- Layout shifts are read from the browser's record since the page loaded. Shifts caused by your own clicks or typing are ignored.
+- Registered WebMCP tools can only be listed in browsers that expose Chrome's WebMCP testing API. Elsewhere the check looks for declarative `toolname` forms and inline scripts that register tools.
+- Hidden-instruction detection matches common prompt-injection wording. It can miss reworded or encoded injections, and it doesn't flag visible text, such as an article about prompt injection.
 
 ## Ideas for the paid tier
 
-Multi-page site crawls, score history per URL, PDF reports for agencies, an LLM-driven "agent test run" that attempts a task on the page and reports where it got stuck, and a CI action that fails builds when readiness drops.
+Multi-page site crawls, flow audits across several pages (a checkout, a sign-up), PDF reports for agencies, an LLM-driven "agent test run" that attempts a task on the page and reports where it got stuck, and a CI action that fails builds when readiness drops.
