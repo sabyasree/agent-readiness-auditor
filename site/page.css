@@ -1,0 +1,36 @@
+/* Shared styles for the small site pages (goodbye, thanks). */
+:root {
+  --paper: #EEF1F4; --surface: #FFFFFF; --ink: #172033; --muted: #5A6678; --line: #D6DDE5;
+  --accent: #2F4BD0; --accent-hover: #2539A8; --accent-ink: #FFFFFF;
+  --serif: "Charter", "Bitstream Charter", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0F141B; --surface: #171E28; --ink: #E4E9F0; --muted: #93A0B2; --line: #2A3442;
+    --accent: #8EA2FF; --accent-hover: #AAB9FF; --accent-ink: #0F141B;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--sans); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 40px 16px 64px; }
+.narrow { max-width: 620px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font: 600 17px/1 var(--serif); color: var(--ink); text-decoration: none; margin-bottom: 28px; }
+h1 { font: 600 clamp(28px, 5vw, 38px)/1.15 var(--serif); margin: 0 0 10px; }
+.lead { color: var(--muted); font-size: 18px; margin: 0 0 24px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
+fieldset { border: 0; margin: 0 0 16px; padding: 0; display: grid; gap: 6px; }
+legend { font-weight: 600; margin-bottom: 8px; }
+fieldset label { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+fieldset label:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.block { display: block; font-weight: 600; margin-bottom: 6px; }
+textarea { width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin-bottom: 14px; }
+.btn { display: inline-block; background: var(--accent); color: var(--accent-ink); border: 0; padding: 11px 20px; border-radius: 8px; font: 600 16px/1.2 var(--sans); text-decoration: none; cursor: pointer; }
+.btn:hover { background: var(--accent-hover); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.hidden { position: absolute; left: -9999px; }
+a { color: var(--accent); }

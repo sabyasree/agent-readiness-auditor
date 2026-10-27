@@ -1,42 +1,50 @@
-Can an AI agent actually use your page? Agent-Readiness Auditor checks how well agents like Claude, Gemini, ChatGPT agent and Perplexity Comet can read a web page and complete tasks on it, then tells you exactly what to fix.
+Can an AI agent actually use your website? Agent-Readiness Auditor checks how well agents like Claude, Gemini, ChatGPT agent and Perplexity Comet can read a web page and complete tasks on it, then shows you exactly what to fix, starting with the fixes worth the most points.
 
-Open any page, click the icon, and press Run audit. In about a second you get a 0–100 score, a breakdown by category, and every problem element listed with why it matters and how to fix it. Press "Show on page" to scroll to an element and highlight it.
+Open any page and click the icon. The audit starts right away, and in about a second you get a 0–100 score, a breakdown by category, and every problem element with why it matters and how to fix it. The score also appears on the toolbar icon.
 
-Most "agent-ready" checkers only look for files like robots.txt and llms.txt. This one checks whether an agent can find your controls by name, fill in your forms, get past overlays, and read your content without being misled.
+Most "agent-ready" checkers only look for files like robots.txt and llms.txt. This one checks whether an agent can find your controls by name, fill in your forms, get past overlays, buy from your product pages and read your content without being misled.
 
-NEW IN 1.2
+NEW IN 1.3
 
-★ Agent view: see your page the way an agent reads it, as its accessibility tree in text, with a token estimate. Buttons and links with no name are flagged in red. Select any line to find it on the page, or copy the whole snapshot.
+★ Agent test: type a task like "Add this product to the cart". Chrome's built-in AI (Gemini Nano) reads your page the way agents do and plans the clicks, then the auditor shows each step on the page and where an agent would get stuck, such as an "Add to cart" that looks like a button but isn't one. It runs on your computer: free, private, no API key. On computers without Chrome's built-in AI, the test matches the task to control names.
 
-★ Prompt-injection check: finds hidden text aimed at AI agents, such as "ignore previous instructions" in invisible, off-screen, tiny or same-colour text, aria-labels, alt text or HTML comments.
+★ Fix these first: the three fixes worth the most points, with the score you'd reach, and one prompt that covers them.
 
-★ Fix prompts for coding agents: copy the whole report, or a single issue, as a ready-made task for Claude Code, Cursor or Copilot. It tells the agent to fix each issue, write a test, verify it and keep going until everything is done.
+★ Mark issues on page: numbered markers on every problem element at once. Hover a number for details.
 
-★ Changes since your last audit: run it again after a fix to see your score change and which issues are fixed, new, or reduced.
+★ Shareable report: a clean report to send to a client or teammate, or save as PDF.
 
-★ More checks: misleading ARIA, layout shifts that move buttons while the page loads, content and prices that only appear after JavaScript runs, and menus so long that agents run out of room before reaching your main content.
+★ Shopping agents: on product pages, checks Product structured data, price and stock, shipping, returns and ratings, and a clear "Add to cart" button.
 
-★ Agent protocols (shown for information, not scored): Markdown for agents, sitemap and Link headers, MCP server card, API catalog, OAuth discovery, Agent Skills, Content Signals and WebMCP tools.
+★ Try it in seconds: a demo store with problems planted on purpose, and your recent audits on the start screen.
 
-WHAT IT CHECKS
+ALSO INCLUDED
+
+★ Agent view: your page as an agent reads it, as its accessibility tree in text, with a token estimate. Unnamed buttons and links are flagged in red.
+
+★ Prompt-injection check: finds hidden text aimed at AI agents, such as "ignore previous instructions" in invisible or off-screen text, aria-labels or HTML comments.
+
+★ Fix prompts for coding agents: copy the report, the top fixes or one issue as a ready-made task for Claude Code, Cursor or Copilot, with a fix, test and verify loop.
+
+★ Changes since your last audit: run it again after a fix to see your score change and which issues are fixed, new or reduced.
+
+WHAT IT CHECKS (40 checks)
 
 • Real controls: clickable divs and spans that aren't real buttons or links, links that go nowhere, positive tabindex
-• Labels and names: icon-only buttons with no label, vague names like "Click here", images without alt text, ARIA that gives wrong information
+• Labels and names: icon-only buttons with no label, vague names like "Click here", images without alt text, misleading ARIA
 • Forms: unlabeled or placeholder-only fields, missing input types and autocomplete hints, required fields not marked as required
-• Interaction traps: cookie banners and overlays covering the page, unnamed dialogs, CAPTCHAs, cross-origin frames, tiny click targets, layout shifts
+• Interaction traps: cookie banners and overlays, unnamed dialogs, CAPTCHAs, cross-origin frames, tiny click targets, layout shifts
 • Stable targeting: controls that can only be found by generated class names or auto-generated IDs
-• Page structure: title, language, landmarks, heading outline, page size, content that needs JavaScript, where the main content starts
+• Page structure: title, language, landmarks, headings, page size, content that needs JavaScript, where the main content starts
+• Shopping agents (product pages): Product data, price and availability, shipping, returns, ratings, the cart button
 • Agent safety: hidden instructions aimed at AI agents
-• Machine-readable signals: meta description, Open Graph, canonical link, structured data, llms.txt, robots.txt rules for AI agents and crawlers
+• Machine-readable signals: meta description, Open Graph, canonical link, structured data, llms.txt, robots.txt rules for AI
+• Agent protocols (for information, not scored): Markdown for agents, sitemap, MCP server card, API and OAuth discovery, Content Signals, WebMCP
 
 WHO IT'S FOR
 
-Front-end developers, QA and accessibility teams, SEO specialists, and agencies preparing sites for AI agents and agentic browsers.
-
-EXPORT
-
-Copy or download reports as Markdown or JSON, or copy them as a prompt for a coding agent.
+Front-end developers, QA and accessibility teams, SEO and GEO specialists, e-commerce teams, and agencies preparing sites for AI agents and agentic browsers.
 
 PRIVATE BY DESIGN
 
-Audits run entirely in your browser. No account, no servers, no analytics, no tracking. Nothing about the page is sent anywhere. The extension only reads a page when you click its icon.
+Audits run entirely in your browser. No account, no servers, no analytics, no tracking. Nothing about the page is sent anywhere, and the Agent test's AI runs on your own computer. The extension only reads a page when you click its icon.

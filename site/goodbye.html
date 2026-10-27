@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sorry to see you go | Agent-Readiness Auditor</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="stylesheet" href="page.css">
+</head>
+<body>
+  <main class="wrap narrow">
+    <a class="brand" href="./"><img src="icon-128.png" width="36" height="36" alt=""> Agent-Readiness Auditor</a>
+    <h1>Sorry to see you go</h1>
+    <p class="lead">The extension has been removed. If you have ten seconds, tell us why. It’s anonymous, and it’s the main way we decide what to fix next.</p>
+
+    <form class="card" name="uninstall-feedback" method="POST" action="goodbye-thanks.html" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="uninstall-feedback">
+      <p class="hidden"><label>Leave this empty: <input name="bot-field"></label></p>
+      <fieldset>
+        <legend>Why did you remove it?</legend>
+        <label><input type="radio" name="reason" value="one-time"> I only needed it once</label>
+        <label><input type="radio" name="reason" value="not-useful"> The results weren’t useful</label>
+        <label><input type="radio" name="reason" value="confusing"> It was hard to understand</label>
+        <label><input type="radio" name="reason" value="wrong"> It flagged things that weren’t problems</label>
+        <label><input type="radio" name="reason" value="missing"> It was missing something I needed</label>
+        <label><input type="radio" name="reason" value="broken"> It didn’t work on my site</label>
+        <label><input type="radio" name="reason" value="other"> Something else</label>
+      </fieldset>
+      <label class="block" for="details">Anything else? <span class="muted">(optional)</span></label>
+      <textarea id="details" name="details" rows="4" placeholder="What would have made it worth keeping?"></textarea>
+      <button class="btn" type="submit">Send</button>
+      <p class="muted small">Only what you type here is sent. We don’t collect your email or anything about your browser.</p>
+    </form>
+
+    <p class="muted">Changed your mind? <a href="https://chromewebstore.google.com/detail/agent-readiness-auditor/bgaigjpjdemhkngkaocgfekiedfaigfa">Reinstall from the Chrome Web Store</a>.</p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Agent-Readiness Auditor</title>
+  <link rel="icon" href="../icons/icon32.png">
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="brand">
+      <img src="../icons/icon48.png" width="40" height="40" alt="">
+      <span>Agent-Readiness Auditor</span>
+    </header>
+
+    <h1>You’re set up. Here’s your first audit in under a minute.</h1>
+    <p class="lead">See how well AI agents like Claude, Gemini and ChatGPT can read and use any page, and exactly what to fix.</p>
+
+    <ol class="steps">
+      <li class="step" id="step-pin">
+        <div class="num" aria-hidden="true">1</div>
+        <div>
+          <h2>Pin the icon <span class="done" id="pinned" hidden>Pinned ✓</span></h2>
+          <p>Click the puzzle-piece <span class="kbd" aria-label="Extensions">⧉</span> icon at the top right of Chrome, then the pin next to <b>Agent-Readiness Auditor</b>. It’ll show each page’s score right on the icon.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="num" aria-hidden="true">2</div>
+        <div>
+          <h2>Open a page and click the icon</h2>
+          <p>The side panel opens. Press <b>Run audit</b>. Shortcut: <span class="kbd">Alt</span> + <span class="kbd">Shift</span> + <span class="kbd">A</span>.</p>
+          <p>Not sure where to start? Try our demo store. It has problems planted for the audit to find.</p>
+          <p><a class="btn" id="demo" href="https://agent-readiness-auditor.netlify.app/demo/">Open the demo store</a></p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="num" aria-hidden="true">3</div>
+        <div>
+          <h2>Fix, then run it again</h2>
+          <p>Start with <b>Fix these first</b>, use <b>Mark issues on page</b> to see every problem at once, or copy a fix prompt into Claude Code, Cursor or Copilot. Re-run to see your score go up.</p>
+        </div>
+      </li>
+    </ol>
+
+    <section class="tips" aria-label="More you can do">
+      <div><b>Agent view</b><span>See the page as an agent reads it, with a token count.</span></div>
+      <div><b>Share report</b><span>Send a clean report to a client or save it as PDF.</span></div>
+      <div><b>Shopping agents</b><span>On product pages, check price, stock and the cart button.</span></div>
+    </section>
+
+    <p class="privacy">Everything runs in your browser. The extension only reads a page when you click its icon, and sends nothing anywhere. <a href="https://agent-readiness-auditor.netlify.app/privacy-policy.html">Privacy policy</a></p>
+  </main>
+  <script src="welcome.js"></script>
+</body>
+</html>

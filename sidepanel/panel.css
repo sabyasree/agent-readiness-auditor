@@ -273,6 +273,89 @@ button { font: inherit; color: inherit; }
 .diff-body h3 { margin: 8px 0 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
 .diff-body ul { margin: 0; padding-left: 18px; }
 
+/* ---------- Score actions, fix-first card, notes */
+
+.score-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.score-actions .btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.fixes-card { margin: 12px 0 0; padding: 14px 16px 12px; background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.fixes-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.fixes-head h2 { margin: 0; font: 600 17px/1.25 var(--serif); }
+.fixes-target { font-size: 13px; font-weight: 600; color: var(--pass); font-variant-numeric: tabular-nums; }
+.fixes { list-style: none; margin: 10px 0 0; padding: 0; }
+.fixes li + li { border-top: 1px solid var(--line); }
+.fixes button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 9px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.fixes button:hover strong { text-decoration: underline; text-underline-offset: 2px; }
+.gain {
+  font-weight: 800;
+  font-size: 13px;
+  text-align: center;
+  padding: 2px 0;
+  border-radius: 5px;
+  color: var(--pass);
+  background: color-mix(in srgb, var(--pass) 13%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+.fix-text strong { display: block; font-size: 13.5px; line-height: 1.35; }
+.fix-text span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 1px; }
+.fixes-actions { margin-top: 6px; }
+
+.note-card {
+  margin: 12px 16px 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.note-card strong { display: block; font-size: 13.5px; }
+.note-card p { margin: 2px 0 0; color: var(--muted); }
+.review-card { flex-direction: column; }
+.note-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.btn-link { border: 0; background: none; padding: 4px; font: inherit; font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer; }
+
+/* ---------- Start screen: demo and recent audits */
+
+.intro-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.recent { margin-top: 26px; }
+.recent h2 { margin: 0 0 6px; font: 600 15px/1.3 var(--serif); }
+.recent-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.recent-list li { border-bottom: 1px solid var(--line); }
+.recent-list button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.recent-list button:hover strong { text-decoration: underline; text-underline-offset: 2px; }
+.recent-score { font: 600 18px/1 var(--serif); font-variant-numeric: tabular-nums; text-align: center; }
+.recent-text { min-width: 0; }
+.recent-text strong, .recent-text span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recent-text strong { font-size: 13px; font-weight: 600; }
+.recent-text span { font-size: 12px; color: var(--muted); }
+.recent-delta { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
 /* ---------- Report / Agent view tabs */
 
 .tabs {
@@ -480,3 +563,53 @@ button { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- Agent test */
+
+.agent-test { padding: 14px 0 28px; }
+.ai-status { margin: 0 16px 12px; padding: 8px 10px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.test-form { padding: 0 16px; }
+.test-label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+.test-row { display: flex; gap: 8px; }
+.test-row .view-search { flex: 1; min-width: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+.chip {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--ink);
+  cursor: pointer;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.test-result { margin: 16px 16px 0; }
+.test-progress { margin: 0; font-size: 13px; color: var(--muted); }
+.test-card { background: var(--surface); border: 1px solid var(--line); border-left-width: 4px; border-radius: 8px; padding: 14px; }
+.tone-border-pass { border-left-color: var(--pass); }
+.tone-border-warn { border-left-color: var(--warn); }
+.tone-border-fail { border-left-color: var(--fail); }
+.test-verdict { display: grid; grid-template-columns: 18px 1fr; gap: 10px; align-items: start; }
+.test-verdict .glyph { margin-top: 2px; }
+.test-verdict div strong { display: block; font-size: 14.5px; }
+.test-verdict div span { display: block; font-size: 12.5px; color: var(--muted); }
+.test-card h3 { margin: 14px 0 6px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.test-steps, .test-hidden { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.test-steps li, .test-hidden li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 8px;
+  align-items: center;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+  font-size: 13px;
+}
+.step-text { font-weight: 600; }
+.step-note { grid-column: 1; font-size: 12px; color: var(--warn); }
+.test-steps li > .btn, .test-hidden li > .btn { grid-column: 2; grid-row: 1 / span 2; }
+.step-problem { border-color: color-mix(in srgb, var(--warn) 45%, var(--line)) !important; }
+.test-note { margin: 10px 0 0; font-size: 13px; }
+.test-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.test-method { margin: 10px 0 0; font-size: 11.5px; color: var(--muted); }

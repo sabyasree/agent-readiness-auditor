@@ -8,7 +8,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.2.0';
+  const VERSION = '1.3.0';
   if (window.__ARA && window.__ARA.version === VERSION) return;
 
   const FINDING_CAP = 50;
@@ -32,6 +32,8 @@
       description: 'Titles, landmarks and headings give agents a map of the page, and a lean DOM keeps it readable.' },
     { id: 'safety', name: 'Agent safety', weight: 6,
       description: 'Hidden text that tries to give agents instructions. Agents may follow it, or flag the whole site as unsafe.' },
+    { id: 'commerce', name: 'Shopping agents', weight: 10,
+      description: 'Scored only on product pages. AI shopping agents compare products from structured data and buy through the cart button.' },
     { id: 'signals', name: 'Machine-readable signals', weight: 6,
       description: 'Metadata, structured data and site files that tell agents what the page is about.' },
     { id: 'protocols', name: 'Agent protocols', weight: 0, scored: false,
@@ -347,6 +349,60 @@
       }
     }
     return '';
+  }
+
+  /** Every JSON-LD object on the page, with @graph and arrays flattened. */
+  function jsonLdNodes() {
+    const out = [];
+    const walk = (n) => {
+      if (!n || typeof n !== 'object') return;
+      if (Array.isArray(n)) { n.forEach(walk); return; }
+      out.push(n);
+      if (n['@graph']) walk(n['@graph']);
+      if (n.hasVariant) walk(n.hasVariant);
+    };
+    for (const s of $$('script[type="application/ld+json"]')) {
+      try { walk(JSON.parse(s.textContent)); } catch { /* reported by structured-data */ }
+    }
+    return out;
+  }
+  const typeIs = (n, t) => [].concat(n['@type'] || []).some((x) => String(x).replace(/^.*[/#]/, '').toLowerCase() === t.toLowerCase());
+  const listJoin = (items, word = 'and') => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} ${word} ${items[items.length - 1]}`);
+
+  // "Add to cart", "Add to bag – $98", "Add Tree Runner to cart", "Buy now".
+  const CART_NAME = /\badd\b.{0,60}?\bto (your |the )?(cart|bag|basket|trolley|order)\b|\bbuy (it )?now\b|\badd item\b/i;
+
+  /** What the page offers shopping agents. Computed once per run. */
+  function commerceInfo(ctx) {
+    if (ctx.commerce) return ctx.commerce;
+    const nodes = jsonLdNodes();
+    // Prefer a ProductGroup (variants of one product) and fill gaps from its first
+    // variant; otherwise the fullest Product. Bare stubs like itemReviewed lose.
+    const richness = (n) => ['name', 'image', 'description', 'brand', 'offers', 'sku', 'gtin13', 'mpn'].filter((k) => n[k]).length;
+    const group = nodes.find((n) => typeIs(n, 'ProductGroup'));
+    const products = nodes.filter((n) => typeIs(n, 'Product')).sort((a, b) => richness(b) - richness(a));
+    let product = null;
+    if (group) product = { ...([].concat(group.hasVariant || [])[0] || {}), ...group };
+    else if (products.length) product = products[0];
+    if (product && !product.aggregateRating) {
+      const rated = nodes.find((n) => n.aggregateRating || typeIs(n, 'AggregateRating'));
+      if (rated) product.aggregateRating = rated.aggregateRating || rated;
+    }
+    let offer = null;
+    if (product) {
+      const offers = [].concat(product.offers || []);
+      const variantOffers = [].concat(product.hasVariant || []).flatMap((v) => [].concat((v && v.offers) || []));
+      offer = offers[0] || variantOffers[0] || null;
+      if (offer && typeIs(offer, 'AggregateOffer') && offer.offers) offer = { ...[].concat(offer.offers)[0], ...offer };
+    }
+    const micro = !!document.querySelector('[itemscope][itemtype*="schema.org/Product" i]');
+    const og = /product/i.test(document.querySelector('meta[property="og:type"]')?.getAttribute('content') || '');
+    const cart = ctx.controls.filter((c) => CART_NAME.test(c.name));
+    const fakeCart = ctx.pointerTops.filter((el) => !el.closest(INSIDE_CONTROL_SEL) && CART_NAME.test(norm(el.innerText).slice(0, 60)));
+    const listing = !product && cart.length + fakeCart.length > 2;
+    const isProduct = !!(product || micro || og) || (!listing && cart.length + fakeCart.length > 0);
+    ctx.commerce = { nodes, product, offer, micro, cart, fakeCart, listing, isProduct };
+    return ctx.commerce;
   }
 
   // ------------------------------------------------------------- page scan
@@ -1382,6 +1438,120 @@
           issues: n,
           summary: n ? `Found ${pl(n, 'piece', 'pieces')} of hidden text that ${vb(n, 'reads', 'read')} like instructions to an AI agent.` : 'No hidden instructions aimed at agents found.',
           findings: findings(out, (o) => o.note),
+        };
+      },
+    },
+
+    // ---- Shopping agents (scored only on product pages)
+    {
+      id: 'product-schema', category: 'commerce', weight: 3,
+      title: 'Product structured data',
+      why: 'AI shopping agents compare products from structured data, not from the layout. Without a Product block they have to guess the name, brand and model from the page text, and often skip the product.',
+      fix: 'Add JSON-LD of type Product with name, image, description, brand, and an identifier such as sku, gtin or mpn. Most shop platforms and SEO plugins can output it.',
+      run(ctx) {
+        const c = commerceInfo(ctx);
+        if (!c.isProduct) return { score: null, status: 'na', summary: c.listing ? 'This looks like a product listing, not a single product page.' : 'This doesn’t look like a product page.' };
+        if (!c.product) {
+          return c.micro
+            ? { score: 0.6, issues: 1, summary: 'This product page uses microdata but no JSON-LD Product block, which more agents read.' }
+            : { score: 0, issues: 1, summary: 'This looks like a product page, but it has no Product structured data.' };
+        }
+        const p = c.product;
+        const fields = [
+          ['name', 1, !!norm(p.name)],
+          ['image', 1, !!p.image],
+          ['description', 1, !!norm(typeof p.description === 'string' ? p.description : '')],
+          ['brand', 0.5, !!p.brand],
+          ['an identifier (sku, gtin or mpn)', 0.5, ['sku', 'gtin', 'gtin8', 'gtin12', 'gtin13', 'gtin14', 'mpn', 'productGroupID'].some((k) => p[k])],
+        ];
+        const missing = fields.filter((f) => !f[2]);
+        const score = fields.reduce((a, f) => a + (f[2] ? f[1] : 0), 0) / 4;
+        return {
+          score,
+          issues: missing.length,
+          summary: missing.length ? `The Product block is missing ${listJoin(missing.map((f) => f[0]))}.` : `Product “${norm(p.name).slice(0, 60)}” has name, image, description, brand and an identifier.`,
+        };
+      },
+    },
+    {
+      id: 'product-offer', category: 'commerce', weight: 3,
+      title: 'Price and availability for agents',
+      why: 'Before an agent recommends or buys a product, it needs the price, the currency and whether it’s in stock. If structured data leaves these out, or shows a different price than the page, agents skip the product or quote the wrong price.',
+      fix: 'Add an offers object to the Product with price, priceCurrency and availability (for example https://schema.org/InStock), and keep the price the same as the one shown on the page.',
+      run(ctx) {
+        const c = commerceInfo(ctx);
+        if (!c.isProduct) return { score: null, status: 'na', summary: 'This doesn’t look like a product page.' };
+        if (!c.product) return { score: 0, issues: 1, summary: 'No Product structured data, so agents can’t read the price or stock.' };
+        const o = c.offer;
+        if (!o) return { score: 0.2, issues: 1, summary: 'The Product block has no offers, so agents can’t read the price or stock.' };
+        const price = o.price ?? o.lowPrice ?? (o.priceSpecification && o.priceSpecification.price);
+        const fields = [['price', price != null && price !== ''], ['priceCurrency', !!(o.priceCurrency || (o.priceSpecification && o.priceSpecification.priceCurrency))], ['availability', !!o.availability]];
+        const missing = fields.filter((f) => !f[1]).map((f) => f[0]);
+        let mismatch = false;
+        if (price != null && price !== '') {
+          const n = Number(String(price).replace(/[^\d.]/g, ''));
+          const text = (document.body.innerText || '').replace(/\s+/g, ' ');
+          const forms = Number.isFinite(n) && n > 0
+            ? [n.toFixed(2), n.toFixed(2).replace('.', ','), String(n), n.toLocaleString('en-US', { minimumFractionDigits: 2 }), n.toLocaleString('de-DE', { minimumFractionDigits: 2 })]
+            : [];
+          if (forms.length && !forms.some((f) => text.includes(f))) mismatch = true;
+        }
+        const score = clamp01((3 - missing.length) / 3 - (mismatch ? 0.3 : 0));
+        const parts = [];
+        if (missing.length) parts.push(`The offer is missing ${listJoin(missing)}.`);
+        if (mismatch) parts.push(`The structured-data price (${String(price).slice(0, 20)}) doesn’t appear on the page.`);
+        return {
+          score,
+          issues: missing.length + (mismatch ? 1 : 0),
+          summary: parts.length ? parts.join(' ') : `Price ${price} ${o.priceCurrency || ''}, ${String(o.availability).replace(/^https?:\/\/schema\.org\//, '')}.`.replace(/\s+,/, ','),
+        };
+      },
+    },
+    {
+      id: 'purchase-info', category: 'commerce', weight: 2,
+      title: 'Shipping, returns and reviews',
+      why: 'Shopping agents weigh delivery cost, return terms and ratings when they compare stores. If these are only in the page text or on another page, the agent may not find them at all.',
+      fix: 'Add shippingDetails and hasMerchantReturnPolicy to the offer, and aggregateRating (or review) to the Product.',
+      run(ctx) {
+        const c = commerceInfo(ctx);
+        if (!c.isProduct) return { score: null, status: 'na', summary: 'This doesn’t look like a product page.' };
+        if (!c.product) return { score: 0, issues: 1, summary: 'No Product structured data, so shipping, returns and reviews can’t be read.' };
+        const o = c.offer || {};
+        const fields = [
+          ['shipping details', !!(o.shippingDetails || c.product.shippingDetails)],
+          ['a return policy', !!(o.hasMerchantReturnPolicy || c.product.hasMerchantReturnPolicy || c.nodes.some((n) => typeIs(n, 'MerchantReturnPolicy')))],
+          ['ratings or reviews', !!(c.product.aggregateRating || c.product.review)],
+        ];
+        const missing = fields.filter((f) => !f[1]).map((f) => f[0]);
+        return {
+          score: (3 - missing.length) / 3,
+          issues: missing.length,
+          summary: missing.length ? `Structured data has no ${listJoin(missing, 'or')}.` : 'Shipping, return policy and ratings are all in structured data.',
+        };
+      },
+    },
+    {
+      id: 'cart-button', category: 'commerce', weight: 2,
+      title: 'A clear “Add to cart” button',
+      why: 'To buy, an agent looks for a button named like “Add to cart”. If the button is a styled div, an icon without a name, or uses wording agents don’t expect, the purchase stalls.',
+      fix: 'Use a real <button> with visible text such as “Add to cart”, “Add to bag” or “Buy now”. If it’s an icon, add an aria-label.',
+      run(ctx) {
+        const c = commerceInfo(ctx);
+        if (!c.isProduct && !c.cart.length && !c.fakeCart.length) return { score: null, status: 'na', summary: 'No product or cart controls on this page.' };
+        if (c.fakeCart.length && !c.cart.length) {
+          return {
+            score: 0.2, issues: c.fakeCart.length,
+            summary: `The “add to cart” control isn’t a real button, so agents may not find it.`,
+            findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role'),
+          };
+        }
+        if (!c.cart.length) return { score: 0.75, issues: 1, summary: 'No button named like “Add to cart” or “Buy now” found. If it only appears after choosing a size or color, make sure its name says what it does.' };
+        const names = [...new Set(c.cart.map((x) => x.name))].slice(0, 3).map((n) => `“${n.slice(0, 30)}”`);
+        return {
+          score: c.fakeCart.length ? 0.8 : 1,
+          issues: c.fakeCart.length,
+          summary: `Found ${pl(c.cart.length, 'cart button')}: ${names.join(', ')}.` + (c.fakeCart.length ? ` ${pl(c.fakeCart.length, 'other one isn’t', 'others aren’t')} a real button.` : ''),
+          findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role'),
         };
       },
     },
