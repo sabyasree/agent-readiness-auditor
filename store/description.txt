@@ -1,0 +1,42 @@
+Can an AI agent actually use your page? Agent-Readiness Auditor checks how well agents like Claude, Gemini, ChatGPT agent and Perplexity Comet can read a web page and complete tasks on it, then tells you exactly what to fix.
+
+Open any page, click the icon, and press Run audit. In about a second you get a 0–100 score, a breakdown by category, and every problem element listed with why it matters and how to fix it. Press "Show on page" to scroll to an element and highlight it.
+
+Most "agent-ready" checkers only look for files like robots.txt and llms.txt. This one checks whether an agent can find your controls by name, fill in your forms, get past overlays, and read your content without being misled.
+
+NEW IN 1.2
+
+★ Agent view: see your page the way an agent reads it, as its accessibility tree in text, with a token estimate. Buttons and links with no name are flagged in red. Select any line to find it on the page, or copy the whole snapshot.
+
+★ Prompt-injection check: finds hidden text aimed at AI agents, such as "ignore previous instructions" in invisible, off-screen, tiny or same-colour text, aria-labels, alt text or HTML comments.
+
+★ Fix prompts for coding agents: copy the whole report, or a single issue, as a ready-made task for Claude Code, Cursor or Copilot. It tells the agent to fix each issue, write a test, verify it and keep going until everything is done.
+
+★ Changes since your last audit: run it again after a fix to see your score change and which issues are fixed, new, or reduced.
+
+★ More checks: misleading ARIA, layout shifts that move buttons while the page loads, content and prices that only appear after JavaScript runs, and menus so long that agents run out of room before reaching your main content.
+
+★ Agent protocols (shown for information, not scored): Markdown for agents, sitemap and Link headers, MCP server card, API catalog, OAuth discovery, Agent Skills, Content Signals and WebMCP tools.
+
+WHAT IT CHECKS
+
+• Real controls: clickable divs and spans that aren't real buttons or links, links that go nowhere, positive tabindex
+• Labels and names: icon-only buttons with no label, vague names like "Click here", images without alt text, ARIA that gives wrong information
+• Forms: unlabeled or placeholder-only fields, missing input types and autocomplete hints, required fields not marked as required
+• Interaction traps: cookie banners and overlays covering the page, unnamed dialogs, CAPTCHAs, cross-origin frames, tiny click targets, layout shifts
+• Stable targeting: controls that can only be found by generated class names or auto-generated IDs
+• Page structure: title, language, landmarks, heading outline, page size, content that needs JavaScript, where the main content starts
+• Agent safety: hidden instructions aimed at AI agents
+• Machine-readable signals: meta description, Open Graph, canonical link, structured data, llms.txt, robots.txt rules for AI agents and crawlers
+
+WHO IT'S FOR
+
+Front-end developers, QA and accessibility teams, SEO specialists, and agencies preparing sites for AI agents and agentic browsers.
+
+EXPORT
+
+Copy or download reports as Markdown or JSON, or copy them as a prompt for a coding agent.
+
+PRIVATE BY DESIGN
+
+Audits run entirely in your browser. No account, no servers, no analytics, no tracking. Nothing about the page is sent anywhere. The extension only reads a page when you click its icon.
