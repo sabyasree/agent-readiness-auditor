@@ -250,6 +250,116 @@ button { font: inherit; color: inherit; }
 .cat-bar b { display: block; height: 100%; background: currentColor; border-radius: 2px; }
 .cat-score { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 
+.cat-unscored { grid-column: span 2; text-align: right; font-size: 12px; color: var(--muted); }
+
+/* ---------- Change since the last audit */
+
+.diff { margin-top: 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); }
+.diff > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 10px;
+  list-style: none;
+  cursor: pointer;
+  font-size: 12.5px;
+}
+.diff > summary::-webkit-details-marker { display: none; }
+.diff > summary .chev { margin-left: auto; align-self: center; }
+.diff[open] .chev { transform: rotate(90deg); }
+.diff-delta { font-weight: 700; font-variant-numeric: tabular-nums; }
+.diff-text { color: var(--muted); }
+.diff-body { padding: 0 10px 10px; font-size: 12.5px; }
+.diff-body h3 { margin: 8px 0 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.diff-body ul { margin: 0; padding-left: 18px; }
+
+/* ---------- Report / Agent view tabs */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.tabs button {
+  border: 0;
+  background: none;
+  padding: 10px 4px 9px;
+  margin-right: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+.check-actions { margin-top: 10px; }
+
+/* ---------- Agent view */
+
+.agent-view { padding: 14px 0 28px; }
+.view-intro { margin: 0 16px 12px; font-size: 12.5px; color: var(--muted); max-width: 40rem; }
+.view-stats { display: flex; flex-wrap: wrap; gap: 18px; margin: 0 16px 4px; }
+.view-stat strong { display: block; font: 600 20px/1.1 var(--serif); font-variant-numeric: tabular-nums; }
+.view-stat span { font-size: 12px; color: var(--muted); }
+.view-toolbar { padding-bottom: 6px; }
+.view-searchbar { padding: 0 16px 10px; }
+.view-search {
+  width: 100%;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.view-search:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+.view-cap { margin: 0 16px 8px !important; }
+.view-empty { margin: 12px 16px; font-size: 13px; color: var(--muted); }
+.agent-view .more { margin: 10px 16px 0; }
+
+.tree {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font: 12px/1.45 var(--mono);
+}
+.node { padding-right: 8px; }
+.node > button, .node > span {
+  display: block;
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.node > span { cursor: default; }
+.node > button:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.node-role { color: var(--muted); }
+.node-name { margin-left: 6px; color: var(--ink); }
+.node-text .node-role { color: color-mix(in srgb, var(--muted) 70%, transparent); }
+.node-text .node-name { color: var(--muted); }
+.node-props { margin-left: 6px; color: var(--accent); }
+.node-props::before { content: "["; }
+.node-props::after { content: "]"; }
+.node-flag {
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 3px;
+  font: 600 11px/1.5 var(--sans);
+  color: var(--fail);
+  background: color-mix(in srgb, var(--fail) 12%, transparent);
+}
+
 /* ---------- Toolbar: filter and export */
 
 .toolbar {
