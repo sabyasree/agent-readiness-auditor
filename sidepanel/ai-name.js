@@ -41,21 +41,21 @@ function applyName(fix, name) {
 /** "Suggest a name" for a finding's fix block; only shown when the on-device model is usable. */
 function suggestNameButton(f, pre) {
   if (!fixNeedsName(f)) return null;
-  const btn = h('button', { class: 'btn btn-quiet btn-small', type: 'button', hidden: true }, 'Suggest a name');
+  const btn = h('button', { class: 'btn btn-quiet btn-small', type: 'button', hidden: true }, t('Suggest a name'));
   aiAvailability().then((a) => { btn.hidden = a === 'unavailable'; });
   btn.addEventListener('click', async () => {
     btn.disabled = true;
-    btn.textContent = 'Thinking…';
+    btn.textContent = t('Thinking…');
     try {
       const name = await suggestName(f);
       if (!name) throw new Error('empty');
       f.fix = applyName(f.fix, name);
       pre.textContent = f.fix;
       if (state.report) saveReport(state.tabId, state.report);
-      btn.textContent = 'Suggest another';
+      btn.textContent = t('Suggest another');
     } catch {
-      toast('Couldn’t get a suggestion. Chrome’s built-in AI may still be downloading.');
-      btn.textContent = 'Suggest a name';
+      toast(t('Couldn’t get a suggestion. Chrome’s built-in AI may still be downloading.'));
+      btn.textContent = t('Suggest a name');
     } finally {
       btn.disabled = false;
     }

@@ -4,6 +4,20 @@ Open any page and click the icon. The audit starts right away, and in about a se
 
 Most "agent-ready" checkers only look for files like robots.txt and llms.txt. This one checks whether an agent can find your controls by name, fill in your forms, get past overlays, buy from your product pages and read your content without being misled.
 
+NEW IN 1.5
+
+★ Weekly re-scan with alerts: after a site scan, turn on "Re-scan every week". The same pages are audited again each week, and you get an alert if the average score drops or a new problem spreads across pages.
+
+★ Keyboard and focus checks: controls you can't reach with the Tab key, and controls with no visible focus indicator.
+
+★ Shadow DOM and frames: buttons and fields inside web components (open shadow roots) and same-site iframes are now audited too.
+
+★ Name suggestions from on-device AI: for an unnamed button or image, Chrome's built-in AI (Gemini Nano) suggests a name from the text around it. Nothing leaves your computer.
+
+★ Command line and MCP server: run the same audit in CI with "npx agent-readiness <url> --min-score 80", or let Claude Code and Cursor audit pages themselves through MCP.
+
+★ In 6 languages: English, Español, Deutsch, 日本語, Português (Brasil) and বাংলা.
+
 NEW IN 1.4
 
 ★ Site scan, free: audit up to 25 pages from your sitemap or navigation and see which problems repeat across pages. A problem on most pages comes from one shared template, so one fix covers them all. Copy one fix prompt for the shared problems, open a site report, or download a CSV.
@@ -38,12 +52,12 @@ ALSO INCLUDED
 
 ★ Changes since your last audit: run it again after a fix to see your score change and which issues are fixed, new or reduced.
 
-WHAT IT CHECKS (40 checks)
+WHAT IT CHECKS (42 checks)
 
-• Real controls: clickable divs and spans that aren't real buttons or links, links that go nowhere, positive tabindex
+• Real controls: clickable divs and spans that aren't real buttons or links, links that go nowhere, controls the Tab key skips, no visible focus, positive tabindex
 • Labels and names: icon-only buttons with no label, vague names like "Click here", images without alt text, misleading ARIA
 • Forms: unlabeled or placeholder-only fields, missing input types and autocomplete hints, required fields not marked as required
-• Interaction traps: cookie banners and overlays, unnamed dialogs, CAPTCHAs, cross-origin frames, tiny click targets, layout shifts
+• Interaction traps: cookie banners and overlays, unnamed dialogs, CAPTCHAs, cross-origin frames, shadow DOM and same-site frames, tiny click targets, layout shifts
 • Stable targeting: controls that can only be found by generated class names or auto-generated IDs
 • Page structure: title, language, landmarks, headings, page size, content that needs JavaScript, where the main content starts
 • Shopping agents (product pages): Product data, price and availability, shipping, returns, ratings, the cart button
@@ -57,4 +71,4 @@ Front-end developers, QA and accessibility teams, SEO and GEO specialists, e-com
 
 PRIVATE BY DESIGN
 
-Audits run entirely in your browser. No account, no servers, no analytics, no tracking. Nothing about the page is sent anywhere, and the Agent test's AI runs on your own computer. The extension only reads a page when you click its icon, and asks for access to a site only when you start a site scan or turn on re-run on reload.
+Audits run entirely in your browser. No account, no servers, no analytics, no tracking. Nothing about the page is sent anywhere, and the Agent test's AI runs on your own computer. The extension only reads a page when you click its icon, and asks for access to a site only when you start a site scan or turn on re-run on reload. Weekly re-scans run in the background only for the sites you turn them on for, and alerts only appear if you allow notifications.

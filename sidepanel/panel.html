@@ -22,13 +22,14 @@
     </div>
     <button id="runBtn" class="btn btn-primary" type="button">Run audit</button>
     </div>
-    <nav id="tabs" class="tabs" role="tablist" aria-label="Results" hidden></nav>
+    <nav id="tabs" class="tabs" role="tablist" aria-label="Results" data-i18n-label hidden></nav>
   </header>
 
   <div id="banner" class="banner" role="status" hidden></div>
   <main id="view" tabindex="-1"></main>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
+  <script src="i18n.js"></script>
   <script src="../lib/scan-core.js"></script>
   <script src="scoring.js"></script>
   <script src="overlay.js"></script>

@@ -1,6 +1,6 @@
 'use strict';
 
-importScripts('lib/scan-core.js');
+importScripts('sidepanel/i18n.js', 'lib/scan-core.js');
 
 const SITE_URL = 'https://agent-readiness-auditor.netlify.app';
 const MONITOR_ALARM = 'weekly-rescan';
@@ -80,15 +80,15 @@ async function alertRegression(origin, change) {
   if (!chrome.notifications || !(await chrome.permissions.contains({ permissions: ['notifications'] }))) return;
   const host = new URL(origin).host;
   const parts = [];
-  if (change.drop >= 3) parts.push(`Average score ${change.before} → ${change.after}.`);
-  if (change.newShared.length) parts.push(`New on most pages: ${change.newShared.slice(0, 2).map((x) => x.title).join('; ')}.`);
+  if (change.drop >= 3) parts.push(t('Average score $1 → $2.', change.before, change.after));
+  if (change.newShared.length) parts.push(t('New on most pages: $1.', change.newShared.slice(0, 2).map((x) => t(x.title)).join('; ')));
   try {
     await chrome.notifications.create(`rescan:${origin}`, {
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icons/icon128.png'),
-      title: `Agent-readiness got worse on ${host}`,
+      title: t('Agent-readiness got worse on $1', host),
       message: parts.join(' '),
-      contextMessage: 'Weekly re-scan · open the site and the Site scan tab for details',
+      contextMessage: t('Weekly re-scan · open the site and the Site scan tab for details'),
     });
   } catch (e) {
     console.warn('Couldn’t show the re-scan alert:', e);

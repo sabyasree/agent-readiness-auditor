@@ -1,0 +1,3561 @@
+{
+ "extName": {
+  "message": "Agent-Readiness Auditor – AI エージェント対応チェッカー"
+ },
+ "extDescription": {
+  "message": "AI エージェントがページを読んで操作できるかを診断。スコア、問題点、修正方法を表示します。処理はすべてブラウザ内で完結。"
+ },
+ "m1lx5ym": {
+  "message": "、",
+  "description": " and "
+ },
+ "m5uvg12": {
+  "message": " 平均",
+  "description": " average"
+ },
+ "m35hj9v": {
+  "message": "$P1$ 個のコントロールの名前が、何をするかを表していません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control has a name that doesn’t say what it does."
+ },
+ "mat607l": {
+  "message": "$P1$ 個のコントロールが Tab キーで飛ばされます。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control is skipped by the Tab key."
+ },
+ "m10834ua": {
+  "message": "$P1$ 個のコントロールが小さすぎて確実に押せません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control is too small to hit reliably."
+ },
+ "m1ho712k": {
+  "message": "$P1$ 個のコントロールが動きました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control moved."
+ },
+ "m2h0qzy": {
+  "message": "$P1$ 個のコントロールが Tab キーで飛ばされます。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls are skipped by the Tab key."
+ },
+ "mwxl2sd": {
+  "message": "$P1$ 個のコントロールが小さすぎて確実に押せません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls are too small to hit reliably."
+ },
+ "mk6sgfj": {
+  "message": "$P1$ 個のコントロールの名前が、何をするかを表していません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls have names that don’t say what they do."
+ },
+ "m15amktb": {
+  "message": "$P1$ 個のコントロールが動きました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls moved."
+ },
+ "m1etgkpy": {
+  "message": "$P1$ 個のクロスオリジンフレームに、エージェントが届かない可能性のあるコンテンツがあります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 cross-origin frame holds content agents may not reach."
+ },
+ "m1o5pmue": {
+  "message": "$P1$ 個のクロスオリジンフレームに、エージェントが届かない可能性のあるコンテンツがあります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 cross-origin frames hold content agents may not reach."
+ },
+ "mrgvq": {
+  "message": "$P1$ 日前",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 days ago"
+ },
+ "mlib1tp": {
+  "message": "$P1$ 個のダイアログをエージェントが識別しにくくなっています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 dialog is hard for agents to identify."
+ },
+ "mnsva76": {
+  "message": "$P1$ 個のダイアログをエージェントが識別しにくくなっています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 dialogs are hard for agents to identify."
+ },
+ "movsnm2": {
+  "message": "$P1$ 個の要素に、エージェントを誤解させる ARIA があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 element has ARIA that misleads agents."
+ },
+ "m10pk21u": {
+  "message": "$P1$ 個の要素がクリックできそうに見えますが、ボタンやリンクとして公開されていません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 element looks clickable but isn’t exposed as a button or link."
+ },
+ "m49071v": {
+  "message": "$P1$ 個の要素が正の tabindex を使っています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 element uses a positive tabindex."
+ },
+ "mhkvjkt": {
+  "message": "$P1$ 個の要素",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements"
+ },
+ "m19lv6yh": {
+  "message": "$P1$ 個の要素に、エージェントを誤解させる ARIA があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements have ARIA that misleads agents."
+ },
+ "m1uhrzwv": {
+  "message": "$P1$ 個の要素がクリックできそうに見えますが、ボタンやリンクとして公開されていません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements look clickable but aren’t exposed as buttons or links."
+ },
+ "mdcovo3": {
+  "message": "$P1$ 個の要素が正の tabindex を使っています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements use a positive tabindex."
+ },
+ "mxzmzxr": {
+  "message": "$P1$ 個の要素、$P2$ 個のコントロール、$P3$ 個のフォーム項目をチェック",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "$1 elements, $2 controls and $3 form fields checked"
+ },
+ "meb516n": {
+  "message": "$P1$ 個の要素、入れ子は最大 $P2$ 階層。アクセシビリティのスナップショットにすると約 $P3$ トークンです。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "$1 elements, nested up to $2 levels deep. As an accessibility snapshot it’s about $3 tokens."
+ },
+ "mfe5p6y": {
+  "message": "$P1$ はありますが、有効な JSON ではありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 exists but isn’t valid JSON."
+ },
+ "m1glkdte": {
+  "message": "不合格 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 failing"
+ },
+ "m49x6vo": {
+  "message": "$P1$ 個の項目が必須に見えますが、必須として指定されていません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 field looks required but isn’t marked as required."
+ },
+ "m1tf0azc": {
+  "message": "$P1$ 個の項目が必須に見えますが、必須として指定されていません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 fields look required but aren’t marked as required."
+ },
+ "mw0h6bq": {
+  "message": "修正 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 fixed"
+ },
+ "m1xviscz": {
+  "message": "ツールとして宣言されたフォーム $P1$ 個: $P2$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 form declared as a tool: $2."
+ },
+ "m1syx1le": {
+  "message": "ツールとして宣言されたフォーム $P1$ 個: $P2$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 forms declared as tools: $2."
+ },
+ "mw0fnom": {
+  "message": "$P1$ 件検出",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 found"
+ },
+ "mw0au41": {
+  "message": "$P1$ 時間前",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 h ago"
+ },
+ "m4hluk5": {
+  "message": "$P1$ 個の見出しが整った構造になっています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 heading in a clean outline."
+ },
+ "m85s6vv": {
+  "message": "$P1$ 個の見出しまたは価格が、JavaScript の実行後にしか表示されません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 heading or price only appears after JavaScript runs."
+ },
+ "mmy2xi6": {
+  "message": "$P1$ 個の見出しや価格が、JavaScript の実行後にしか表示されません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 headings and prices only appear after JavaScript runs."
+ },
+ "m5a2pl2": {
+  "message": "$P1$ 個の見出しが整った構造になっています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 headings in a clean outline."
+ },
+ "m18yz4r2": {
+  "message": "改善 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 improved"
+ },
+ "mjky3tx": {
+  "message": "同一サイトのフレーム内に $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 in same-site frames"
+ },
+ "m1or3sl3": {
+  "message": "シャドウ DOM 内に $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 in shadow DOM"
+ },
+ "mvxzvbd": {
+  "message": "$P1$ 件の問題",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 issue"
+ },
+ "m1nqaxp6": {
+  "message": "$P1$ 件の問題",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 issues"
+ },
+ "m176lu2r": {
+  "message": "$P1$ 個のリンクに実際の移動先がありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 link has no real destination."
+ },
+ "m1jv70ts": {
+  "message": "$P1$ 個のリンクに実際の移動先がありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 links have no real destination."
+ },
+ "m2vg8b7": {
+  "message": "$P1$ 分前",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 min ago"
+ },
+ "m1dln38s": {
+  "message": "新規 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 new"
+ },
+ "m251g4g": {
+  "message": "$P2$ 個のボタンとリンクのうち $P1$ 個に名前がありません。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of $2 buttons and links have no name."
+ },
+ "matnsqa": {
+  "message": "$P2$ 個のコントロール ID のうち $P1$ 個が自動生成されたもののようです。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of $2 control IDs look auto-generated."
+ },
+ "mohiyr8": {
+  "message": "$P2$ 個のコントロールのうち $P1$ 個は、自動生成されたクラス名でしか指定できません。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of $2 controls can only be targeted by generated class names."
+ },
+ "m1u1vm0d": {
+  "message": "$P2$ 個の項目のうち $P1$ 個にラベルがありません。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of $2 fields have no label."
+ },
+ "mv3yqgb": {
+  "message": "$P2$ 枚の画像のうち $P1$ 枚に alt 属性がありません。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of $2 images have no alt attribute."
+ },
+ "mw74go2": {
+  "message": "$P2$ 個の個人情報項目のうち $P1$ 個に型または autocomplete の指定がありません。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of $2 personal-information fields are missing a type or autocomplete hint."
+ },
+ "m1b2vrwf": {
+  "message": "テストした $P2$ 個のコントロールのうち $P1$ 個は、フォーカス時に見た目が変わりません。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of $2 tested controls show no change when focused."
+ },
+ "msejz1m": {
+  "message": "ほかの $P1$ 個は本物のボタンではありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 other one isn’t a real button."
+ },
+ "m1y43ahv": {
+  "message": "ほかの $P1$ 個は本物のボタンではありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 others aren’t real buttons."
+ },
+ "m1nw8lm8": {
+  "message": "$P1$ 個のオーバーレイがページを覆っています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 overlay covers the page."
+ },
+ "m1fxoys0": {
+  "message": "$P1$ 個のオーバーレイがページを覆っています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 overlays cover the page."
+ },
+ "mvi1r80": {
+  "message": "$P1$ ページ",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 pages"
+ },
+ "m1fmshhc": {
+  "message": "$P1$ ページをスキャン済み",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 pages scanned"
+ },
+ "m194a6n4": {
+  "message": "合格 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 passed"
+ },
+ "m34kp5s": {
+  "message": "宣言されたツールに $P1$ 件の問題があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 problem with declared tools."
+ },
+ "mjw1l77": {
+  "message": "宣言されたツールに $P1$ 件の問題があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 problems with declared tools."
+ },
+ "mvlzbyp": {
+  "message": "$P1$ ステップ",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 steps"
+ },
+ "m1ywqd3s": {
+  "message": "$P1$ 個の構造化データブロックがスクリプトで追加されています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 structured data block is added by script."
+ },
+ "m1p8rtxj": {
+  "message": "$P1$ 個の構造化データブロックがスクリプトで追加されています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 structured data blocks are added by script."
+ },
+ "mpdz2xo": {
+  "message": "名前のないコントロール $P1$ 個",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 unnamed controls"
+ },
+ "m1bber5m": {
+  "message": "警告 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 warning"
+ },
+ "m1xt5qo9": {
+  "message": "警告 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 warnings"
+ },
+ "mv472tw": {
+  "message": "名前のない$P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 with no name"
+ },
+ "mvod9zg": {
+  "message": "悪化 $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 worse"
+ },
+ "m7ypcvb": {
+  "message": "$P1$「$P2$」",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 “$2”"
+ },
+ "m1ta2hdu": {
+  "message": "（名前なし）",
+  "description": "(no name)"
+ },
+ "m3v2b51": {
+  "message": "（うち $P1$）",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": ", including $1"
+ },
+ "m1e13aay": {
+  "message": "1 個の要素",
+  "description": "1 element"
+ },
+ "m1quntye": {
+  "message": "1 ステップ",
+  "description": "1 step"
+ },
+ "mikv0tw": {
+  "message": "わかりやすい「カートに追加」ボタン",
+  "description": "A clear “Add to cart” button"
+ },
+ "m47wlz7": {
+  "message": "リンクはページ移動を約束するものです。href がない、または「#」「javascript:」のリンクはスクリプト経由でしか動かないため、エージェントは新しいタブで開いて何も得られないか、無視してしまいます。",
+  "description": "A link promises navigation. Links with no href, “#” or “javascript:” only work through scripts, so agents may open them in a new tab, get nothing, or skip them."
+ },
+ "msddtdw": {
+  "message": "meta description と Open Graph タグは、エージェントがページを読む前に要約を伝え、正しく引用する助けになります。",
+  "description": "A meta description and Open Graph tags give agents a one-line summary of the page before they read it, and help them cite it correctly."
+ },
+ "m1a3a2gt": {
+  "message": "Chrome ウェブストアで評価していただけると、ほかの開発者が見つけやすくなります。10 秒で終わります。",
+  "description": "A quick rating on the Chrome Web Store helps other developers find it. It takes ten seconds."
+ },
+ "m17jrxrt": {
+  "message": "サイト全体のスキャン",
+  "description": "A scan of the whole site"
+ },
+ "m1230naz": {
+  "message": "スコアと最初に直すべき点",
+  "description": "A score and what to fix first"
+ },
+ "m1kme5f7": {
+  "message": "サイトマップはエージェントが訪問できるページを一覧にします。Link レスポンスヘッダー（RFC 8288）を使えば、API カタログ、ドキュメント、Markdown 版へ直接案内できます。",
+  "description": "A sitemap lists the pages an agent can visit. Link response headers (RFC 8288) can point an agent straight to an API catalog, documentation or a Markdown version."
+ },
+ "m4bh78k": {
+  "message": "実際のタスクのテスト実行",
+  "description": "A test run of a real task"
+ },
+ "m9qu37k": {
+  "message": "AI ショッピングエージェントはレイアウトではなく構造化データで商品を比較します。Product ブロックがないと、名前・ブランド・型番をページ本文から推測するしかなく、商品が候補から外されがちです。",
+  "description": "AI shopping agents compare products from structured data, not from the layout. Without a Product block they have to guess the name, brand and model from the page text, and often skip the product."
+ },
+ "mu0j7vv": {
+  "message": "API・サインイン・スキルの検出",
+  "description": "API, sign-in and skills discovery"
+ },
+ "m1tu7mrg": {
+  "message": "エージェントに誤った情報を与える ARIA",
+  "description": "ARIA that gives agents wrong information"
+ },
+ "m1th96l1": {
+  "message": "約 $P1$ トークン",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "About $1 tokens"
+ },
+ "mgtzui8": {
+  "message": "約 $P2$ トークン、名前のないコントロール $P1$ 個",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "About $2 tokens, $1 unnamed control"
+ },
+ "m1ma2kw3": {
+  "message": "約 $P2$ トークン、名前のないコントロール $P1$ 個",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "About $2 tokens, $1 unnamed controls"
+ },
+ "m18ijjfp": {
+  "message": "アクセスが許可されませんでした。対象ページでツールバーのアイコンをクリックすると、1 回だけ診断できます。",
+  "description": "Access wasn’t granted. Click the toolbar icon while on the page to audit it once."
+ },
+ "mr67ktp": {
+  "message": "アクセシビリティツリー",
+  "description": "Accessibility tree"
+ },
+ "m1nej05f": {
+  "message": "$P1$ ページの平均。最低: $P2$（$P3$）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "Across $1 pages. Lowest: $2 ($3)."
+ },
+ "m12votl": {
+  "message": "<meta name=\"description\">、og:title、og:description と、優先 URL を指す <link rel=\"canonical\"> を追加してください。",
+  "description": "Add <meta name=\"description\">, og:title, og:description, and a <link rel=\"canonical\"> pointing at the preferred URL."
+ },
+ "m16rmtok": {
+  "message": "ページの主題に合った JSON-LD（Product、Article、Organization、Event、FAQPage など）を追加してください。",
+  "description": "Add JSON-LD for the page’s main subject, such as Product, Article, Organization, Event or FAQPage."
+ },
+ "monnxzo": {
+  "message": "name、image、description、brand と、sku・gtin・mpn などの識別子を持つ Product 型の JSON-LD を追加してください。ほとんどの EC プラットフォームや SEO プラグインで出力できます。",
+  "description": "Add JSON-LD of type Product with name, image, description, brand, and an identifier such as sku, gtin or mpn. Most shop platforms and SEO plugins can output it."
+ },
+ "m1fmdnz8": {
+  "message": "robots.txt に Content-Signal: search=yes, ai-input=yes, ai-train=no のような行を追加してください。",
+  "description": "Add a line such as Content-Signal: search=yes, ai-input=yes, ai-train=no to robots.txt."
+ },
+ "mc1x0vn": {
+  "message": "重要なコントロールに安定した目印を付けてください。意味のある id、name、または data-testid や data-action などの data 属性です。",
+  "description": "Add a stable hook to important controls: a meaningful id, a name, or a data attribute such as data-testid or data-action."
+ },
+ "mrif9bp": {
+  "message": "画像を説明する alt テキストを追加してください。装飾目的だけの画像は alt=\"\" にして、エージェントが読み飛ばせるようにします。",
+  "description": "Add alt text that describes the image. For purely decorative images, use alt=\"\" so agents can skip them."
+ },
+ "m7rnbwt": {
+  "message": "Product に price、priceCurrency、availability（例: https://schema.org/InStock）を持つ offers を追加し、価格はページの表示と一致させてください。",
+  "description": "Add an offers object to the Product with price, priceCurrency and availability (for example https://schema.org/InStock), and keep the price the same as the one shown on the page."
+ },
+ "m1269udb": {
+  "message": "offer に shippingDetails と hasMerchantReturnPolicy を、Product に aggregateRating（または review）を追加してください。",
+  "description": "Add shippingDetails and hasMerchantReturnPolicy to the offer, and aggregateRating (or review) to the Product."
+ },
+ "m1lvpdnh": {
+  "message": "フォームで必須の項目すべてに required 属性または aria-required=\"true\" を追加してください。",
+  "description": "Add the required attribute, or aria-required=\"true\", to every field the form needs."
+ },
+ "m12v5k33": {
+  "message": "この商品をカートに追加する",
+  "description": "Add this product to the cart"
+ },
+ "m13uot5m": {
+  "message": "主要なフォームに toolname と tooldescription を追加し、すべての項目に name とラベルを付けるか、document.modelContext の registerTool() メソッドでスクリプトからツールを登録してください。",
+  "description": "Add toolname and tooldescription to key forms, give every field a name and a label, or register tools in script with the registerTool() method of document.modelContext."
+ },
+ "mtez6o6": {
+  "message": "表示テキスト、aria-label、またはアイコン画像の alt テキストを追加してください。SVG アイコンの場合はボタン自体に aria-label を付けます。",
+  "description": "Add visible text, an aria-label, or alt text on the icon image. For SVG icons, put aria-label on the button itself."
+ },
+ "mo3evzt": {
+  "message": "エージェント向けプロトコル",
+  "description": "Agent protocols"
+ },
+ "mnpdj5s": {
+  "message": "エージェントの安全性",
+  "description": "Agent safety"
+ },
+ "m1dq1fbe": {
+  "message": "エージェントテスト",
+  "description": "Agent test"
+ },
+ "m1q5tked": {
+  "message": "エージェントテスト: $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Agent test: $1"
+ },
+ "m1dpzosx": {
+  "message": "エージェントビュー",
+  "description": "Agent view"
+ },
+ "mdt8g3p": {
+  "message": "エージェントビューをコピーしました",
+  "description": "Agent view copied"
+ },
+ "m1kjfmre": {
+  "message": "Agent-Readiness: $P1$ をマーク",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Agent-Readiness: $1 marked"
+ },
+ "m28revp": {
+  "message": "$P1$ のエージェント対応度が低下しました",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Agent-readiness got worse on $1"
+ },
+ "m3uao7u": {
+  "message": "エージェント対応済み",
+  "description": "Agent-ready"
+ },
+ "m1djf8o3": {
+  "message": "エージェントや自動化ツールは属性で要素を見つけ直します。自動生成されたクラス名や ID はビルドのたびに変わります。",
+  "description": "Agents and automations re-find elements by their attributes. Generated class names and IDs change with every build."
+ },
+ "m1uk8kvl": {
+  "message": "エージェントやそのツールは、別ドメインの iframe 内を読んだりクリックしたりできないことがよくあります。この方法で埋め込まれた決済・ログイン・予約ウィジェットには到達できない場合があります。",
+  "description": "Agents and their tools often can’t read or click inside iframes from another domain. Checkout, login or booking widgets embedded this way can be unreachable."
+ },
+ "m1bh3v3w": {
+  "message": "エージェントはここで行き詰まる可能性が高いです。下の不合格項目が最大の障害です。",
+  "description": "Agents are likely to get stuck here. The failing checks below are the biggest blockers."
+ },
+ "m1o7bvrr": {
+  "message": "エージェントはこのページを使えますが、いくつかの問題で手間取ったりミスをしたりします。",
+  "description": "Agents can use this page, but a few issues will slow them down or cause mistakes."
+ },
+ "mc1z2p2": {
+  "message": "エージェントは項目のラベルと手持ちの情報を照合してフォームに入力します。ラベルがない項目やプレースホルダーだけの項目は推測頼みになり、プレースホルダーは入力を始めると消えてしまいます。",
+  "description": "Agents fill forms by matching field labels to the information they have. A field with no label, or only placeholder text, is a guess, and placeholders vanish once typing starts."
+ },
+ "mp3af9r": {
+  "message": "エージェントはロールを手がかりにクリック対象を探します。ただの div や span で作られたコントロールは見えません。",
+  "description": "Agents find things to click by their role. Controls built from plain divs and spans are invisible to them."
+ },
+ "m9yonkr": {
+  "message": "エージェントはアクセシビリティツリーからボタンやリンクを探します。見た目だけクリックできそうな div はそこに載らないため、無視されるか、画面のピクセルから推測するしかありません。",
+  "description": "Agents look for buttons and links in the accessibility tree. A div that only looks clickable isn’t listed there, so agents skip it or have to guess from pixels."
+ },
+ "m164ziva": {
+  "message": "エージェントは限られたコンテキストの中で、切り詰めたページのコピーを読みます。非常に大きい、または入れ子が深いページは途中で切れ、末尾近くの内容は読まれないことがあります。",
+  "description": "Agents read a trimmed copy of the page within a limited context. Very large or deeply nested pages get cut off, so content near the end may never be seen."
+ },
+ "m1os8djj": {
+  "message": "エージェントはページを上から読み、コンテキストに収まるよう途中で切ることがよくあります。メニューや巨大なナビゲーション、バナーが先にあると、そこで予算を使い切り、本文に届かないことがあります。",
+  "description": "Agents read the page from the top and often cut it off to fit their context. If menus, mega-navigation and banners come first, the agent spends its budget on them and may never reach the content."
+ },
+ "mww4r46": {
+  "message": "エージェントはページを読み、クリック先を決めてからクリックします。その間に画像・広告・バナーの遅延読み込みでボタンが動くと、別のものをクリックしてしまいます。",
+  "description": "Agents read the page, decide where to click, then click. If buttons move in between, because images, ads or banners load late, the click lands on the wrong thing."
+ },
+ "m1o0nal8": {
+  "message": "エージェントはこのページを読み、ほとんどのタスクを完了できるはずです。",
+  "description": "Agents should be able to read this page and complete most tasks on it."
+ },
+ "m1puojyf": {
+  "message": "キーボードでページを操作するエージェントや、マウスを使えない人は Tab キーでコントロール間を移動します。tabindex=\"-1\" のボタンやリンクは飛ばされるため、クリックでしか到達できません。",
+  "description": "Agents that drive the page with the keyboard, and people who can’t use a mouse, move between controls with Tab. A button or link with tabindex=\"-1\" is skipped, so it can only be reached by clicking."
+ },
+ "mpgeljw": {
+  "message": "ページをテキストとして読むエージェントには、alt のない画像は何もないのと同じです。商品写真、グラフ、意味のあるアイコンが消えてしまいます。",
+  "description": "Agents that read the page as text see nothing for an image without alt. Product photos, charts and meaningful icons disappear."
+ },
+ "m1pe8g6v": {
+  "message": "スクリーンショットで動くエージェントは座標でクリックします。24 × 24 ピクセル未満や幅 16 ピクセル未満の小さな対象は、押し損じたり隣と取り違えたりしがちです。",
+  "description": "Agents that work from screenshots click by coordinates. Tiny targets, smaller than 24 × 24 pixels or thinner than 16 pixels, are easy to miss or to confuse with their neighbours."
+ },
+ "m1eoj8h6": {
+  "message": "エージェントは ARIA を完全に信頼します。aria-hidden が付いたフォーカス可能な要素、存在しない id を指すラベル、表示テキストと一致しない aria-label は誤った情報を伝え、エージェントはその誤りに気づけません。",
+  "description": "Agents trust ARIA completely. A focusable element marked aria-hidden, a label that points at a missing id, or an aria-label that doesn’t match the visible text tells the agent something false, and it "
+ },
+ "m1hkigni": {
+  "message": "エージェントはこのページの一部で苦労します。不合格の項目から始めましょう。",
+  "description": "Agents will struggle with parts of this page. Start with the failing checks."
+ },
+ "m8o8x7z": {
+  "message": "通知はオフです。",
+  "description": "Alerts are off."
+ },
+ "m3765b8": {
+  "message": "すべて",
+  "description": "All"
+ },
+ "mny5ony": {
+  "message": "$P1$ 個のボタンとリンクすべてに名前があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 buttons and links have a name."
+ },
+ "mx4m42n": {
+  "message": "$P1$ 個の項目すべてにラベルがあります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 fields are labeled."
+ },
+ "mcyo0zr": {
+  "message": "$P1$ 枚の画像すべてに alt 属性があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 images have alt attributes."
+ },
+ "m11y3eqb": {
+  "message": "テストした $P1$ 個のコントロールすべてにフォーカス表示があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 tested controls show a focus indicator."
+ },
+ "m13e2vcr": {
+  "message": "すべてのリンクに実際の移動先があります。",
+  "description": "All links point to real destinations."
+ },
+ "muz3ptn": {
+  "message": "ローカルファイルへのアクセスを許可",
+  "description": "Allow access to local files"
+ },
+ "m19kslz8": {
+  "message": "すべてのサイトで許可",
+  "description": "Allow on all sites"
+ },
+ "mtg11ol": {
+  "message": "/.well-known/mcp/server-card.json の MCP サーバーカードは、サイトが Model Context Protocol でツールを提供していること、接続とサインインの方法をエージェントに伝えます。現時点ではドラフト段階で、ほとんど普及していません。",
+  "description": "An MCP server card at /.well-known/mcp/server-card.json tells agents the site offers tools over the Model Context Protocol, and how to connect and sign in. It’s a draft with very little adoption so fa"
+ },
+ "m5fwgr5": {
+  "message": "エージェントはおそらく実行できます",
+  "description": "An agent could likely do this"
+ },
+ "mkad2zf": {
+  "message": "エージェントは問題を抱えつつ実行できるかもしれません",
+  "description": "An agent might manage, with problems"
+ },
+ "mh54lue": {
+  "message": "「保存をクリック」と指示されたエージェントは「保存」という名前のコントロールを探します。アイコンだけのボタンや空のリンクには照合できる名前がなく、推測するしかありません。",
+  "description": "An agent told to “click Save” looks for a control named Save. Icon-only buttons and empty links have no name to match, so the agent has to guess."
+ },
+ "m1rhgi03": {
+  "message": "エージェントはおそらく行き詰まります",
+  "description": "An agent would probably get stuck"
+ },
+ "m19rs9ka": {
+  "message": "アスタリスクは見た目だけの印です。required 属性がないと、エージェントは未入力のままフォームを送信し、エラーからやり直すことになります。",
+  "description": "An asterisk is only visual. Without the required attribute, agents submit forms with missing fields and then have to recover from errors."
+ },
+ "mv06b5s": {
+  "message": "クリックできるものは本物のボタンやリンクですか？",
+  "description": "Are clickable things real buttons and links?"
+ },
+ "mtwjzta": {
+  "message": "項目にラベル・型・必須指定がありますか？",
+  "description": "Are fields labeled, typed and marked as required?"
+ },
+ "m1sbwlvi": {
+  "message": "まず競合のトップページや商品ページなど別のページを診断し、ここでこのページと比較してください。",
+  "description": "Audit another page first, such as a competitor’s homepage or product page, then compare it with this one here."
+ },
+ "muoj8gi": {
+  "message": "診断履歴を消去しました",
+  "description": "Audit history cleared"
+ },
+ "mg6pm0e": {
+  "message": "表示中のページを診断",
+  "description": "Audit the page you’re on"
+ },
+ "mmj2es7": {
+  "message": "$P1$ の最大 25 ページを診断し、共通の問題を見つけます。多くのページに出る問題はたいてい 1 つのテンプレートが原因なので、1 か所の修正ですべて直ります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Audit up to 25 pages of $1 and find the problems they share. A problem on most pages usually comes from one template, so one fix covers them all."
+ },
+ "m1oepb91": {
+  "message": "このサイトの最大 25 ページを診断",
+  "description": "Audit up to 25 pages of this site"
+ },
+ "m1cwx0z4": {
+  "message": "$P1$ に診断（$P2$ 秒）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Audited $1 in $2 s."
+ },
+ "m1wzanns": {
+  "message": "診断中",
+  "description": "Auditing"
+ },
+ "m1wneqmc": {
+  "message": "$P2$ ページ中 $P1$ ページ目を診断中…",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Auditing $1 of $2…"
+ },
+ "m3d63xq": {
+  "message": "診断中…",
+  "description": "Auditing…"
+ },
+ "ml4joae": {
+  "message": "自動生成された ID",
+  "description": "Auto-generated IDs"
+ },
+ "mifclip": {
+  "message": "平均スコア $P1$ → $P2$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Average score $1 → $2."
+ },
+ "mvyxsts": {
+  "message": "エージェントが商品を勧めたり購入したりするには、価格、通貨、在庫の有無が必要です。構造化データにこれらがない、またはページと価格が違うと、エージェントは商品を外すか、誤った価格を伝えます。",
+  "description": "Before an agent recommends or buys a product, it needs the price, the currency and whether it’s in stock. If structured data leaves these out, or shows a different price than the page, agents skip the"
+ },
+ "mn49vts": {
+  "message": "人の代わりに閲覧するエージェントをブロック: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Blocks agents browsing for a person: $1."
+ },
+ "m8z9qcx": {
+  "message": "クローラーをブロック: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Blocks crawlers: $1."
+ },
+ "m1c2m8jw": {
+  "message": "ボット認証",
+  "description": "Bot challenges"
+ },
+ "mlojp22": {
+  "message": "ブラウザのページ",
+  "description": "Browser page"
+ },
+ "my5uomj": {
+  "message": "CAPTCHA やボットチェックは、実在の人の代わりに動くエージェントも含め、自動アクセスを止めるためのものです。重要な導線にあるとタスクがそこで終わってしまいます。",
+  "description": "CAPTCHAs and bot checks are built to stop automated visitors, including agents acting for a real person. A challenge on a key flow can end the task."
+ },
+ "m1gxt4tr": {
+  "message": "エージェントは名前でコントロールを区別できますか？",
+  "description": "Can an agent tell controls apart by name?"
+ },
+ "mdvzitr": {
+  "message": "エージェントはここで「カートに追加」や「登録」ができますか？",
+  "description": "Can an agent “add to cart” or “sign up” here?"
+ },
+ "m18x3nqb": {
+  "message": "キャンセル",
+  "description": "Cancel"
+ },
+ "mdonbir": {
+  "message": "見つかったカートボタン: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Cart buttons found: $1."
+ },
+ "m1hlydds": {
+  "message": "カテゴリ別スコアは、バージョン 1.4 以降で診断したページに表示されます。",
+  "description": "Category scores appear for pages audited with version 1.4 or later."
+ },
+ "m881kqe": {
+  "message": "ページごとではなく、サイト全体で 1 回チェックします。",
+  "description": "Checked once for the whole site, not per page."
+ },
+ "mzc8ir2": {
+  "message": "Chrome の組み込み AI を確認中…",
+  "description": "Checking for Chrome’s built-in AI…"
+ },
+ "m1misvnu": {
+  "message": "$P1$ で選択",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Choose in $1"
+ },
+ "m19hns4d": {
+  "message": "$P2$ で「$P1$」を選択",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Choose “$1” in $2"
+ },
+ "m1drs9vz": {
+  "message": "Chrome では、拡張機能が Chrome 自身のページ、Chrome ウェブストア、ほかの拡張機能を読むことはできません。通常のウェブサイトを開いて診断してください。",
+  "description": "Chrome doesn’t let extensions read its own pages, the Chrome Web Store, or other extensions. Open a regular website and run the audit there."
+ },
+ "m171qjiw": {
+  "message": "Chrome が組み込み AI モデルをダウンロード中です。準備ができるまで、テストは名前照合で行います。",
+  "description": "Chrome is downloading its built-in AI model. Until it’s ready, tests use name matching."
+ },
+ "mkmft6z": {
+  "message": "このページを読むには許可が必要です",
+  "description": "Chrome needs your OK to read this page"
+ },
+ "m13ziwmm": {
+  "message": "css-1x2y3z や Button_root__a8F3k のようなクラス名はサイトを再ビルドするたびに変わります。これらのセレクターを覚えているエージェントや自動化はリリースのたびに壊れます。",
+  "description": "Class names like css-1x2y3z or Button_root__a8F3k change whenever the site is rebuilt. Agents and automations that remember these selectors break after every release."
+ },
+ "m17cmr1v": {
+  "message": "診断履歴を消去",
+  "description": "Clear audit history"
+ },
+ "m6vzlzy": {
+  "message": "$P1$ をクリック",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Click $1"
+ },
+ "m1l91z4h": {
+  "message": "クリック対象は十分な大きさです。",
+  "description": "Click targets are a comfortable size."
+ },
+ "mp59e8o": {
+  "message": "対象ページでツールバーの拡張機能アイコンをクリックして 1 回だけの診断を許可し、「診断を実行」を押してください。または、すべてのサイトで許可すれば確認なしでどこでも使えます。",
+  "description": "Click the extension’s toolbar icon while you’re on the page to allow a one-time audit, then press Run audit. Or allow the auditor on all sites so it works anywhere without asking."
+ },
+ "m1l37z3p": {
+  "message": "Chrome の右上にあるパズルのアイコン <span class=\"kbd\" aria-label=\"Extensions\">⧉</span> をクリックし、<b>Agent-Readiness Auditor</b> の横のピンをクリックします。各ページのスコアがアイコンに表示されるようになります。",
+  "description": "Click the puzzle-piece <span class=\"kbd\" aria-label=\"Extensions\">⧉</span> icon at the top right of Chrome, then the pin next to <b>Agent-Readiness Auditor</b>. It’ll show each page’s score right on th"
+ },
+ "m11haw1e": {
+  "message": "コントロールのロールがないクリック可能な要素",
+  "description": "Clickable elements without a control role"
+ },
+ "m1ohrlfm": {
+  "message": "比較",
+  "description": "Compare"
+ },
+ "m1gx820l": {
+  "message": "このページと比較する対象",
+  "description": "Compare this page with"
+ },
+ "m19wyrsu": {
+  "message": "オープンなシャドウ DOM を持つコンポーネント: $P1$ 個（内部のコントロール $P2$ 個）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Components with open shadow DOM: $1, with $2 controls inside."
+ },
+ "mi3polt": {
+  "message": "各項目に <label for> を関連付けるか、項目を <label> で囲んでください。aria-label は、表示ラベルを置けない場合にだけ使います。",
+  "description": "Connect a <label for> to each field, or wrap the field in a <label>. Use aria-label only when a visible label isn’t possible."
+ },
+ "m120i3bb": {
+  "message": "robots.txt の Content Signals",
+  "description": "Content Signals in robots.txt"
+ },
+ "m11e3akm": {
+  "message": "Content Signals を使うと、クローラーを一律にブロックする代わりに、検索、AI の回答（ai-input）、AI の学習（ai-train）それぞれでコンテンツの利用可否を示せます。",
+  "description": "Content Signals let a site say separately whether its content may be used for search, for AI answers (ai-input) and for AI training (ai-train), instead of blocking crawlers outright."
+ },
+ "m2gul5l": {
+  "message": "クロスオリジンのフレーム内のコンテンツ",
+  "description": "Content inside cross-origin frames"
+ },
+ "mmr8t0v": {
+  "message": "JavaScript が必要なコンテンツ",
+  "description": "Content that needs JavaScript"
+ },
+ "m1uahxug": {
+  "message": "コントロールの ID は安定しているようです。",
+  "description": "Control IDs look stable."
+ },
+ "m18qld33": {
+  "message": "コントロール名は具体的で区別できます。",
+  "description": "Control names are specific and distinct."
+ },
+ "m5i9k9d": {
+  "message": "コントロール",
+  "description": "Controls"
+ },
+ "mj3bsfx": {
+  "message": "コントロールは自動生成クラス名に依存していません。",
+  "description": "Controls don’t depend on generated class names."
+ },
+ "mbvzc3i": {
+  "message": "自動生成クラス名でしか識別できないコントロール",
+  "description": "Controls identified only by generated class names"
+ },
+ "m1cbsk7c": {
+  "message": "シャドウ DOM とフレーム内のコントロール",
+  "description": "Controls inside shadow DOM and frames"
+ },
+ "m13lisfp": {
+  "message": "名前のないコントロール",
+  "description": "Controls with no name"
+ },
+ "mgb7rqt": {
+  "message": "Tab キーで到達できないコントロール",
+  "description": "Controls you can’t reach with the Tab key"
+ },
+ "m1jk8av9": {
+  "message": "Cookie バナー、登録モーダル、インタースティシャルはコンテンツの上に重なります。エージェントは誤ってオーバーレイをクリックしたり、閉じるまで下の内容に届かなかったりします。",
+  "description": "Cookie banners, sign-up modals and interstitials sit on top of the content. Agents often click the overlay by mistake, or can’t reach what’s underneath until it’s dismissed."
+ },
+ "m11101k": {
+  "message": "この問題の修正とテストをコーディングエージェントに頼むプロンプトをコピー",
+  "description": "Copy a prompt that asks a coding agent to fix and test this issue"
+ },
+ "moxz5in": {
+  "message": "テキストとしてコピー",
+  "description": "Copy as text"
+ },
+ "m1nmiyh9": {
+  "message": "コードをコピー",
+  "description": "Copy code"
+ },
+ "m1bnoamr": {
+  "message": "修正プロンプトをコピー",
+  "description": "Copy fix prompt"
+ },
+ "m1f8uij4": {
+  "message": "これらのプロンプトをコピー",
+  "description": "Copy prompt for these"
+ },
+ "mhmsczf": {
+  "message": "レポートを Markdown でコピー",
+  "description": "Copy report as Markdown"
+ },
+ "m1cqaz94": {
+  "message": "レポートをプロンプトとしてコピー",
+  "description": "Copy report as prompt"
+ },
+ "m1nnce5r": {
+  "message": "このページから llms.txt を確認できませんでした。",
+  "description": "Couldn’t check for llms.txt from this page."
+ },
+ "m8xsgwt": {
+  "message": "このページから robots.txt を確認できませんでした。",
+  "description": "Couldn’t check robots.txt from this page."
+ },
+ "megojnf": {
+  "message": "比較できませんでした: ページの URL が $P1$ を返しました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Couldn’t compare: the page URL returned $1."
+ },
+ "m2tqd0i": {
+  "message": "コピーできませんでした。代わりに「Markdown をダウンロード」を使ってください。",
+  "description": "Couldn’t copy. Use Download Markdown instead."
+ },
+ "modgrbv": {
+  "message": "比較のためにこのページの HTML を取得できませんでした。",
+  "description": "Couldn’t fetch this page’s HTML to compare."
+ },
+ "mlfqwj8": {
+  "message": "提案を取得できませんでした。Chrome の組み込み AI がまだダウンロード中かもしれません。",
+  "description": "Couldn’t get a suggestion. Chrome’s built-in AI may still be downloading."
+ },
+ "m18dpshp": {
+  "message": "ページにアクセスできませんでした。もう一度診断してください。",
+  "description": "Couldn’t reach the page. Run the audit again."
+ },
+ "m1milpcv": {
+  "message": "それらの要素にアクセスできませんでした。もう一度診断してください。",
+  "description": "Couldn’t reach those elements. Run the audit again."
+ },
+ "mc7rwy1": {
+  "message": "このページから robots.txt を読めませんでした。",
+  "description": "Couldn’t read robots.txt from this page."
+ },
+ "m42yzu3": {
+  "message": "このブラウザではキーボードフォーカスを再現できませんでした。",
+  "description": "Couldn’t simulate keyboard focus in this browser."
+ },
+ "m1ft03jl": {
+  "message": "どのエージェントを許可するかは意図して決めましょう。学習用クローラー（GPTBot、ClaudeBot、Google-Extended）のブロックと、人の代わりに閲覧するエージェントのブロックは別物です。",
+  "description": "Decide deliberately which agents to allow. Blocking training crawlers (GPTBot, ClaudeBot, Google-Extended) is separate from blocking agents that browse on someone’s behalf."
+ },
+ "m1vooihc": {
+  "message": "まずタスクを入力してください。",
+  "description": "Describe a task first."
+ },
+ "msmmp3": {
+  "message": "人がここでエージェントに頼みそうなことを入力してください。テストはエージェントと同じ方法でページを読み、クリック手順を計画して、どこで行き詰まるかを示します。ページ上で実際にクリックはしません。",
+  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked."
+ },
+ "mrzztvp": {
+  "message": "説明文とリンクのメタデータ",
+  "description": "Description and link metadata"
+ },
+ "md9dltx": {
+  "message": "description、Open Graph、canonical タグがすべてあります。",
+  "description": "Description, Open Graph and canonical tags are all present."
+ },
+ "mm0yiiq": {
+  "message": "内容がわかるページタイトル",
+  "description": "Descriptive page title"
+ },
+ "m19xqb96": {
+  "message": "ダイアログに名前がありません（aria-labelledby か aria-label を追加）",
+  "description": "Dialog has no name (add aria-labelledby or aria-label)"
+ },
+ "msdjbbb": {
+  "message": "オーバーレイ、CAPTCHA、フレームが邪魔していませんか？",
+  "description": "Do overlays, CAPTCHAs or frames block the way?"
+ },
+ "mxssd9w": {
+  "message": "今後表示しない",
+  "description": "Don’t ask again"
+ },
+ "mfnyy6x": {
+  "message": "フォーカスの枠線を消さないでください。デザイン上独自のものが必要なら、背景とはっきり区別できる outline か box-shadow で :focus-visible をスタイル指定します。",
+  "description": "Don’t remove the focus outline. If the design needs a custom one, style :focus-visible with an outline or a box-shadow that contrasts with the background."
+ },
+ "m1f9pqt3": {
+  "message": "CSV をダウンロード",
+  "description": "Download CSV"
+ },
+ "m1m776h5": {
+  "message": "JSON をダウンロード",
+  "description": "Download JSON"
+ },
+ "ma1xd3q": {
+  "message": "Markdown をダウンロード",
+  "description": "Download Markdown"
+ },
+ "my7pm4k": {
+  "message": "共有用レポートをダウンロード（HTML）",
+  "description": "Download shareable report (HTML)"
+ },
+ "m7f191s": {
+  "message": "ダウンロードしました",
+  "description": "Downloaded"
+ },
+ "m12sg01l": {
+  "message": "すべての項目が合格、またはこのページには該当しません。",
+  "description": "Every check passed or doesn’t apply to this page."
+ },
+ "m3u3sfl": {
+  "message": "全チェック項目と修正方法",
+  "description": "Every check, with fixes"
+ },
+ "mtc6lb4": {
+  "message": "クリックできそうな要素はすべて本物のコントロールです。",
+  "description": "Every clickable-looking element is a real control."
+ },
+ "mnc2hr1": {
+  "message": "すべてのコントロールに Tab キーで到達できます。",
+  "description": "Every control can be reached with the Tab key."
+ },
+ "m1ml31ld": {
+  "message": "すべてのコントロールに、「カートに追加をクリック」のような指示と照合できる名前が必要です。",
+  "description": "Every control needs a name an agent can match to an instruction like “click Add to cart”."
+ },
+ "m1iahjyp": {
+  "message": "すべてのステップで、エージェントが名前で見つけられるコントロールを使います。",
+  "description": "Every step uses a control an agent can find by name."
+ },
+ "m1c596is": {
+  "message": "すべて",
+  "description": "Everything"
+ },
+ "mtzq1wz": {
+  "message": "処理はすべてブラウザ内で行われます。ページの情報はどこにも送信されません。",
+  "description": "Everything runs in your browser. Nothing about the page is sent anywhere."
+ },
+ "m5n61xj": {
+  "message": "処理はすべてブラウザ内で行われます。拡張機能はアイコンをクリックしたときだけページを読み、どこにも送信しません。<a href=\"https://agent-readiness-auditor.netlify.app/privacy-policy.html\">プライバシーポリシー</a>",
+  "description": "Everything runs in your browser. The extension only reads a page when you click its icon, and sends nothing anywhere. <a href=\"https://agent-readiness-auditor.netlify.app/privacy-policy.html\">Privacy "
+ },
+ "mhweyeh": {
+  "message": "さらに見る",
+  "description": "Explore more"
+ },
+ "m1305875": {
+  "message": "エクスポート",
+  "description": "Export"
+ },
+ "mnl3hon": {
+  "message": "不合格",
+  "description": "Failing"
+ },
+ "m13fdvho": {
+  "message": "問題が減少",
+  "description": "Fewer issues"
+ },
+ "ma1u4u3": {
+  "message": "型や autocomplete の指定がない項目",
+  "description": "Fields missing type or autocomplete hints"
+ },
+ "mmsuays": {
+  "message": "必須に見える項目は必須として指定されています。",
+  "description": "Fields that look required are marked as required."
+ },
+ "mbxo00f": {
+  "message": "名前またはロールを検索",
+  "description": "Find a name or role"
+ },
+ "m1nwyqlm": {
+  "message": "エージェントビュー内を検索",
+  "description": "Find in the agent view"
+ },
+ "m6c26i": {
+  "message": "お問い合わせページを探す",
+  "description": "Find the contact page"
+ },
+ "m17xy841": {
+  "message": "料金を探す",
+  "description": "Find the pricing"
+ },
+ "m1gb0s11": {
+  "message": "お役に立っていますか？",
+  "description": "Finding this useful?"
+ },
+ "my5br52": {
+  "message": "修正コードをコピーしました",
+  "description": "Fix copied"
+ },
+ "m6p34te": {
+  "message": "修正プロンプトをコピーしました",
+  "description": "Fix prompt copied"
+ },
+ "mcgssdj": {
+  "message": "まずこれを修正",
+  "description": "Fix these first"
+ },
+ "m1adaw7x": {
+  "message": "修正して再実行",
+  "description": "Fix, then run it again"
+ },
+ "m3f1ylv": {
+  "message": "修正済み",
+  "description": "Fixed"
+ },
+ "m1fzolxr": {
+  "message": "フォーカス可能なのに aria-hidden=\"true\" でエージェントから隠されています",
+  "description": "Focusable, but hidden from agents with aria-hidden=\"true\""
+ },
+ "mfyc6ti": {
+  "message": "例: この商品をカートに追加する",
+  "description": "For example: Add this product to the cart"
+ },
+ "mgoz6jt": {
+  "message": "サイトを編集しているときに",
+  "description": "For when you’re editing the site"
+ },
+ "md6y56j": {
+  "message": "ラベルのないフォーム項目",
+  "description": "Form fields without labels"
+ },
+ "m3f6srk": {
+  "message": "フォーム",
+  "description": "Forms"
+ },
+ "me07t6s": {
+  "message": "「$P2$」の $P1$ が見つかりました。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $1 for “$2”."
+ },
+ "m12njdup": {
+  "message": "AI エージェントへの指示のように読める隠しテキストが $P1$ 件見つかりました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $1 piece of hidden text that reads like instructions to an AI agent."
+ },
+ "m1j9l5lt": {
+  "message": "AI エージェントへの指示のように読める隠しテキストが $P1$ 件見つかりました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $1 pieces of hidden text that read like instructions to an AI agent."
+ },
+ "m12g9oo8": {
+  "message": "$P1$ が見つかりました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $1."
+ },
+ "mktkm9x": {
+  "message": "$P2$/llms.txt が見つかりました（$P1$ 行）。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $2/llms.txt ($1 lines)."
+ },
+ "mdcjdyq": {
+  "message": "$P2$/llms.txt が見つかりました（1 行）。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Found $2/llms.txt (1 line)."
+ },
+ "m1517x8m": {
+  "message": "このページで検出: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found on this page: $1."
+ },
+ "m1p6tvg2": {
+  "message": "検出: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found: $1."
+ },
+ "me5y9j5": {
+  "message": "サイトのスコアが下がったら通知します。",
+  "description": "Get an alert if a site’s score drops."
+ },
+ "mvk81j3": {
+  "message": "スコアの低下や新しい問題の広がりを通知",
+  "description": "Get an alert if the score drops or a new problem spreads"
+ },
+ "m61exxf": {
+  "message": "重要なコントロールには読みやすく恒久的な ID を付けるか、代わりに name や data-testid 属性を使ってください。",
+  "description": "Give important controls readable, permanent IDs, or rely on name and data-testid attributes instead."
+ },
+ "m101a7sm": {
+  "message": "オーバーレイには名前の明確な閉じるボタンを付けてメインコンテンツから離し、モーダルには role=\"dialog\"、aria-modal=\"true\" と名前を付けてください。",
+  "description": "Give overlays a clearly named close button, keep them away from main content, and mark modals with role=\"dialog\", aria-modal=\"true\" and a name."
+ },
+ "mofk3bu": {
+  "message": "本当のリンクには移動先 URL を設定してください。操作を実行する要素なら <button> にします。",
+  "description": "Give real links a destination URL. If the element performs an action instead, make it a <button>."
+ },
+ "m16gh86c": {
+  "message": "了解",
+  "description": "Got it"
+ },
+ "m1y1o72j": {
+  "message": "エージェントには困難",
+  "description": "Hard for agents"
+ },
+ "mn0ekja": {
+  "message": "onclick ハンドラーはあるが、コントロールのロールがない",
+  "description": "Has an onclick handler but no control role"
+ },
+ "m4gkcdp": {
+  "message": "見出しの構造",
+  "description": "Heading outline"
+ },
+ "m6tznov": {
+  "message": "エージェントは見出しで内容を拾い読みします。明確な h1 が 1 つと論理的な見出し構造があれば、目的の箇所をすばやく見つけられます。",
+  "description": "Headings are how agents skim. One clear h1 and a logical outline let them find the right section quickly."
+ },
+ "m1jqqa1r": {
+  "message": "エージェントを狙った隠し指示",
+  "description": "Hidden instructions aimed at agents"
+ },
+ "mpluayg": {
+  "message": "エージェントに指示を与えようとする隠しテキスト。エージェントがそれに従うか、サイト全体を危険と判定するおそれがあります。",
+  "description": "Hidden text that tries to give agents instructions. Agents may follow it, or flag the whole site as unsafe."
+ },
+ "myjtsh1": {
+  "message": "非表示",
+  "description": "Hide"
+ },
+ "ml99m1v": {
+  "message": "マークを非表示",
+  "description": "Hide marks"
+ },
+ "myjtufe": {
+  "message": "ホーム",
+  "description": "Home"
+ },
+ "mtn6fzu": {
+  "message": "重要な導線は自社ドメインで提供するか、埋め込みフレームではなく提供元のリダイレクトや API を使ってください。",
+  "description": "Host key flows on your own domain, or use your provider’s redirect or API option instead of an embedded frame."
+ },
+ "m1v3ecoe": {
+  "message": "ページ数",
+  "description": "How many"
+ },
+ "m1xjt7zi": {
+  "message": "ページ数",
+  "description": "How many pages"
+ },
+ "mu3dncp": {
+  "message": "修正方法",
+  "description": "How to fix"
+ },
+ "m1a9ufcw": {
+  "message": "AI エージェントはこのページをどれだけ使えるでしょう？",
+  "description": "How well can AI agents use this page?"
+ },
+ "mrig626": {
+  "message": ":r4: や input-83412 のような ID は実行時に生成され、訪問のたびに変わります。これらを指すセレクターやラベルの関連付けは壊れやすくなります。",
+  "description": "IDs like :r4: or input-83412 are created at runtime and change between visits. Selectors and label links that point at them are fragile."
+ },
+ "m3kzn4l": {
+  "message": "ラベルのないアイコンだけのコントロール",
+  "description": "Icon-only control with no label"
+ },
+ "m1cuy86g": {
+  "message": "API を提供しているなら /.well-known/api-catalog を公開してください。エージェントにサインインさせるなら、OAuth の authorization-server と protected-resource のメタデータを公開します。コンテンツだけのサイトは不要です。",
+  "description": "If you offer an API, publish /.well-known/api-catalog. If agents should sign in, publish OAuth authorization-server and protected-resource metadata. Content-only sites can skip this."
+ },
+ "m1s4d867": {
+  "message": "MCP サーバーを運用しているなら、名前、トランスポート URL、認証情報を記載したカードを /.well-known/mcp/server-card.json で公開してください。",
+  "description": "If you run an MCP server, publish its card at /.well-known/mcp/server-card.json with its name, transport URL and authentication details."
+ },
+ "m1s6v86x": {
+  "message": "alt テキストのない画像",
+  "description": "Images without alt text"
+ },
+ "m1rjk8jj": {
+  "message": "インラインスクリプトが WebMCP ツールを登録しているようですが、このブラウザでは一覧を取得できませんでした。",
+  "description": "Inline scripts appear to register WebMCP tools, but this browser couldn’t list them."
+ },
+ "mtlgx23": {
+  "message": "操作の障害",
+  "description": "Interaction traps"
+ },
+ "mmu1vnl": {
+  "message": "エージェントに指示を与えようとする隠しテキストはありませんか？",
+  "description": "Is there hidden text trying to give agents instructions?"
+ },
+ "m1ak6k27": {
+  "message": "問題",
+  "description": "Issues"
+ },
+ "m1149fxp": {
+  "message": "このタスクに必要なコントロールが見つかりません。",
+  "description": "It can’t find the controls this task needs."
+ },
+ "m3e3mm2": {
+  "message": "アクセシビリティツリーを表示し、名前のないボタンをすべて指摘します。",
+  "description": "Its accessibility tree, with every unnamed button flagged."
+ },
+ "mtqwy4o": {
+  "message": "JSON をダウンロードしました",
+  "description": "JSON downloaded"
+ },
+ "m1mz5zdn": {
+  "message": "通常の導線には認証を置かず、パズルをめったに出さないリスクベースのチェックを選び、利用できる場合は提供元の認証済みエージェント向けオプションを使ってください。",
+  "description": "Keep challenges off routine flows, prefer risk-based checks that rarely show a puzzle, and use your provider’s options for verified agents where available."
+ },
+ "mmnqyiv": {
+  "message": "ヘッダーとナビゲーションは簡潔にし、長いメニューは展開ボタンの奥に置き、補助的なブロックは <main> の後ろへ移動して、メインコンテンツを <main> で示してください。",
+  "description": "Keep the header and navigation lean, put long menus behind a button that expands them, move secondary blocks after <main>, and mark the main content with <main>."
+ },
+ "mxfs6pk": {
+  "message": "ラベルは必須と示しているが、項目は必須になっていない",
+  "description": "Label says required, but the field doesn’t"
+ },
+ "mmzszrh": {
+  "message": "ラベルと型が指定された項目なら、エージェントは一度で正しく入力できます。",
+  "description": "Labeled, typed fields let agents fill forms correctly the first time."
+ },
+ "mi0gegf": {
+  "message": "ラベルと名前",
+  "description": "Labels and names"
+ },
+ "mixufep": {
+  "message": "ランドマークがあれば、エージェントはページ全体を順に読まずに、メインコンテンツやナビゲーションへ直接移動できます。",
+  "description": "Landmarks let an agent jump straight to the main content or the site navigation instead of reading the whole page in order."
+ },
+ "mxidshk": {
+  "message": "言語: $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Language: $1"
+ },
+ "m3g7ocf": {
+  "message": "前回のスキャン（$P1$）: $P2$ ページ、平均 $P3$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "Last scan $1: $2 pages, average $3."
+ },
+ "mxaxouk": {
+  "message": "前回の週次再スキャン（$P1$）: $P2$ ページ、平均 $P3$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "Last weekly re-scan $1: $2 pages, average $3."
+ },
+ "m8aw8kw": {
+  "message": "読み込み後のレイアウトのずれのスコア: $P1$（0.1 以下が良好）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Layout shift score $1 since the page loaded (0.1 or less is good)."
+ },
+ "m1hk940l": {
+  "message": "読み込み中のレイアウトのずれ",
+  "description": "Layout shifts while loading"
+ },
+ "mtk7o6m": {
+  "message": "Link ヘッダーの関係: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Link header relations: $1."
+ },
+ "meui1ij": {
+  "message": "Markdown 版へのリンク: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Links a Markdown version: $1."
+ },
+ "m1ejjg2q": {
+  "message": "このページのリンク",
+  "description": "Links on this page"
+ },
+ "m1bdqt7o": {
+  "message": "どこにも移動しないリンク",
+  "description": "Links that don’t go anywhere"
+ },
+ "m1656e5d": {
+  "message": "$P2$ 件中、最初の $P1$ 件を表示しています。これらを修正して再診断すると、残りが表示されます。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Listing the first $1 of $2. Fix these and run the audit again to see the rest."
+ },
+ "m10sw4bl": {
+  "message": "最近の診断を読み込み中…",
+  "description": "Loading your recent audits…"
+ },
+ "mgrytzf": {
+  "message": "カートに追加ボタンのように見えるが、ボタンのロールがない",
+  "description": "Looks like an add-to-cart button, but has no button role"
+ },
+ "m18j3282": {
+  "message": "フォーカスの有無で見た目が変わらない",
+  "description": "Looks the same focused and unfocused"
+ },
+ "mpv0wlm": {
+  "message": "MCP サーバーカード",
+  "description": "MCP server card"
+ },
+ "ml0fkk8": {
+  "message": "機械可読なシグナル",
+  "description": "Machine-readable signals"
+ },
+ "m1g9f9x8": {
+  "message": "メインコンテンツとナビゲーションがランドマークとしてマークアップされています。",
+  "description": "Main content and navigation are marked up as landmarks."
+ },
+ "m1u98zgn": {
+  "message": "メインコンテンツとナビゲーションのランドマーク",
+  "description": "Main content and navigation landmarks"
+ },
+ "m1xvewg5": {
+  "message": "クリック領域は 24 × 24 ピクセル以上にしてください。アイコンが小さい場合は padding で広げます。",
+  "description": "Make clickable areas at least 24 × 24 pixels, using padding if the visible icon is smaller."
+ },
+ "mo6nnns": {
+  "message": "「料金ガイドを読む」のように、名前で行き先を説明してください。表示テキストを短くする必要がある場合は、完全な意味を持つ aria-label を追加します。",
+  "description": "Make each name describe its target, like “Read the pricing guide”. If the visible text must stay short, add an aria-label with the full meaning."
+ },
+ "md7ys1k": {
+  "message": "多くのエージェントや AI クローラーはスクリプトを実行せずにページを取得します。価格、商品詳細、シングルページアプリ全体など、JavaScript で追加されるものは彼らには見えません。",
+  "description": "Many agents and AI crawlers fetch a page without running its scripts. Anything added by JavaScript, such as prices, product details or a whole single-page app, is missing for them."
+ },
+ "mkllr6i": {
+  "message": "問題をマーク",
+  "description": "Mark issues"
+ },
+ "m43qh7s": {
+  "message": "ページ上で問題をマーク",
+  "description": "Mark issues on page"
+ },
+ "msl5tpz": {
+  "message": "Markdown をダウンロードしました",
+  "description": "Markdown downloaded"
+ },
+ "m12o4l61": {
+  "message": "エージェント向け Markdown 版",
+  "description": "Markdown version for agents"
+ },
+ "mgint75": {
+  "message": "Markdown、MCP、WebMCP、API、サインインの検出。参考情報で、採点対象外です。",
+  "description": "Markdown, MCP, WebMCP, API and sign-in discovery. Shown for information, not scored."
+ },
+ "m3mh5n0": {
+  "message": "ページ上の $P1$ 個の要素をマークしました。番号にカーソルを合わせると詳細が表示されます。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Marked $1 element on the page. Hover a number for details."
+ },
+ "mgw3x3z": {
+  "message": "ページ上の $P1$ 個の要素をマークしました。番号にカーソルを合わせると詳細が表示されます。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Marked $1 elements on the page. Hover a number for details."
+ },
+ "m88tcp6": {
+  "message": "コントロール名で照合しました。Chrome の組み込み AI があれば、複数ステップのタスクを計画します。",
+  "description": "Matched by control names. With Chrome’s built-in AI the test plans multi-step tasks."
+ },
+ "m1il4od7": {
+  "message": "ページの内容をエージェントに伝えるメタデータ、構造化データ、サイトファイル。",
+  "description": "Metadata, structured data and site files that tell agents what the page is about."
+ },
+ "m1cvoi2t": {
+  "message": "メタデータ、構造化データ、llms.txt、robots.txt。",
+  "description": "Metadata, structured data, llms.txt and robots.txt."
+ },
+ "myoo9vk": {
+  "message": "不足: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Missing: $1."
+ },
+ "m1id537q": {
+  "message": "モーダルに aria-modal=\"true\" がない",
+  "description": "Modal is missing aria-modal=\"true\""
+ },
+ "m1g1a1qy": {
+  "message": "問題が増加",
+  "description": "More issues"
+ },
+ "m1idn8ic": {
+  "message": "ほかにできること",
+  "description": "More you can do"
+ },
+ "mg6sdzy": {
+  "message": "おおむね対応",
+  "description": "Mostly ready"
+ },
+ "m1609qxd": {
+  "message": "「ここをクリック」や、10 個並んだ「詳しく見る」のような名前では行き先がわかりません。エージェントは周囲のレイアウトを調べないと区別できません。",
+  "description": "Names like “Click here”, or ten links all called “Learn more”, don’t say where they lead. Agents can’t tell them apart without studying the layout around them."
+ },
+ "mocpk7x": {
+  "message": "要改善",
+  "description": "Needs work"
+ },
+ "mdgssi3": {
+  "message": "$P1$ の新機能",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "New in $1"
+ },
+ "m1xs8gvw": {
+  "message": "多くのページで新たに発生: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "New on most pages: $1."
+ },
+ "m8nz8n5": {
+  "message": "新しい問題",
+  "description": "New problems"
+ },
+ "m15awy2u": {
+  "message": "新しいスキャン",
+  "description": "New scan"
+ },
+ "m1ywqiic": {
+  "message": "エージェントが Markdown、API、ツールを見つけられるようにする新しい標準です。公開しているサイトも読むエージェントもまだ少ないため、参考情報として表示し、スコアには影響しません。",
+  "description": "Newer standards that let agents discover Markdown, APIs and tools. Few sites publish them and few agents read them yet, so they’re shown for information and don’t affect the score."
+ },
+ "mqhs2le": {
+  "message": "次回は $P1$ 日後。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Next in $1 day."
+ },
+ "mlxdsa9": {
+  "message": "次回は $P1$ 日後。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Next in $1 days."
+ },
+ "moobxda": {
+  "message": "診断済みの別ページと並べて",
+  "description": "Next to another page you audited"
+ },
+ "m1s0ffih": {
+  "message": "API カタログ、OAuth メタデータ、Agent Skills のインデックスは見つかりませんでした。",
+  "description": "No API catalog, OAuth metadata or Agent Skills index found."
+ },
+ "m1hiikxv": {
+  "message": "このページに CAPTCHA やボット認証は見つかりませんでした。",
+  "description": "No CAPTCHA or bot challenge found on this page."
+ },
+ "mki6ipj": {
+  "message": "エージェント向けの Link ヘッダーはありません。",
+  "description": "No Link headers for agents."
+ },
+ "ma6l0ib": {
+  "message": "MCP サーバーカードが見つかりません。",
+  "description": "No MCP server card found."
+ },
+ "mrexwu8": {
+  "message": "Product の構造化データがないため、エージェントは価格や在庫を読めません。",
+  "description": "No Product structured data, so agents can’t read the price or stock."
+ },
+ "mionqld": {
+  "message": "Product の構造化データがないため、配送・返品・レビューを読めません。",
+  "description": "No Product structured data, so shipping, returns and reviews can’t be read."
+ },
+ "m1531b15": {
+  "message": "WebMCP ツールは見つかりませんでした。",
+  "description": "No WebMCP tools found."
+ },
+ "m88fpsf": {
+  "message": "WebMCP ツールは見つかりませんでした。このブラウザは WebMCP に対応しています。",
+  "description": "No WebMCP tools found. This browser supports WebMCP."
+ },
+ "m14brns1": {
+  "message": "alt 属性がない",
+  "description": "No alt attribute"
+ },
+ "m162nbhl": {
+  "message": "「カートに追加」や「今すぐ購入」のような名前のボタンが見つかりません。サイズや色を選んだ後に表示される場合は、その名前で何をするかがわかるようにしてください。",
+  "description": "No button named like “Add to cart” or “Buy now” found. If it only appears after choosing a size or color, make sure its name says what it does."
+ },
+ "mwicvyt": {
+  "message": "このページにボタンやリンクはありません。",
+  "description": "No buttons or links on this page."
+ },
+ "m1fpvbim": {
+  "message": "変化した項目はありません。",
+  "description": "No check changed."
+ },
+ "m1jmuwqh": {
+  "message": "クロスオリジンのフレームに埋め込まれたコンテンツはありません。",
+  "description": "No content is embedded in cross-origin frames."
+ },
+ "m1m9q75a": {
+  "message": "このページのコントロールには ID がありません。",
+  "description": "No controls on this page have IDs."
+ },
+ "m1tj94tt": {
+  "message": "タスクに一致する名前のコントロールがありません。",
+  "description": "No control’s name matches the task."
+ },
+ "m17emk7h": {
+  "message": "タスクに一致する名前のコントロールがありません。名前のないコントロールが $P1$ 個あり、それが目的のものかもしれません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No control’s name matches the task. $1 control has no name, and it may be the one you need."
+ },
+ "mo2gzh": {
+  "message": "タスクに一致する名前のコントロールがありません。名前のないコントロールが $P1$ 個あり、その中に目的のものがあるかもしれません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No control’s name matches the task. $1 controls have no name, and the one you need may be among them."
+ },
+ "mqa1d5v": {
+  "message": "説明なし: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No description: $1."
+ },
+ "m1fk9oon": {
+  "message": "マークする要素がありません。このページの問題はページ全体に関するものです。",
+  "description": "No elements to mark. The issues on this page are page-wide."
+ },
+ "m1qovyux": {
+  "message": "このページにフォーム項目はありません。",
+  "description": "No form fields on this page."
+ },
+ "ma5mnt2": {
+  "message": "エージェントを狙った隠し指示は見つかりませんでした。",
+  "description": "No hidden instructions aimed at agents found."
+ },
+ "m1gpmazl": {
+  "message": "href 属性がない",
+  "description": "No href attribute"
+ },
+ "m1xn2uyy": {
+  "message": "このページに画像はありません。",
+  "description": "No images on this page."
+ },
+ "m4p7qc8": {
+  "message": "問題は見つかりませんでした",
+  "description": "No issues found"
+ },
+ "mj3orhq": {
+  "message": "ラベルも toolparamdescription もない",
+  "description": "No label or toolparamdescription"
+ },
+ "m16yyzs3": {
+  "message": "ラベル、aria-label、title がない",
+  "description": "No label, aria-label or title"
+ },
+ "m1am8eh8": {
+  "message": "テストするリンクやボタンがありません。",
+  "description": "No links or buttons to test."
+ },
+ "m10ab2at": {
+  "message": "$P1$/llms.txt に llms.txt はありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No llms.txt at $1/llms.txt."
+ },
+ "m6e5wwn": {
+  "message": "main ランドマークもナビゲーションのランドマークも見つかりませんでした。",
+  "description": "No main landmark and no navigation landmark found."
+ },
+ "mbx5n5x": {
+  "message": "main ランドマークが見つかりませんでした。",
+  "description": "No main landmark found."
+ },
+ "mwzph1e": {
+  "message": "基準となる main ランドマークや h1 がありません。",
+  "description": "No main landmark or h1 to measure from."
+ },
+ "mh7v872": {
+  "message": "誤解を招く、または壊れた ARIA は見つかりませんでした。",
+  "description": "No misleading or broken ARIA found."
+ },
+ "m1dpk603": {
+  "message": "名前なし",
+  "description": "No name"
+ },
+ "mfpqr34": {
+  "message": "name 属性がないため、ツールのパラメーターになれない",
+  "description": "No name attribute, so it can’t become a tool parameter"
+ },
+ "mbbimro": {
+  "message": "ナビゲーションのランドマークが見つかりませんでした。",
+  "description": "No navigation landmark found."
+ },
+ "m1w360or": {
+  "message": "オープンなシャドウ DOM のコンポーネントや同一サイトのフレームは見つかりませんでした。",
+  "description": "No open shadow DOM components or same-site frames found."
+ },
+ "m5cpxw2": {
+  "message": "診断できたページはありません。サインインが必要か、サイトがバックグラウンドタブをブロックした可能性があります。",
+  "description": "No pages could be audited. They may need a sign-in, or the site blocked the background tab."
+ },
+ "mv5osh6": {
+  "message": "型や autocomplete の指定が必要な個人情報の項目はありません。",
+  "description": "No personal-information fields that need type or autocomplete hints."
+ },
+ "m3sy94g": {
+  "message": "正の tabindex 値はありません。",
+  "description": "No positive tabindex values."
+ },
+ "m1ryhwqh": {
+  "message": "どのページにも問題はありません。すばらしい。",
+  "description": "No problems on any page. Nice."
+ },
+ "m1ro0d08": {
+  "message": "このページに商品やカートのコントロールはありません。",
+  "description": "No product or cart controls on this page."
+ },
+ "mombuc8": {
+  "message": "robots.txt がないため、ブロックされているエージェントはありません。",
+  "description": "No robots.txt found, so no agents are blocked."
+ },
+ "m1j9mosd": {
+  "message": "robots.txt が見つかりません。",
+  "description": "No robots.txt found."
+ },
+ "m8z7oq3": {
+  "message": "サイトマップが見つかりません。",
+  "description": "No sitemap found."
+ },
+ "mq0mnb1": {
+  "message": "構造化データが見つかりません。",
+  "description": "No structured data found."
+ },
+ "m1fo829k": {
+  "message": "テキスト、aria-label、title がない",
+  "description": "No text, aria-label or title"
+ },
+ "mifirpj": {
+  "message": "フォーカスが見えない",
+  "description": "No visible focus indicator"
+ },
+ "mz0f7od": {
+  "message": "該当なし",
+  "description": "Not applicable"
+ },
+ "m1f5nb52": {
+  "message": "後で",
+  "description": "Not now"
+ },
+ "m1j9lmxo": {
+  "message": "採点対象外",
+  "description": "Not scored"
+ },
+ "mh0bm23": {
+  "message": "どこから始めればよいかわからない場合は、デモストアをお試しください。診断で見つかるよう、わざと問題を仕込んであります。",
+  "description": "Not sure where to start? Try our demo store. It has problems planted for the audit to find."
+ },
+ "m17t1zdr": {
+  "message": "無効な JSON: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Not valid JSON: $1."
+ },
+ "myjpeph": {
+  "message": "参考",
+  "description": "Note"
+ },
+ "mdmp9r1": {
+  "message": "現在、ページを覆っているものはありません。",
+  "description": "Nothing is covering the page right now."
+ },
+ "meqfjoz": {
+  "message": "一致するものはありません。",
+  "description": "Nothing matches."
+ },
+ "mmdic2o": {
+  "message": "表示する項目はありません",
+  "description": "Nothing to show"
+ },
+ "mkztme3": {
+  "message": "ページ上のすべての問題に番号を付ける",
+  "description": "Number every problem on the page"
+ },
+ "m1l97e0v": {
+  "message": "商品ページで、AI ショッピングエージェントは価格・在庫・カートボタンを読めますか？",
+  "description": "On product pages: can an AI shopping agent read the price, stock and cart button?"
+ },
+ "mg5ec4k": {
+  "message": "$P1$ を開く",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Open $1"
+ },
+ "mkuxspg": {
+  "message": "ページを開いてアイコンをクリック",
+  "description": "Open a page and click the icon"
+ },
+ "mvrhjwt": {
+  "message": "拡張機能の設定を開く",
+  "description": "Open extension settings"
+ },
+ "m1sz6zp0": {
+  "message": "サイトレポートを開く",
+  "description": "Open site report"
+ },
+ "m1qknqic": {
+  "message": "デモストアを開く",
+  "description": "Open the demo store"
+ },
+ "m1jyji90": {
+  "message": "このページを現在のタブで開く",
+  "description": "Open this page in the current tab"
+ },
+ "m1fzz17t": {
+  "message": "現在のタブで開きました。詳細はそのページで診断してください。",
+  "description": "Opened in the current tab. Run the audit there for full details."
+ },
+ "m3lrcg1": {
+  "message": "比較先",
+  "description": "Other"
+ },
+ "m6bbpn7": {
+  "message": "ほかの近い候補: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Other close matches: $1."
+ },
+ "mjkq4vq": {
+  "message": "比較先のページは $P1$ に診断されました。最新の比較にはもう一度診断してください。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Other page audited $1. Run it again for a fresh comparison."
+ },
+ "mes0iju": {
+  "message": "総合",
+  "description": "Overall"
+ },
+ "miiwb0i": {
+  "message": "総合スコア",
+  "description": "Overall score"
+ },
+ "mvszmbv": {
+  "message": "ページを覆うオーバーレイ",
+  "description": "Overlays covering the page"
+ },
+ "m16nbe47": {
+  "message": "タスクの途中でエージェントを止めるオーバーレイ、ボット認証、埋め込みフレーム。",
+  "description": "Overlays, bot challenges and embedded frames that stop agents mid-task."
+ },
+ "m1pi8jpi": {
+  "message": "概要",
+  "description": "Overview"
+ },
+ "mcbx20o": {
+  "message": "ページの言語指定",
+  "description": "Page language declared"
+ },
+ "ml74jas": {
+  "message": "ページの大きさと入れ子",
+  "description": "Page size and nesting"
+ },
+ "m1g8w2zn": {
+  "message": "ページ構造",
+  "description": "Page structure"
+ },
+ "m1jch3bn": {
+  "message": "ページの取得元",
+  "description": "Pages from"
+ },
+ "mrhvc1c": {
+  "message": "ページはバックグラウンドのタブで 1 つずつ開かれ、スキャン終了時に閉じます。このパネルは開いたままにしてください。何も送信されません。",
+  "description": "Pages open one at a time in a background tab, which closes when the scan ends. Keep this panel open. Nothing is sent anywhere."
+ },
+ "m10g9abx": {
+  "message": "ページ（スコアの低い順）",
+  "description": "Pages, lowest score first"
+ },
+ "m1jrbxf9": {
+  "message": "合格",
+  "description": "Passed"
+ },
+ "m190oc59": {
+  "message": "個人情報の項目に正しい型と autocomplete の指定があります。",
+  "description": "Personal-information fields have the right type and autocomplete hints."
+ },
+ "mc8ryio": {
+  "message": "アイコンを固定する",
+  "description": "Pin the icon"
+ },
+ "mm913fy": {
+  "message": "固定済み ✓",
+  "description": "Pinned ✓"
+ },
+ "m59o7jx": {
+  "message": "お使いのデバイス上の Gemini Nano が計画しました。小さなモデルは間違えることがあります。簡易チェックとしてご利用ください。",
+  "description": "Planned by Gemini Nano on your device. Small models make mistakes; treat this as a quick check, not proof."
+ },
+ "m1iqbr45": {
+  "message": "ポインターカーソルだが、ボタンやリンクのロールがない",
+  "description": "Pointer cursor, but no button or link role"
+ },
+ "m1n8qnjz": {
+  "message": "正の tabindex 値",
+  "description": "Positive tabindex values"
+ },
+ "mdevum4": {
+  "message": "オープンなシャドウルートを使い、Web コンポーネントが名前とロールを公開するようにし、重要な導線を他サイトのフレームに入れないでください。",
+  "description": "Prefer open shadow roots, make sure web components expose their names and roles, and keep key flows out of cross-site frames."
+ },
+ "m1x9bg2r": {
+  "message": "エージェント向けの価格と在庫",
+  "description": "Price and availability for agents"
+ },
+ "m4y19qr": {
+  "message": "価格: $P1$、$P2$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Price: $1, $2."
+ },
+ "m1btlmi3": {
+  "message": "複数ページに共通する問題",
+  "description": "Problems shared across pages"
+ },
+ "m198qhgv": {
+  "message": "商品の構造化データ",
+  "description": "Product structured data"
+ },
+ "m8un4zc": {
+  "message": "商品「$P1$」には name、image、description、brand、識別子があります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Product “$1” has name, image, description, brand and an identifier."
+ },
+ "ms4um1h": {
+  "message": "プロンプトをコピーしました",
+  "description": "Prompt copied"
+ },
+ "mhtf1vq": {
+  "message": "共通の問題のプロンプトをコピーしました",
+  "description": "Prompt for the shared problems copied"
+ },
+ "m11dnazh": {
+  "message": "優先修正のプロンプトをコピーしました",
+  "description": "Prompt for the top fixes copied"
+ },
+ "mvhvwxs": {
+  "message": "サイトのルートに、短い説明と主要ページへの Markdown リンクを載せた /llms.txt を公開してください。",
+  "description": "Publish /llms.txt at the root of the site with a short description and Markdown links to its most useful pages."
+ },
+ "m1o21asj": {
+  "message": "/sitemap.xml を公開し、robots.txt の Sitemap: 行で参照してください。API やドキュメントがあれば、rel=\"api-catalog\" や rel=\"service-doc\" などの Link ヘッダーを追加します。",
+  "description": "Publish /sitemap.xml and reference it from robots.txt with a Sitemap: line. If you have an API or docs, add Link headers such as rel=\"api-catalog\" or rel=\"service-doc\"."
+ },
+ "m2h687i": {
+  "message": "修正ごとに上がる点数の順に、コピーできるコード付きで表示します。",
+  "description": "Ranked by how many points each fix is worth, with code you can copy."
+ },
+ "mo1pzyy": {
+  "message": "評価する",
+  "description": "Rate it"
+ },
+ "m57s493": {
+  "message": "拡張機能を評価",
+  "description": "Rate the extension"
+ },
+ "m1yc003q": {
+  "message": "再読み込み時に再実行",
+  "description": "Re-run on reload"
+ },
+ "mux043n": {
+  "message": "再読み込み時の再実行には、このサイトへのアクセス許可が必要です。",
+  "description": "Re-run on reload needs access to this site."
+ },
+ "mwx2ubh": {
+  "message": "再読み込み時に再実行: オン",
+  "description": "Re-run on reload: on"
+ },
+ "mh3lwch": {
+  "message": "毎週再スキャン",
+  "description": "Re-scan every week"
+ },
+ "m1t1s2ee": {
+  "message": "エージェントのようにページを読んでいます…",
+  "description": "Reading the page like an agent…"
+ },
+ "morxabi": {
+  "message": "エージェントと同じ方法でページを読んでいます…",
+  "description": "Reading the page the way an agent would…"
+ },
+ "m1maf5pn": {
+  "message": "本物のコントロール",
+  "description": "Real controls"
+ },
+ "mga0lhs": {
+  "message": "最近の診断",
+  "description": "Recent audits"
+ },
+ "mk9ss7b": {
+  "message": "登録されたツール: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Registered tools: $1."
+ },
+ "mzcjeo9": {
+  "message": "ページを再読み込みして、もう一度診断してください。繰り返し起きる場合は、ページがスクリプトをブロックしている可能性があります。詳細: ",
+  "description": "Reload the page and run the audit again. If it keeps happening, the page may be blocking scripts. Details: "
+ },
+ "mno0z6v": {
+  "message": "フォーカス可能な要素から aria-hidden を外し、aria-labelledby と aria-describedby は存在する id を指すようにし、正しいロールと true/false の値を使い、aria-label はコントロールの表示テキストから始めてください。",
+  "description": "Remove aria-hidden from anything focusable, point aria-labelledby and aria-describedby at ids that exist, use valid roles and true/false values, and start each aria-label with the control’s visible te"
+ },
+ "m2hixa8": {
+  "message": "非表示の重複マークアップを削除し、長いリストは仮想化し、スタイルのためだけのラッパーを減らしてください。",
+  "description": "Remove hidden duplicate markup, virtualize long lists, and flatten wrappers that only exist for styling."
+ },
+ "msh3yxh": {
+  "message": "AI エージェントに向けた隠しテキストを削除してください。エージェントを案内したい場合は、表示テキスト、llms.txt、構造化データで公然と伝えます。",
+  "description": "Remove hidden text that addresses AI agents. If you want to guide agents, say it openly: in visible text, in llms.txt, or in structured data."
+ },
+ "mlw90r0": {
+  "message": "単独のコントロールから tabindex=\"-1\" を外してください。矢印キーで操作するメニュー項目、タブ、選択肢など、フォーカスを自前で管理するウィジェット内の項目にだけ残します。",
+  "description": "Remove tabindex=\"-1\" from standalone controls. Keep it only for items inside a widget that manages focus itself, such as menu items, tabs or options with arrow-key navigation."
+ },
+ "m1cp1mpr": {
+  "message": "メインコンテンツ、見出し、価格、主要な操作はサーバー側でレンダリングし（SSR または静的生成）、構造化データはタグマネージャーではなく HTML に直接含めてください。",
+  "description": "Render the main content, headings, prices and primary actions on the server (server-side rendering or static generation), and include structured data in the HTML rather than adding it with a tag manag"
+ },
+ "mcmfq2n": {
+  "message": "レポートをコピーしました",
+  "description": "Report copied"
+ },
+ "mmfju72": {
+  "message": "レポートをダウンロードしました",
+  "description": "Report downloaded"
+ },
+ "m1kbn5ew": {
+  "message": "レポートを新しいタブで開きました。送るときは「印刷 → PDF に保存」を使ってください。",
+  "description": "Report opened in a new tab. Use Print → Save as PDF to send it."
+ },
+ "m1515ssn": {
+  "message": "必須指定のない必須項目",
+  "description": "Required fields not marked as required"
+ },
+ "md1ub86": {
+  "message": "画像、広告、埋め込み、バナーの領域を width と height または aspect-ratio で確保し、表示済みの内容の上に要素を挿入しないでください。",
+  "description": "Reserve space for images, ads, embeds and banners with width and height or aspect-ratio, and don’t insert content above what’s already on screen."
+ },
+ "mlk9n7j": {
+  "message": "結果",
+  "description": "Results"
+ },
+ "m1cfd894": {
+  "message": "リクエストが Accept: text/markdown を送ってきたら Markdown 版を返す（Vary: Accept も送る）か、<link rel=\"alternate\" type=\"text/markdown\" href=\"…\"> でリンクしてください。",
+  "description": "Return a Markdown rendering when a request sends Accept: text/markdown (and send Vary: Accept), or link one with <link rel=\"alternate\" type=\"text/markdown\" href=\"…\">."
+ },
+ "mj1nfk1": {
+  "message": "Accept: text/markdown に Markdown を返します。",
+  "description": "Returns Markdown for Accept: text/markdown."
+ },
+ "m84rihl": {
+  "message": "エージェントが読む内容のおおよその姿です。ページのアクセシビリティツリーをテキストで表示します。名前のないコントロールはロールだけになり、エージェントはほかと区別できません。行を選ぶとページ上の位置を表示します。",
+  "description": "Roughly what an agent reads: the page’s accessibility tree as text. A control without a name shows up as a bare role, so the agent can’t tell it from the others. Select a line to find it on the page."
+ },
+ "m1js5gss": {
+  "message": "再実行",
+  "description": "Run again"
+ },
+ "mnkjpo0": {
+  "message": "Claude、Gemini、ChatGPT などのエージェントがこのページを読み、コントロールを見つけ、タスクを完了できるかを診断します。スコアと具体的な修正方法がわかります。",
+  "description": "Run an audit to see how easily agents like Claude, Gemini and ChatGPT can read this page, find its controls and finish tasks on it. You’ll get a score and specific fixes."
+ },
+ "m1jsj681": {
+  "message": "診断を実行",
+  "description": "Run audit"
+ },
+ "malrgb5": {
+  "message": "もう一度実行",
+  "description": "Run it again"
+ },
+ "mvtyxlm": {
+  "message": "テストを実行",
+  "description": "Run test"
+ },
+ "mdt4afs": {
+  "message": "もう一度診断",
+  "description": "Run the audit again"
+ },
+ "mk45151": {
+  "message": "再読み込みのたびに再実行",
+  "description": "Runs again after each reload"
+ },
+ "m1fkg1an": {
+  "message": "同一サイトのフレーム（チェック済み）",
+  "description": "Same-site frame, checked"
+ },
+ "m1f17pmu": {
+  "message": "同一サイトのフレーム: $P1$ 個（内部のコントロール $P2$ 個）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Same-site frames: $1, with $2 controls inside."
+ },
+ "m1knjxcf": {
+  "message": "$P1$ ページをスキャン",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Scan $1 pages"
+ },
+ "mdeoxip": {
+  "message": "サイト全体をスキャン",
+  "description": "Scan the whole site"
+ },
+ "m1hj22fj": {
+  "message": "最大 25 ページをスキャンして、共通の問題を見つけます。",
+  "description": "Scan up to 25 pages and find the problems they share."
+ },
+ "m15ycy0b": {
+  "message": "Schema.org のデータは、価格、在庫、著者、日付などの事実を、レイアウトを解釈せずに読める形で示します。",
+  "description": "Schema.org data states facts like price, availability, author and dates in a form agents can read without interpreting the layout."
+ },
+ "m1n9360q": {
+  "message": "スコアと最初に直すべき点",
+  "description": "Score and what to fix first"
+ },
+ "ms2mg58": {
+  "message": "商品ページでのみ採点します。AI ショッピングエージェントは構造化データで商品を比較し、カートボタンから購入します。",
+  "description": "Scored only on product pages. AI shopping agents compare products from structured data and buy through the cart button."
+ },
+ "mzlt4e1": {
+  "message": "スコアは目安です。問題の発見に使い、実際のエージェントで確認してください。",
+  "description": "Scores are heuristics: use them to find problems, then confirm with a real agent."
+ },
+ "m17wkofp": {
+  "message": "カテゴリ別スコア",
+  "description": "Scores by category"
+ },
+ "m16ybxd9": {
+  "message": "この要素までスクロールして強調表示",
+  "description": "Scroll to this element and highlight it"
+ },
+ "m98asbv": {
+  "message": "サイト内で「ギフトカード」を検索する",
+  "description": "Search the site for “gift card”"
+ },
+ "m9mre02": {
+  "message": "すべての項目を見る",
+  "description": "See all checks"
+ },
+ "msnhake": {
+  "message": "Claude、Gemini、ChatGPT などの AI エージェントがどんなページでもどれだけ読んで使えるか、何を直せばよいかが正確にわかります。",
+  "description": "See how well AI agents like Claude, Gemini and ChatGPT can read and use any page, and exactly what to fix."
+ },
+ "mypzs4v": {
+  "message": "エージェントの視点で見る",
+  "description": "See it as an agent"
+ },
+ "mhw16fj": {
+  "message": "$P1$ の項目を見る",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "See the $1 checks"
+ },
+ "m1us7e71": {
+  "message": "エージェントが読むとおりにページを表示し、トークン数も確認できます。",
+  "description": "See the page as an agent reads it, with a token count."
+ },
+ "mpj4plr": {
+  "message": "クライアントにきれいなレポートを送ったり、PDF で保存したりできます。",
+  "description": "Send a clean report to a client or save it as PDF."
+ },
+ "m1qou2tw": {
+  "message": "送信または PDF で保存",
+  "description": "Send it, or save as PDF"
+ },
+ "m19lyhsu": {
+  "message": "<html lang=\"ja\"> のように、<html> 要素に lang を設定してください。",
+  "description": "Set lang on the <html> element, like <html lang=\"en\">."
+ },
+ "m1u7ygzv": {
+  "message": "シャドウ DOM や iframe は通常のセレクターから要素を隠します。Playwright や DevTools プロトコルを使うエージェントはオープンなシャドウルートや同一サイトのフレームを読めますが、単純なスクリプトは読めず、クローズドなシャドウルートはどれからも見えません。",
+  "description": "Shadow DOM and iframes hide elements from ordinary selectors. Agents built on Playwright or the DevTools protocol read open shadow roots and same-site frames, but simpler scripts don’t, and closed sha"
+ },
+ "m1g1w7ly": {
+  "message": "レポートを共有",
+  "description": "Share report"
+ },
+ "mdqv78x": {
+  "message": "配送、返品ポリシー、評価がすべて構造化データにあります。",
+  "description": "Shipping, return policy and ratings are all in structured data."
+ },
+ "m7zo8u8": {
+  "message": "配送・返品・レビュー",
+  "description": "Shipping, returns and reviews"
+ },
+ "mhe2797": {
+  "message": "ショッピングエージェント",
+  "description": "Shopping agents"
+ },
+ "m2jqogs": {
+  "message": "ショッピングエージェントは、ストアを比較するときに送料、返品条件、評価を重視します。これらがページ本文や別ページにしかないと、まったく見つけられないことがあります。",
+  "description": "Shopping agents weigh delivery cost, return terms and ratings when they compare stores. If these are only in the page text or on another page, the agent may not find them at all."
+ },
+ "myjzr6u": {
+  "message": "表示",
+  "description": "Show"
+ },
+ "msjdx9i": {
+  "message": "さらに $P1$ 件表示",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Show $1 more"
+ },
+ "m5tsv5e": {
+  "message": "全 $P1$ 件を表示",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Show all $1"
+ },
+ "m23mnub": {
+  "message": "表示する項目",
+  "description": "Show checks"
+ },
+ "m12uvznf": {
+  "message": "表示する行",
+  "description": "Show lines"
+ },
+ "mvbdeer": {
+  "message": "さらに表示",
+  "description": "Show more"
+ },
+ "m7mi3bo": {
+  "message": "ページ上で表示",
+  "description": "Show on page"
+ },
+ "mdefl5h": {
+  "message": "ページ上で手順を表示",
+  "description": "Show steps on page"
+ },
+ "mcajnys": {
+  "message": "最初の $P1$ 行を表示しています。トークン数の見積もりはページ全体が対象です。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Showing the first $1 lines. The token estimate covers the whole page."
+ },
+ "mnhapmn": {
+  "message": "アカウントにサインインする",
+  "description": "Sign in to my account"
+ },
+ "m1o4t37k": {
+  "message": "ニュースレターに登録する",
+  "description": "Sign up for the newsletter"
+ },
+ "m14x9cmp": {
+  "message": "サイトスキャン",
+  "description": "Site scan"
+ },
+ "mdkupr2": {
+  "message": "サイトスキャンは通常のウェブサイトで使えます。",
+  "description": "Site scans work on regular websites."
+ },
+ "m1h4rjpu": {
+  "message": "サイトマップ",
+  "description": "Sitemap"
+ },
+ "m11xgead": {
+  "message": "サイトマップと Link ヘッダー",
+  "description": "Sitemap and Link headers"
+ },
+ "m7meuvn": {
+  "message": "サイトマップ: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Sitemap: $1."
+ },
+ "m1vj9kpx": {
+  "message": "API やアカウントがあるサイトは、エージェントに場所を伝えられます。API カタログ（RFC 9727）、人のセッションを借りずにアクセスを要求できる OAuth メタデータ（RFC 8414・RFC 9728）、Agent Skills のインデックスです。",
+  "description": "Sites with an API or accounts can tell agents where things are: an API catalog (RFC 9727), OAuth metadata (RFC 8414 and RFC 9728) so agents can ask for access instead of borrowing a person’s session, "
+ },
+ "m1hntra0": {
+  "message": "Accept: text/markdown でページを要求するエージェントがあります。Markdown を返せば、マークアップ、スクリプト、ナビゲーションに費やすトークンを節約できます。",
+  "description": "Some agents ask for a page with Accept: text/markdown. Serving Markdown saves them the tokens spent on markup, scripts and navigation."
+ },
+ "m13p5594": {
+  "message": "人の代わりに動く前に robots.txt を確認するエージェントもあります。ChatGPT-User や Claude-User などユーザー操作で動くエージェントをブロックすると、ページをまったく開けなくなることがあります。",
+  "description": "Some agents check robots.txt before acting for a person. Blocking user-triggered agents such as ChatGPT-User or Claude-User can stop them from opening your pages at all."
+ },
+ "mlyx2rg": {
+  "message": "推測に頼るステップがあるか、タスクの一部がエージェントから見えません。",
+  "description": "Some steps rely on guesswork, or part of the task is hidden from agents."
+ },
+ "mllo2yh": {
+  "message": "安定した要素指定",
+  "description": "Stable targeting"
+ },
+ "m70rzww": {
+  "message": "まず<b>まずこれを修正</b>から始め、<b>ページ上で問題をマーク</b>ですべての問題を一度に確認するか、修正プロンプトを Claude Code、Cursor、Copilot にコピーしてください。再実行するとスコアの上昇を確認できます。",
+  "description": "Start with <b>Fix these first</b>, use <b>Mark issues on page</b> to see every problem at once, or copy a fix prompt into Claude Code, Cursor or Copilot. Re-run to see your score go up."
+ },
+ "myjz4al": {
+  "message": "停止",
+  "description": "Stop"
+ },
+ "m8gv6f8": {
+  "message": "構造化データ",
+  "description": "Structured data"
+ },
+ "mcdxlp7": {
+  "message": "構造化データに不足: $P1$。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Structured data is missing: $1."
+ },
+ "m104e953": {
+  "message": "名前を提案",
+  "description": "Suggest a name"
+ },
+ "mmoursa": {
+  "message": "別の案を提案",
+  "description": "Suggest another"
+ },
+ "m12szk9j": {
+  "message": "修正案",
+  "description": "Suggested fix"
+ },
+ "m1upu1z2": {
+  "message": "タスクの例",
+  "description": "Suggested tasks"
+ },
+ "m1oqxqxc": {
+  "message": "すべての項目を見るには「すべて」に切り替えてください。",
+  "description": "Switch to All to see every check."
+ },
+ "myjx1qg": {
+  "message": "タスク",
+  "description": "Task"
+ },
+ "m1896gwv": {
+  "message": "タスクをテスト",
+  "description": "Test a task"
+ },
+ "m1ysge6y": {
+  "message": "エージェントと同じ方法でタスクをテスト",
+  "description": "Test a task the way an agent would"
+ },
+ "mj0lrfa": {
+  "message": "テストをキャンセルしました。",
+  "description": "Test cancelled."
+ },
+ "m17pu6lz": {
+  "message": "人には見えないがエージェントは読むテキスト（「以前の指示を無視せよ」と書かれた非表示の span、画面外のブロック、aria-label、HTML コメントなど）はプロンプトインジェクションです。エージェントが従うおそれがあり、エージェントブラウザはこうしたサイトに警告を出したり、拒否したりするようになっています。",
+  "description": "Text that people can’t see but agents read, such as invisible spans, off-screen blocks, aria-labels or HTML comments saying “ignore previous instructions”, is a prompt injection. Agents may follow it,"
+ },
+ "m1xz1av6": {
+  "message": "その要素はもうページにありません。もう一度診断してください。",
+  "description": "That element is no longer on the page. Run the audit again."
+ },
+ "muou6o": {
+  "message": "<html> 要素に lang 属性がありません。",
+  "description": "The <html> element has no lang attribute."
+ },
+ "m10f7hlu": {
+  "message": "サーバーが送る HTML には、表示後のページのテキストの $P1$% が含まれています。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The HTML the server sends contains $1% of the text on the rendered page."
+ },
+ "mvxz7ts": {
+  "message": "Product ブロックに offers がないため、エージェントは価格や在庫を読めません。",
+  "description": "The Product block has no offers, so agents can’t read the price or stock."
+ },
+ "miq9lvf": {
+  "message": "Product ブロックに $P1$ がありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The Product block is missing $1."
+ },
+ "m1d3spks": {
+  "message": "エージェントの計画",
+  "description": "The agent’s plan"
+ },
+ "m1fnp06r": {
+  "message": "診断結果が返されませんでした。",
+  "description": "The audit didn’t return any results."
+ },
+ "mqgf8dq": {
+  "message": "診断が途中で停止しました",
+  "description": "The audit stopped before it finished"
+ },
+ "m10234x1": {
+  "message": "このページを再読み込みするたびに診断を再実行します。",
+  "description": "The audit will run again each time this page reloads."
+ },
+ "m73wn3l": {
+  "message": "このページのボタンまたはリンクには名前があります。",
+  "description": "The button or link on this page has a name."
+ },
+ "mmwhqel": {
+  "message": "項目にラベルがあります。",
+  "description": "The field is labeled."
+ },
+ "m1txdx2d": {
+  "message": "画像に alt 属性があります。",
+  "description": "The image has an alt attribute."
+ },
+ "m2ocqbg": {
+  "message": "lang 属性はエージェントに読み書きする言語を伝えます。フォーム入力、翻訳、日付の扱いに影響します。",
+  "description": "The lang attribute tells agents which language to read and write in, which matters for form input, translation and dates."
+ },
+ "m6fhat7": {
+  "message": "メインコンテンツはページの先頭から約 $P1$ トークンの位置で始まります（全体約 $P3$ の $P2$%）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p3": {
+    "content": "$3"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "The main content starts about $1 tokens into the page ($2% of roughly $3)."
+ },
+ "mcmlzbb": {
+  "message": "モデルがページにない要素を選びました。",
+  "description": "The model picked an element that isn’t on the page."
+ },
+ "m1q4zja9": {
+  "message": "offer に $P1$ がありません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The offer is missing $1."
+ },
+ "m1fvpxj8": {
+  "message": "見出し構造で階層の飛ばしが $P1$ 回あります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The outline skips a level $1 times."
+ },
+ "m1353iq8": {
+  "message": "見出し構造で階層の飛ばしが 1 回あります。",
+  "description": "The outline skips a level once."
+ },
+ "myyy247": {
+  "message": "エージェントが読むページ",
+  "description": "The page as an agent reads it"
+ },
+ "mmm5nxy": {
+  "message": "エージェントから見たページ",
+  "description": "The page as an agent sees it"
+ },
+ "mr68yw5": {
+  "message": "このページは Accept: text/markdown に応答せず、Markdown 版へのリンクもありません。",
+  "description": "The page doesn’t answer Accept: text/markdown and doesn’t link a Markdown version."
+ },
+ "mqaz8z1": {
+  "message": "ページのアクセシビリティツリー",
+  "description": "The page’s accessibility tree"
+ },
+ "m16te35r": {
+  "message": "ページを開くには $P1$ へのアクセス許可が必要です。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The scan needs access to $1 to open its pages."
+ },
+ "m1a92mgn": {
+  "message": "サイドパネルが開きます。<b>診断を実行</b>を押してください。ショートカット: <span class=\"kbd\">Alt</span> + <span class=\"kbd\">Shift</span> + <span class=\"kbd\">A</span>。",
+  "description": "The side panel opens. Press <b>Run audit</b>. Shortcut: <span class=\"kbd\">Alt</span> + <span class=\"kbd\">Shift</span> + <span class=\"kbd\">A</span>."
+ },
+ "mv8oltx": {
+  "message": "構造化データの価格（$P1$）がページに表示されていません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The structured-data price ($1) doesn’t appear on the page."
+ },
+ "m1gpp63g": {
+  "message": "テストが完了しませんでした: $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The test didn’t finish: $1"
+ },
+ "mb99cvy": {
+  "message": "テストしたコントロールにはフォーカス表示があります。",
+  "description": "The tested control shows a focus indicator."
+ },
+ "ma55xmb": {
+  "message": "タイトルは、エージェントが正しいページにいるかを確かめるために最初に読むことが多く、タブを見分ける手がかりにもなります。",
+  "description": "The title is often the first thing an agent reads to confirm it’s on the right page, and it’s how the agent tells tabs apart."
+ },
+ "m140c8v4": {
+  "message": "タイトル「$P1$」はこのページの内容を表していません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The title “$1” doesn’t describe this page."
+ },
+ "maewx8c": {
+  "message": "「カートに追加」のコントロールが本物のボタンではないため、エージェントが見つけられない可能性があります。",
+  "description": "The “add to cart” control isn’t a real button, so agents may not find it."
+ },
+ "m1kjm0qs": {
+  "message": "h1 見出しが $P1$ 個あります。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "There are $1 h1 headings."
+ },
+ "m1xdw5w7": {
+  "message": "h1 がありません。",
+  "description": "There’s no h1."
+ },
+ "m1jzri0z": {
+  "message": "この $P1$ ページを毎週再スキャンします。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "These $1 pages will be re-scanned every week."
+ },
+ "m12w0je2": {
+  "message": "ページのほかの部分と一緒にチェックしました。",
+  "description": "They were checked along with the rest of the page."
+ },
+ "m1sji4z7": {
+  "message": "考え中…",
+  "description": "Thinking…"
+ },
+ "m1y494vs": {
+  "message": "このブラウザはレイアウトのずれを報告しません。",
+  "description": "This browser doesn’t report layout shifts."
+ },
+ "mk69p68": {
+  "message": "このチェックはこのページで実行できませんでした（$P1$）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "This check couldn’t run on this page ($1)."
+ },
+ "m1lo2og5": {
+  "message": "このコントロールには名前がないため、エージェントは推測するしかありません。",
+  "description": "This control has no name, so an agent would be guessing."
+ },
+ "m1x7se86": {
+  "message": "商品ページではないようです。",
+  "description": "This doesn’t look like a product page."
+ },
+ "m1uxsxvk": {
+  "message": "単一の商品ページではなく、商品一覧のようです。",
+  "description": "This looks like a product listing, not a single product page."
+ },
+ "mcdbn48": {
+  "message": "商品ページのようですが、Product の構造化データがありません。",
+  "description": "This looks like a product page, but it has no Product structured data."
+ },
+ "m1babq0g": {
+  "message": "このページ",
+  "description": "This page"
+ },
+ "m667tbu": {
+  "message": "このページは診断できません",
+  "description": "This page can’t be audited"
+ },
+ "m11p5bt0": {
+  "message": "このページには表示中の main ランドマークが $P1$ 個あります。1 個にすべきです。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "This page has $1 visible main landmarks; it should have one."
+ },
+ "m18b11s0": {
+  "message": "診断後にこのページが変更されました。",
+  "description": "This page has changed since the audit."
+ },
+ "m1sl09a6": {
+  "message": "このページには見出しがありません。",
+  "description": "This page has no headings."
+ },
+ "myarbyd": {
+  "message": "このページにはタイトルがありません。",
+  "description": "This page has no title."
+ },
+ "m5tjpgm": {
+  "message": "このページはデバイス上のモデルで扱うにはコントロールが多すぎます。",
+  "description": "This page has too many controls for the on-device model."
+ },
+ "m9sk7la": {
+  "message": "この商品ページは microdata を使っていますが、より多くのエージェントが読む JSON-LD の Product ブロックがありません。",
+  "description": "This product page uses microdata but no JSON-LD Product block, which more agents read."
+ },
+ "m16f39zz": {
+  "message": "このレポートは、エージェントビューが導入される前の古いバージョンで作成されました。",
+  "description": "This report was made by an older version, before the agent view existed."
+ },
+ "msukoc1": {
+  "message": "それらの要素はもうページにありません。もう一度診断してください。",
+  "description": "Those elements are no longer on the page. Run the audit again."
+ },
+ "m1u7t3d2": {
+  "message": "タイトル、ランドマーク、見出し、ページの大きさ、JavaScript が必要なコンテンツ。",
+  "description": "Title, landmarks, headings, page size, and content that needs JavaScript."
+ },
+ "mb98kx7": {
+  "message": "タイトル:「$P1$」",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Title: “$1”"
+ },
+ "m7a4gdj": {
+  "message": "タイトル、ランドマーク、見出しはエージェントにページの地図を与え、簡潔な DOM は読みやすさを保ちます。",
+  "description": "Titles, landmarks and headings give agents a map of the page, and a lean DOM keeps it readable."
+ },
+ "mpean9y": {
+  "message": "パソコンから開いたファイルを診断するには、この拡張機能の「ファイルの URL へのアクセスを許可する」をオンにしてから、もう一度診断してください。",
+  "description": "To audit files opened from your computer, turn on “Allow access to file URLs” for this extension, then run the audit again."
+ },
+ "m3zg8gd": {
+  "message": "購入するとき、エージェントは「カートに追加」のような名前のボタンを探します。ボタンが装飾された div、名前のないアイコン、または想定外の文言だと、購入が止まってしまいます。",
+  "description": "To buy, an agent looks for a button named like “Add to cart”. If the button is a styled div, an icon without a name, or uses wording agents don’t expect, the purchase stalls."
+ },
+ "m17u9dam": {
+  "message": "判定できるだけのスタイル付きコントロールがありません。",
+  "description": "Too few styled controls to judge."
+ },
+ "mr1rcti": {
+  "message": "比較するにはこのページのテキストが少なすぎます。",
+  "description": "Too little text on this page to compare."
+ },
+ "m3rvhla": {
+  "message": "ツール",
+  "description": "Tools"
+ },
+ "mgi8tbu": {
+  "message": "再試行",
+  "description": "Try again"
+ },
+ "mwuzv1b": {
+  "message": "デモストアを試す",
+  "description": "Try the demo store"
+ },
+ "mxa6mac": {
+  "message": "$P1$ に入力",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Type into $1"
+ },
+ "mmcn0gz": {
+  "message": "$P2$ に「$P1$」と入力",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Type “$1” into $2"
+ },
+ "mwn40ai": {
+  "message": "「カートに追加」や「登録」と入力して、エージェントがどこで行き詰まるかを確認します。",
+  "description": "Type “add to cart” or “sign up” and see where an agent gets stuck."
+ },
+ "ml6bdth": {
+  "message": "不明なエラー",
+  "description": "Unknown error"
+ },
+ "m12bamuy": {
+  "message": "無題",
+  "description": "Untitled"
+ },
+ "m16gsbt6": {
+  "message": "$P1$ 点アップ。お見事です。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Up $1 points. Nice work."
+ },
+ "m19xps3d": {
+  "message": "最大 25 ページと、その共通の問題。",
+  "description": "Up to 25 pages, and the problems they share."
+ },
+ "m1hxvngk": {
+  "message": "最大 25 ページ、無料",
+  "description": "Up to 25 pages, free"
+ },
+ "mi6mk9n": {
+  "message": "本物の <button> または <a href> を使ってください。難しい場合は role=\"button\"、tabindex=\"0\" とキーボード操作の処理を追加します。",
+  "description": "Use a real <button> or <a href>. If that isn’t possible, add role=\"button\", tabindex=\"0\" and keyboard handlers."
+ },
+ "m1pi6h6p": {
+  "message": "「カートに追加」「バッグに追加」「今すぐ購入」などの表示テキストを持つ本物の <button> を使ってください。アイコンの場合は aria-label を追加します。",
+  "description": "Use a real <button> with visible text such as “Add to cart”, “Add to bag” or “Buy now”. If it’s an icon, add an aria-label."
+ },
+ "m1fwwrwy": {
+  "message": "ページの主題に h1 を 1 つ使い、階層を飛ばさずに 1 段ずつ下げてください（h2、次に h3）。",
+  "description": "Use one h1 for the page topic, and step down one level at a time (h2, then h3) without skipping levels."
+ },
+ "mxmvsuq": {
+  "message": "tabindex=\"0\" にするか削除し、到達させたい順序で DOM に要素を並べてください。",
+  "description": "Use tabindex=\"0\" or remove it, and order elements in the DOM the way they should be reached."
+ },
+ "m18kqhwq": {
+  "message": "適切な input の type（email、tel、url、date）を使い、name、email、tel、street-address、postal-code などの autocomplete 値を追加してください。",
+  "description": "Use the matching input type (email, tel, url, date) and add autocomplete tokens such as name, email, tel, street-address and postal-code."
+ },
+ "mcs1bsv": {
+  "message": "パソコン上で動く Chrome の組み込み AI（Gemini Nano）を使います。データはブラウザの外に出ません。",
+  "description": "Uses Chrome’s built-in AI (Gemini Nano), running on your computer. Nothing leaves your browser."
+ },
+ "m1dwze18": {
+  "message": "Chrome の組み込み AI（Gemini Nano）を使います。初回のテストでモデルを一度だけダウンロードします。それまでは名前照合でテストします。",
+  "description": "Uses Chrome’s built-in AI (Gemini Nano). The first test asks Chrome to download the model once; until then, tests use name matching."
+ },
+ "mdmzbf6": {
+  "message": "名前照合を使用しています。Chrome の組み込み AI（Gemini Nano）があるパソコンでは、すべてのステップを計画します。",
+  "description": "Using name matching. On computers with Chrome’s built-in AI (Gemini Nano), the test plans every step instead."
+ },
+ "mnisu3c": {
+  "message": "あいまい、または重複したコントロール名",
+  "description": "Vague or duplicated control names"
+ },
+ "mcxg7e6": {
+  "message": "非常に小さいクリック対象",
+  "description": "Very small click targets"
+ },
+ "myjvsso": {
+  "message": "表示",
+  "description": "View"
+ },
+ "mo30akn": {
+  "message": "人には見えて、エージェントには見えない",
+  "description": "Visible to people, invisible to agents"
+ },
+ "mximv9r": {
+  "message": "警告",
+  "description": "Warning"
+ },
+ "m13skb79": {
+  "message": "WebMCP を使うと、ページは画面をクリックさせる代わりに「search_flights」のような名前付きツールをエージェントに提供できます。Chrome のオリジントライアル段階でまだほとんど普及していないため、任意です。",
+  "description": "WebMCP lets a page offer agents named tools, like “search_flights”, instead of making them click through the interface. It’s an origin trial in Chrome with almost no adoption yet, so it’s optional."
+ },
+ "m13xjt40": {
+  "message": "WebMCP ツール",
+  "description": "WebMCP tools"
+ },
+ "m12wmwuh": {
+  "message": "週次再スキャン",
+  "description": "Weekly re-scan"
+ },
+ "mwtrgg5": {
+  "message": "週次再スキャンはオンです。通知を受け取るには通知を許可してください。",
+  "description": "Weekly re-scan is on. Allow notifications to get alerts."
+ },
+ "m1b6siac": {
+  "message": "週次再スキャンをオフにしました。",
+  "description": "Weekly re-scan turned off."
+ },
+ "m1pkpjlc": {
+  "message": "週次再スキャン · 詳細はサイトを開いて「サイトスキャン」タブで確認",
+  "description": "Weekly re-scan · open the site and the Site scan tab for details"
+ },
+ "m2263g2": {
+  "message": "週次再スキャン: オン",
+  "description": "Weekly re-scan: on"
+ },
+ "m57qeo5": {
+  "message": "サイトが悪化したら通知する週次再スキャン、キーボードとフォーカスのチェック、シャドウ DOM やフレーム内のボタンの診断、名前のないボタンへの AI による名前の提案、そして 6 言語対応のインターフェース。",
+  "description": "Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages."
+ },
+ "m1g2zi34": {
+  "message": "Agent-Readiness Auditor へようこそ",
+  "description": "Welcome to Agent-Readiness Auditor"
+ },
+ "moj6ax3": {
+  "message": "チェック内容",
+  "description": "What it checks"
+ },
+ "m1tj8t7j": {
+  "message": "見つからなかったもの: ",
+  "description": "What it couldn’t find: "
+ },
+ "me66w7i": {
+  "message": "診断でチェックする内容",
+  "description": "What the audit checks"
+ },
+ "mexy3ne": {
+  "message": "わかること",
+  "description": "What you get"
+ },
+ "mms1pnd": {
+  "message": "新機能",
+  "description": "What’s new"
+ },
+ "mu27h7a": {
+  "message": "エージェントやキーボード利用者がコントロールに移動すると、枠線で現在位置がわかります。スクリーンショットで動くエージェントは、Enter を押す前にそれで正しいコントロールにフォーカスがあるかを確かめます。",
+  "description": "When an agent or a keyboard user moves to a control, a visible outline shows where they are. Agents that work from screenshots check it to confirm the right control is focused before they press Enter."
+ },
+ "m1xqy37k": {
+  "message": "メインコンテンツの開始位置",
+  "description": "Where the main content starts"
+ },
+ "m1go2miz": {
+  "message": "比較先のほうが優れている点",
+  "description": "Where the other page does better"
+ },
+ "m1krwck0": {
+  "message": "このページのほうが優れている点",
+  "description": "Where this page does better"
+ },
+ "m1ooppw6": {
+  "message": "ページの探し方",
+  "description": "Where to find pages"
+ },
+ "m5glo3a": {
+  "message": "重要な理由",
+  "description": "Why it matters"
+ },
+ "mghh9ku": {
+  "message": "次のリリース後もセレクターは使えますか？",
+  "description": "Will selectors still work after the next release?"
+ },
+ "m1ycfdaw": {
+  "message": "メインコンテンツを <main>、サイトナビゲーションを <nav> で囲み、ページの枠部分には <header> と <footer> を使ってください。",
+  "description": "Wrap the primary content in <main> and site navigation in <nav>, and use <header> and <footer> for page chrome."
+ },
+ "m1rg8nyu": {
+  "message": "「注文履歴 | Acme」のように、ページ名とサイト名を含む固有のタイトルにしてください。",
+  "description": "Write a unique title that names the page and the site, like “Order history | Acme”."
+ },
+ "m1l1cxc2": {
+  "message": "スコアが下がると通知されます。",
+  "description": "You’ll get an alert if the score drops."
+ },
+ "mwgphmh": {
+  "message": "準備完了です。1 分以内に最初の診断ができます。",
+  "description": "You’re set up. Here’s your first audit in under a minute."
+ },
+ "mnncif0": {
+  "message": "不明な要素",
+  "description": "an unknown element"
+ },
+ "miuw45i": {
+  "message": "名前のないコントロール",
+  "description": "control with no name"
+ },
+ "mpbq9jp": {
+  "message": "名前のないコントロール",
+  "description": "controls with no name"
+ },
+ "momdb1j": {
+  "message": "不合格",
+  "description": "failing"
+ },
+ "m1ts3t3f": {
+  "message": "たった今",
+  "description": "just now"
+ },
+ "m1rmc1kz": {
+  "message": "共通テンプレートの可能性大",
+  "description": "likely a shared template"
+ },
+ "m2v44ew": {
+  "message": "行",
+  "description": "lines"
+ },
+ "m127crzf": {
+  "message": "llms.txt ファイル",
+  "description": "llms.txt file"
+ },
+ "mwuji42": {
+  "message": "llms.txt は新しく広まりつつある慣習で、言語モデル向けに書かれたサイトのプレーンテキストガイドです。まだ置いているサイトは少なく、手軽にエージェントを助けられます。",
+  "description": "llms.txt is an emerging convention: a plain-text guide to a site, written for language models. Few sites have one yet, so it’s an inexpensive way to help agents."
+ },
+ "m375lnp": {
+  "message": "—",
+  "description": "n/a"
+ },
+ "m1c2t9kz": {
+  "message": "名前なし",
+  "description": "no name"
+ },
+ "m1ae6av4": {
+  "message": "AI エージェント向けの robots.txt ルール",
+  "description": "robots.txt rules for AI agents"
+ },
+ "m1q2cysr": {
+  "message": "（$P1$ の診断から。前回 $P2$）",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "since the audit on $1 (was $2)."
+ },
+ "mxrp6h6": {
+  "message": "0 より大きい tabindex はページ本来の順序を上書きするため、キーボードで移動するエージェントは予測できない順に飛び回ります。",
+  "description": "tabindex above 0 overrides the natural order of the page, so agents that move with the keyboard jump around unpredictably."
+ },
+ "mt0bt2l": {
+  "message": "トークン",
+  "description": "tokens"
+ },
+ "milu1m8": {
+  "message": "type=\"email\" と autocomplete=\"email\" は、項目が何を求めているかを正確にエージェントに伝えます。ないと周囲のテキストから推測し、形式を間違えがちです。",
+  "description": "type=\"email\" and autocomplete=\"email\" tell an agent exactly what a field wants. Without them it infers from nearby text and often formats the data wrong."
+ },
+ "mtj5kmn": {
+  "message": "警告",
+  "description": "warning"
+ },
+ "m1ngt6ad": {
+  "message": "昨日",
+  "description": "yesterday"
+ },
+ "m1cwwvnv": {
+  "message": "「$P1$」はクリックできそうに見えますが、ボタンでもリンクでもないため、エージェントは使えません。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "“$1” looks clickable, but it isn’t a button or link, so agents can’t use it."
+ }
+}

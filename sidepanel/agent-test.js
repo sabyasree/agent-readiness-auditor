@@ -161,7 +161,7 @@ async function aiPlan(task, r, targets, { onProgress, signal }) {
         throw e;
       }
     }
-    throw new Error('This page has too many controls for the on-device model.');
+    throw new Error(t('This page has too many controls for the on-device model.'));
   } finally {
     session.destroy();
   }
@@ -180,8 +180,8 @@ function matchPlan(task, targets) {
       possible: false,
       steps: [],
       missing: unnamed
-        ? `No control’s name matches the task. ${unnamed === 1 ? 'One control has' : `${unnamed} controls have`} no name, and the one you need may be among them.`
-        : 'No control’s name matches the task.',
+        ? tn(unnamed, 'No control’s name matches the task. $1 control has no name, and it may be the one you need.', 'No control’s name matches the task. $1 controls have no name, and the one you need may be among them.')
+        : t('No control’s name matches the task.'),
     };
   }
   const best = ranked[0].t;
@@ -198,10 +198,10 @@ function matchPlan(task, targets) {
  */
 function evaluatePlan(task, plan, targets, hidden) {
   const steps = (plan.steps || []).slice(0, 6).map((s) => {
-    const target = targets.find((t) => t.i === s.element) || null;
+    const target = targets.find((x) => x.i === s.element) || null;
     let problem = '';
-    if (!target) problem = 'The model picked an element that isn’t on the page.';
-    else if (target.unnamed) problem = 'This control has no name, so an agent would be guessing.';
+    if (!target) problem = t('The model picked an element that isn’t on the page.');
+    else if (target.unnamed) problem = t('This control has no name, so an agent would be guessing.');
     return { action: s.action || 'click', text: s.text || '', target, problem };
   });
   const want = atExpand(atWords(task));
@@ -214,7 +214,7 @@ function evaluatePlan(task, plan, targets, hidden) {
   return { verdict, steps, hidden: hiddenHits, missing: plan.possible ? '' : String(plan.missing || ''), alternatives: plan.alternatives || [] };
 }
 
-function describeTarget(t) {
-  if (!t) return 'an unknown element';
-  return t.unnamed ? `${t.role} with no name` : `${t.role} “${t.name.slice(0, 60)}”`;
+function describeTarget(x) {
+  if (!x) return t('an unknown element');
+  return x.unnamed ? t('$1 with no name', x.role) : t('$1 “$2”', x.role, x.name.slice(0, 60));
 }

@@ -663,7 +663,11 @@ button.scan-path:hover { text-decoration: underline; }
 .tabs button:focus-visible { outline-offset: -3px; }
 .ico, .tool-ico { display: inline-flex; flex: none; }
 .ico svg { width: 19px; height: 19px; }
-.tab-label { font-size: 11.5px; font-weight: 600; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.tab-label {
+  font-size: 11.5px; font-weight: 600; line-height: 1.15; max-width: 100%; text-align: center; flex: none;
+  /* Longer translations wrap to a second line rather than being cut off. */
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; hyphens: auto; overflow-wrap: anywhere;
+}
 .tab-badge {
   position: absolute;
   top: 3px;

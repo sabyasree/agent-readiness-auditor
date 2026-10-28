@@ -81,7 +81,7 @@ function scanPrompt(scan) {
 function renderSiteScan(r) {
   let origin = '';
   try { origin = new URL(r.url).origin; } catch { /* ignore */ }
-  if (!/^https?:/.test(origin)) return h('p', { class: 'view-empty', text: 'Site scans work on regular websites.' });
+  if (!/^https?:/.test(origin)) return h('p', { class: 'view-empty', text: t('Site scans work on regular websites.') });
   const host = new URL(origin).host;
   const site = state.site && state.site.origin === origin ? state.site : (state.site = { origin, phase: 'idle', pages: [], source: 'auto', size: 10 });
   const box = h('section', { class: 'site-scan' });
@@ -100,24 +100,24 @@ function renderSiteScan(r) {
     }, label);
     const last = site.saved;
     return [
-      h('p', { class: 'view-intro', text: `Audit up to 25 pages of ${host} and find the problems they share. A problem on most pages usually comes from one template, so one fix covers them all.` }),
+      h('p', { class: 'view-intro', text: t('Audit up to 25 pages of $1 and find the problems they share. A problem on most pages usually comes from one template, so one fix covers them all.', host) }),
       h('div', { class: 'scan-form' },
         h('div', { class: 'scan-row' },
-          h('span', { class: 'test-label', text: 'Pages from' }),
-          h('div', { class: 'segmented', role: 'group', 'aria-label': 'Where to find pages' },
-            choice('source', 'auto', 'Sitemap'), choice('source', 'links', 'Links on this page')),
+          h('span', { class: 'test-label', text: t('Pages from') }),
+          h('div', { class: 'segmented', role: 'group', 'aria-label': t('Where to find pages') },
+            choice('source', 'auto', t('Sitemap')), choice('source', 'links', t('Links on this page'))),
         ),
         h('div', { class: 'scan-row' },
-          h('span', { class: 'test-label', text: 'How many' }),
-          h('div', { class: 'segmented', role: 'group', 'aria-label': 'How many pages' },
-            SCAN_SIZES.map((n) => choice('size', n, `${n} pages`))),
+          h('span', { class: 'test-label', text: t('How many') }),
+          h('div', { class: 'segmented', role: 'group', 'aria-label': t('How many pages') },
+            SCAN_SIZES.map((n) => choice('size', n, t('$1 pages', n)))),
         ),
-        h('button', { class: 'btn btn-primary', type: 'button', onclick: startScan }, `Scan ${site.size} pages`),
-        h('p', { class: 'scan-note', text: 'Pages open one at a time in a background tab, which closes when the scan ends. Keep this panel open. Nothing is sent anywhere.' }),
+        h('button', { class: 'btn btn-primary', type: 'button', onclick: startScan }, t('Scan $1 pages', site.size)),
+        h('p', { class: 'scan-note', text: t('Pages open one at a time in a background tab, which closes when the scan ends. Keep this panel open. Nothing is sent anywhere.') }),
       ),
       last ? h('div', { class: 'scan-last' },
-        h('span', { text: `${last.auto ? 'Last weekly re-scan' : 'Last scan'} ${timeAgo(last.ts)}: ${summarizeScan(last.pages).done} pages, average ${summarizeScan(last.pages).avg}.` }),
-        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { Object.assign(site, { phase: 'done', pages: last.pages, ts: last.ts }); draw(); } }, 'View'),
+        h('span', { text: t(last.auto ? 'Last weekly re-scan $1: $2 pages, average $3.' : 'Last scan $1: $2 pages, average $3.', timeAgo(last.ts), summarizeScan(last.pages).done, summarizeScan(last.pages).avg) }),
+        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { Object.assign(site, { phase: 'done', pages: last.pages, ts: last.ts }); draw(); } }, t('View')),
       ) : null,
     ];
   }
@@ -127,13 +127,13 @@ function renderSiteScan(r) {
     const running = site.phase === 'running';
     const icon = (p) => (p.result ? h('span', { class: `scan-score tone-${toneFor(p.result.score)}`, text: String(p.result.score) })
       : p.error ? h('span', { class: 'scan-score tone-na', text: '–', title: p.error })
-        : p.running ? h('span', { class: 'scan-spin', 'aria-label': 'Auditing' }) : h('span', { class: 'scan-score tone-na', text: '·' }));
+        : p.running ? h('span', { class: 'scan-spin', 'aria-label': t('Auditing') }) : h('span', { class: 'scan-score tone-na', text: '·' }));
     return [
       h('div', { class: 'scan-head' },
-        h('strong', { text: running ? `Auditing ${Math.min(done + 1, site.pages.length)} of ${site.pages.length}…` : `${done} pages scanned` }),
+        h('strong', { text: running ? t('Auditing $1 of $2…', Math.min(done + 1, site.pages.length), site.pages.length) : t('$1 pages scanned', done) }),
         running
-          ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { site.cancel = true; } }, 'Stop')
-          : h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { site.phase = 'idle'; draw(); } }, 'New scan'),
+          ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { site.cancel = true; } }, t('Stop'))
+          : h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { site.phase = 'idle'; draw(); } }, t('New scan')),
       ),
       h('div', { class: 'scan-bar', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': String(site.pages.length), 'aria-valuenow': String(done) },
         h('b', { style: { width: `${site.pages.length ? (done / site.pages.length) * 100 : 0}%` } })),
@@ -143,7 +143,7 @@ function renderSiteScan(r) {
 
   function resultView() {
     const s = summarizeScan(site.pages);
-    if (!s.done) return [h('p', { class: 'view-empty', text: 'No pages could be audited. They may need a sign-in, or the site blocked the background tab.' })];
+    if (!s.done) return [h('p', { class: 'view-empty', text: t('No pages could be audited. They may need a sign-in, or the site blocked the background tab.') })];
     const scan = { origin, ts: site.ts || Date.now(), pages: site.pages };
     const sharedRow = (x) => {
       const share = x.pages.length / s.done;
@@ -152,8 +152,8 @@ function renderSiteScan(r) {
           h('summary', {},
             h('span', { class: `scan-count${share >= 0.5 ? '' : ' scan-count-some'}`, text: `${x.pages.length}/${s.done}` }),
             h('span', { class: 'fix-text' },
-              h('strong', { text: x.title }),
-              h('span', { text: `${x.cat}${share >= 0.5 && s.done > 2 ? ' · likely a shared template' : ''}` }),
+              h('strong', { text: t(x.title) }),
+              h('span', { text: `${t(x.cat)}${share >= 0.5 && s.done > 2 ? ` · ${t('likely a shared template')}` : ''}` }),
             ),
           ),
           h('ul', { class: 'scan-sub' }, x.pages.map((u) => h('li', {},
@@ -163,21 +163,21 @@ function renderSiteScan(r) {
     };
     return [
       h('div', { class: 'scan-summary' },
-        h('div', { class: `score-num tone-${toneFor(s.avg)}` }, String(s.avg), h('small', { text: ' average' })),
-        h('p', { class: 'muted', text: `Across ${s.done} pages. Lowest: ${pathOf(s.worst[0].result.url)} (${s.worst[0].result.score}).` }),
+        h('div', { class: `score-num tone-${toneFor(s.avg)}` }, String(s.avg), h('small', { text: t(' average') })),
+        h('p', { class: 'muted', text: t('Across $1 pages. Lowest: $2 ($3).', s.done, pathOf(s.worst[0].result.url), s.worst[0].result.score) }),
       ),
-      h('h3', { class: 'scan-h', text: 'Problems shared across pages' }),
-      s.shared.length ? h('ul', { class: 'scan-shared' }, s.shared.slice(0, 12).map(sharedRow)) : h('p', { class: 'view-empty', text: 'No problems on any page. Nice.' }),
-      h('h3', { class: 'scan-h', text: 'Pages, lowest score first' }),
+      h('h3', { class: 'scan-h', text: t('Problems shared across pages') }),
+      s.shared.length ? h('ul', { class: 'scan-shared' }, s.shared.slice(0, 12).map(sharedRow)) : h('p', { class: 'view-empty', text: t('No problems on any page. Nice.') }),
+      h('h3', { class: 'scan-h', text: t('Pages, lowest score first') }),
       h('ul', { class: 'scan-pages' }, s.worst.map((p) => h('li', {},
         h('span', { class: `scan-score tone-${toneFor(p.result.score)}`, text: String(p.result.score) }),
-        h('button', { type: 'button', class: 'btn-link scan-path', title: 'Open this page in the current tab', onclick: () => openInTab(p.result.url) }, pathOf(p.result.url)),
+        h('button', { type: 'button', class: 'btn-link scan-path', title: t('Open this page in the current tab'), onclick: () => openInTab(p.result.url) }, pathOf(p.result.url)),
       ))),
       monitorTile(),
       h('div', { class: 'test-actions' },
-        s.shared.length ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(scanPrompt(scan), 'Prompt for the shared problems copied') }, 'Copy fix prompt') : null,
-        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => openBlob(scanHtml(scan), 'text/html') }, 'Open site report'),
-        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => saveBlob(scanCsv(scan), 'text/csv', `agent-readiness-${host}.csv`) }, 'Download CSV'),
+        s.shared.length ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(scanPrompt(scan), t('Prompt for the shared problems copied')) }, t('Copy fix prompt')) : null,
+        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => openBlob(scanHtml(scan), 'text/html') }, t('Open site report')),
+        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => saveBlob(scanCsv(scan), 'text/csv', `agent-readiness-${host}.csv`) }, t('Download CSV')),
       ),
     ];
   }
@@ -193,8 +193,8 @@ function renderSiteScan(r) {
       },
       icon(TOOL_ICONS.rerun, 'tool-ico'),
       h('span', { class: 'tool-text' },
-        h('strong', { text: on ? 'Weekly re-scan: on' : 'Re-scan every week' }),
-        h('span', { text: on ? `Next in ${next === 1 ? '1 day' : `${next} days`}. ${m.alerts ? 'You’ll get an alert if the score drops.' : 'Alerts are off.'}` : 'Get an alert if the score drops or a new problem spreads' }),
+        h('strong', { text: on ? t('Weekly re-scan: on') : t('Re-scan every week') }),
+        h('span', { text: on ? `${tn(next, 'Next in $1 day.', 'Next in $1 days.')} ${m.alerts ? t('You’ll get an alert if the score drops.') : t('Alerts are off.')}` : t('Get an alert if the score drops or a new problem spreads') }),
       )),
     );
   }
@@ -203,7 +203,7 @@ function renderSiteScan(r) {
     if (site.monitor && site.monitor.enabled) {
       site.monitor = { ...site.monitor, enabled: false };
       await chrome.storage.local.set({ [monitorKey(origin)]: site.monitor });
-      toast('Weekly re-scan turned off.');
+      toast(t('Weekly re-scan turned off.'));
       return draw();
     }
     let alerts = false;
@@ -211,20 +211,20 @@ function renderSiteScan(r) {
     const urls = site.pages.filter((p) => p.result).map((p) => p.url);
     site.monitor = { origin, urls, enabled: true, alerts, lastRun: site.ts || Date.now(), every: MONITOR_EVERY_DAYS };
     await chrome.storage.local.set({ [monitorKey(origin)]: site.monitor });
-    toast(alerts ? `These ${urls.length} pages will be re-scanned every week.` : 'Weekly re-scan is on. Allow notifications to get alerts.');
+    toast(alerts ? t('These $1 pages will be re-scanned every week.', urls.length) : t('Weekly re-scan is on. Allow notifications to get alerts.'));
     draw();
   }
 
   function openInTab(url) {
     chrome.tabs.update(state.tabId, { url });
-    toast('Opened in the current tab. Run the audit there for full details.');
+    toast(t('Opened in the current tab. Run the audit there for full details.'));
   }
 
   async function startScan() {
     if (site.phase === 'running') return;
     let granted = false;
     try { granted = await chrome.permissions.request({ origins: [`${origin}/*`] }); } catch { granted = false; }
-    if (!granted) return toast(`The scan needs access to ${host} to open its pages.`);
+    if (!granted) return toast(t('The scan needs access to $1 to open its pages.', host));
 
     site.phase = 'running';
     site.cancel = false;
@@ -274,5 +274,5 @@ function saveBlob(text, type, name) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  toast('Downloaded');
+  toast(t('Downloaded'));
 }
