@@ -76,12 +76,20 @@ function pickPages(current, urls, n) {
   return out;
 }
 
+/** Resolves when the tab finishes loading; rejects at once if the tab is closed. */
 function waitForLoad(tabId) {
-  return new Promise((resolve) => {
-    const done = (why) => { clearTimeout(timer); chrome.tabs.onUpdated.removeListener(onUpdated); resolve(why); };
-    const onUpdated = (id, info) => { if (id === tabId && info.status === 'complete') done('ok'); };
-    const timer = setTimeout(() => done('timeout'), SCAN_LOAD_TIMEOUT_MS);
+  return new Promise((resolve, reject) => {
+    const done = (fn, v) => {
+      clearTimeout(timer);
+      chrome.tabs.onUpdated.removeListener(onUpdated);
+      chrome.tabs.onRemoved.removeListener(onRemoved);
+      fn(v);
+    };
+    const onUpdated = (id, info) => { if (id === tabId && info.status === 'complete') done(resolve, 'ok'); };
+    const onRemoved = (id) => { if (id === tabId) done(reject, new Error('The background tab was closed')); };
+    const timer = setTimeout(() => done(resolve, 'timeout'), SCAN_LOAD_TIMEOUT_MS);
     chrome.tabs.onUpdated.addListener(onUpdated);
+    chrome.tabs.onRemoved.addListener(onRemoved);
   });
 }
 
@@ -322,23 +330,36 @@ function renderSiteScan(r) {
     let tab;
     try {
       tab = await chrome.tabs.create({ url: 'about:blank', active: false });
+      const auditPage = async (url) => {
+        // The background tab can disappear (closed by the person, or its page crashed): open a fresh one.
+        try { await chrome.tabs.get(tab.id); } catch { tab = await chrome.tabs.create({ url: 'about:blank', active: false }); }
+        const loaded = waitForLoad(tab.id);
+        await chrome.tabs.update(tab.id, { url });
+        await loaded;
+        await sleep(SCAN_SETTLE_MS);
+        const now = await chrome.tabs.get(tab.id);
+        if (now.url && new URL(now.url).origin !== origin) {
+          const err = new Error('Went to another site (maybe a sign-in page)');
+          err.final = true;
+          throw err;
+        }
+        await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content/auditor.js'] });
+        const [res] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: (o) => window.__ARA.run(o), args: [{ siteScan: true }] });
+        if (!res || !res.result) throw new Error('No result');
+        return compactPage(res.result);
+      };
       for (const p of site.pages) {
         if (site.cancel) break;
         p.running = true;
         draw();
-        try {
-          const loaded = waitForLoad(tab.id);
-          await chrome.tabs.update(tab.id, { url: p.url });
-          await loaded;
-          await sleep(SCAN_SETTLE_MS);
-          const now = await chrome.tabs.get(tab.id);
-          if (now.url && new URL(now.url).origin !== origin) throw new Error('Went to another site (maybe a sign-in page)');
-          await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content/auditor.js'] });
-          const [res] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: (o) => window.__ARA.run(o), args: [{ siteScan: true }] });
-          if (!res || !res.result) throw new Error('No result');
-          p.result = compactPage(res.result);
-        } catch (e) {
-          p.error = String((e && e.message) || e).slice(0, 120);
+        for (let attempt = 0; attempt < 2 && !p.result && !site.cancel; attempt++) {
+          try {
+            p.result = await auditPage(p.url);
+            delete p.error;
+          } catch (e) {
+            p.error = String((e && e.message) || e).slice(0, 120);
+            if (e && e.final) break; // retrying won't help
+          }
         }
         p.running = false;
         draw();
