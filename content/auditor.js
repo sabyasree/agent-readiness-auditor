@@ -8,7 +8,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.4.0';
+  const VERSION = '1.5.0';
   if (window.__ARA && window.__ARA.version === VERSION) return;
 
   const FINDING_CAP = 50;
@@ -79,17 +79,40 @@
     return visible(el) && !el.closest('[aria-hidden="true"], [inert]');
   }
 
-  function textFromIds(ids) {
+  /** Text of the elements with these ids, looked up in `root` (the element's document or shadow root). */
+  function textFromIds(ids, root = document) {
+    const find = (id) => (root && root.getElementById ? root.getElementById(id) : null) || document.getElementById(id);
     return norm(ids.split(/\s+/).map((id) => {
-      const n = document.getElementById(id);
+      const n = find(id);
       return n ? n.textContent : '';
     }).join(' '));
+  }
+
+  // Open shadow roots and same-origin iframes hold controls too. These roots
+  // are searched alongside the page; closed shadow roots and cross-origin
+  // frames can't be read from here.
+  const ROOT_CAP = 300;
+  function extraRoots() {
+    const out = [];
+    const visit = (root, inFrame) => {
+      const walker = (root.ownerDocument || root).createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+      for (let n = walker.nextNode(); n && out.length < ROOT_CAP; n = walker.nextNode()) {
+        if (n.shadowRoot) { out.push({ root: n.shadowRoot, kind: inFrame ? 'frame' : 'shadow', host: n }); visit(n.shadowRoot, inFrame); }
+        if (n.tagName === 'IFRAME' || n.tagName === 'FRAME') {
+          let doc = null;
+          try { doc = n.contentDocument; } catch { doc = null; }
+          if (doc && doc.documentElement && usable(n)) { out.push({ root: doc, kind: 'frame', host: n }); visit(doc.documentElement, true); }
+        }
+      }
+    };
+    visit(document.documentElement, false);
+    return out;
   }
 
   /** A practical approximation of the accessible name computation. */
   function accName(el) {
     const lb = el.getAttribute('aria-labelledby');
-    if (lb) { const t = textFromIds(lb); if (t) return t; }
+    if (lb) { const t = textFromIds(lb, el.getRootNode()); if (t) return t; }
     const al = norm(el.getAttribute('aria-label'));
     if (al) return al;
 
@@ -123,7 +146,7 @@
     const parts = [];
     if (el.labels) for (const l of el.labels) parts.push(l.innerText || l.textContent);
     const lb = el.getAttribute('aria-labelledby');
-    if (lb) parts.push(textFromIds(lb));
+    if (lb) parts.push(textFromIds(lb, el.getRootNode()));
     parts.push(el.getAttribute('aria-label') || '');
     return norm(parts.join(' '));
   }
@@ -178,23 +201,48 @@
     return open.length > 200 ? open.slice(0, 199) + '…' : open;
   }
 
-  function finding(el, note, fix) {
+  function finding(el, note, fix, hint) {
     const ref = refs.push(el) - 1;
     let selector = '';
     try { selector = cssPath(el); } catch { /* ignore */ }
     const out = { ref, selector, snippet: snippet(el), note: note || '' };
     if (fix) out.fix = fix;
+    if (hint) out.hint = hint;
     return out;
   }
 
   /** Findings for up to FINDING_CAP items. `fixFn(item)` returns suggested code, or '' for none. */
-  function findings(items, noteFn, fixFn) {
+  function findings(items, noteFn, fixFn, withHint) {
     return items.slice(0, FINDING_CAP).map((it) => {
       const el = it.el || it;
       let fix = '';
       if (fixFn) { try { fix = fixFn(it) || ''; } catch { fix = ''; } }
-      return finding(el, noteFn ? noteFn(it) : '', fix);
+      let hint = '';
+      if (withHint) { try { hint = elementHint(el); } catch { hint = ''; } }
+      return finding(el, noteFn ? noteFn(it) : '', fix, hint);
     });
+  }
+
+  /** What surrounds an element, for naming it: nearby text, the section heading, class names, link or image. */
+  function elementHint(el) {
+    const parts = [];
+    const own = norm(el.innerText || el.textContent);
+    for (let a = el.parentElement, i = 0; a && i < 3; a = a.parentElement, i++) {
+      const t = norm(a.innerText).replace(own, '').trim();
+      if (t.length > 200) break; // a whole section says nothing about this one control
+      if (t.length >= 3) { parts.push(`Nearby text: ${t.slice(0, 120)}`); break; }
+    }
+    const headings = Array.from(el.ownerDocument.querySelectorAll('h1, h2, h3'));
+    const before = headings.filter((h) => h.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING).pop();
+    if (before) parts.push(`Section: ${norm(before.innerText).slice(0, 60)}`);
+    const classes = [el.id, typeof el.className === 'string' ? el.className : '',
+      ...Array.from(el.querySelectorAll('svg, i, img, use')).map((d) => d.getAttribute('class') || d.getAttribute('data-icon') || d.getAttribute('href') || d.getAttribute('src') || '')]
+      .join(' ').replace(/\s+/g, ' ').trim();
+    if (classes) parts.push(`Classes and icons: ${classes.slice(0, 120)}`);
+    const href = el.getAttribute('href');
+    if (href && !/^(#|javascript:)/i.test(href)) parts.push(`Links to: ${href.slice(0, 80)}`);
+    if (el.tagName === 'IMG') parts.push(`Image file: ${(el.getAttribute('src') || '').split('/').pop().split('?')[0].slice(0, 60)}`);
+    return parts.join('\n');
   }
 
   // ------------------------------------------------------- suggested fixes
@@ -543,13 +591,18 @@
       controls: [], fields: [],
     };
 
+    ctx.roots = extraRoots();
+    const deep = (sel) => [...$$(sel), ...ctx.roots.flatMap((r) => { try { return $$(sel, r.root); } catch { return []; } })];
+    const where = new Map(ctx.roots.map((r) => [r.root, r.kind]));
+    ctx.where = (el) => where.get(el.getRootNode()) || (el.ownerDocument !== document ? 'frame' : '');
+
     const controlSet = new Set();
-    for (const el of $$(CONTROL_SEL)) {
+    for (const el of deep(CONTROL_SEL)) {
       if (ctx.controls.length >= 5000) break;
       if (el.matches(FIELD_SEL)) continue;
       if (usable(el)) { controlSet.add(el); ctx.controls.push({ el, name: accName(el) }); }
     }
-    for (const el of $$(FIELD_SEL)) {
+    for (const el of deep(FIELD_SEL)) {
       if (ctx.fields.length >= 2000) break;
       if (controlSet.has(el)) continue;
       if (el.tagName === 'INPUT' && el.closest('[role="combobox"]') && el.closest('[role="combobox"]') !== el &&
@@ -558,6 +611,8 @@
     }
     ctx.interactive = [...ctx.controls.map((c) => c.el), ...ctx.fields.map((f) => f.el)];
     ctx.interactiveSet = controlSet;
+    ctx.coverage = { shadow: 0, frame: 0 };
+    for (const el of ctx.interactive) { const w = ctx.where(el); if (w) ctx.coverage[w]++; }
 
     // Depth-first walk: depth, fixed overlays, shadow hosts, pointer-only "controls".
     const cursorOf = new Map();
@@ -613,7 +668,7 @@
 
   function explicitName(el) {
     const lb = el.getAttribute('aria-labelledby');
-    return (lb && textFromIds(lb)) || norm(el.getAttribute('aria-label'));
+    return (lb && textFromIds(lb, el.getRootNode())) || norm(el.getAttribute('aria-label'));
   }
 
   function implicitRole(el) {
@@ -853,6 +908,67 @@
       },
     },
     {
+      id: 'keyboard-reachable', category: 'semantics', weight: 2,
+      title: 'Controls you can’t reach with the Tab key',
+      why: 'Agents that drive the page with the keyboard, and people who can’t use a mouse, move between controls with Tab. A button or link with tabindex="-1" is skipped, so it can only be reached by clicking.',
+      fix: 'Remove tabindex="-1" from standalone controls. Keep it only for items inside a widget that manages focus itself, such as menu items, tabs or options with arrow-key navigation.',
+      run(ctx) {
+        const COMPOSITE = '[role="menu"], [role="menubar"], [role="listbox"], [role="tablist"], [role="tree"], [role="treegrid"], [role="grid"], [role="radiogroup"], [role="toolbar"], [role="combobox"], [aria-activedescendant]';
+        const bad = ctx.interactive.filter((el) => {
+          const t = el.getAttribute('tabindex');
+          if (t == null || !/^\s*-\d+\s*$/.test(t) || el.disabled) return false;
+          if (el.parentElement && el.parentElement.closest(COMPOSITE)) return false;
+          return !['menuitem', 'menuitemcheckbox', 'menuitemradio', 'tab', 'option', 'treeitem', 'gridcell', 'radio'].includes(role(el));
+        });
+        const n = bad.length;
+        return {
+          score: ratioScore(n, ctx.interactive.length, 0.2),
+          issues: n,
+          summary: n ? `${pl(n, 'control')} ${vb(n, 'is', 'are')} skipped by the Tab key.` : 'Every control can be reached with the Tab key.',
+          findings: findings(bad, () => 'tabindex="-1" takes it out of the Tab order', (el) => `${openTag(el, { remove: ['tabindex'] })}${closeTag(el)}`),
+        };
+      },
+    },
+    {
+      id: 'focus-visible', category: 'semantics', weight: 1,
+      title: 'No visible focus indicator',
+      why: 'When an agent or a keyboard user moves to a control, a visible outline shows where they are. Agents that work from screenshots check it to confirm the right control is focused before they press Enter.',
+      fix: 'Don’t remove the focus outline. If the design needs a custom one, style :focus-visible with an outline or a box-shadow that contrasts with the background.',
+      run(ctx) {
+        // Focus a sample of links and buttons the way the keyboard does, compare styles, then put focus back.
+        const sample = ctx.controls.map((c) => c.el)
+          .filter((el) => el.ownerDocument === document && !el.disabled && el.matches(FOCUSABLE_SEL))
+          .filter((el) => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < ctx.vh * 2; })
+          .slice(0, 25);
+        if (!sample.length) return { score: null, status: 'na', summary: 'No links or buttons to test.' };
+        const props = ['outlineStyle', 'outlineWidth', 'outlineColor', 'boxShadow', 'borderColor', 'borderWidth', 'backgroundColor', 'color', 'textDecorationLine'];
+        const snap = (el) => { const cs = getComputedStyle(el); return props.map((p) => cs[p]).join('|'); };
+        const prev = document.activeElement;
+        const bad = [];
+        let tested = 0;
+        try {
+          for (const el of sample) {
+            const before = snap(el);
+            try { el.focus({ preventScroll: true, focusVisible: true }); } catch { continue; }
+            if (document.activeElement !== el || !el.matches(':focus-visible')) { el.blur(); continue; }
+            tested++;
+            if (snap(el) === before) bad.push(el);
+            el.blur();
+          }
+        } finally {
+          if (prev && prev !== document.body && typeof prev.focus === 'function') { try { prev.focus({ preventScroll: true }); } catch { /* ignore */ } }
+        }
+        if (!tested) return { score: null, status: 'na', summary: 'Couldn’t simulate keyboard focus in this browser.' };
+        const n = bad.length;
+        return {
+          score: ratioScore(n, tested, 0.5),
+          issues: n,
+          summary: n ? `${n.toLocaleString()} of ${pl(tested, 'tested control')} show no change when focused.` : `All ${pl(tested, 'tested control')} show a focus indicator.`,
+          findings: findings(bad, () => 'Looks the same focused and unfocused'),
+        };
+      },
+    },
+    {
       id: 'positive-tabindex', category: 'semantics', weight: 1,
       title: 'Positive tabindex values',
       why: 'tabindex above 0 overrides the natural order of the page, so agents that move with the keyboard jump around unpredictably.',
@@ -886,7 +1002,7 @@
             ? `${n.toLocaleString()} of ${pl(ctx.controls.length, 'button or link', 'buttons and links')} ${vb(n, 'has', 'have')} no name.`
             : ctx.controls.length ? `All ${pl(ctx.controls.length, 'button and link', 'buttons and links')} have a name.` : 'No buttons or links on this page.',
           findings: findings(bad, (c) => c.el.querySelector('svg, img, i, [class*="icon" i]')
-            ? 'Icon-only control with no label' : 'No text, aria-label or title', (c) => fixUnnamed(c.el)),
+            ? 'Icon-only control with no label' : 'No text, aria-label or title', (c) => fixUnnamed(c.el), true),
         };
       },
     },
@@ -949,7 +1065,7 @@
           findings: findings(bad, (i) => {
             const src = (i.currentSrc || i.src || '').split('/').pop().split('?')[0];
             return src ? `No alt attribute (${src.slice(0, 40)})` : 'No alt attribute';
-          }, fixImageAlt),
+          }, fixImageAlt, true),
         };
       },
     },
@@ -976,7 +1092,8 @@
           if (!visible(el)) continue;
           for (const attr of ['aria-labelledby', 'aria-describedby', 'aria-errormessage']) {
             const ids = norm(el.getAttribute(attr)).split(' ').filter(Boolean);
-            const missing = ids.filter((id) => !document.getElementById(id));
+            const root = el.getRootNode();
+            const missing = ids.filter((id) => !(root.getElementById ? root.getElementById(id) : document.getElementById(id)));
             if (missing.length) { flag(el, `${attr} points at a missing id: ${missing.slice(0, 2).join(', ')}`); break; }
           }
         }
@@ -1135,7 +1252,7 @@
         const dialogs = $$('[role="dialog"], [role="alertdialog"], dialog[open]').filter(usable);
         const dialogIssues = [];
         for (const d of dialogs) {
-          const named = textFromIds(d.getAttribute('aria-labelledby') || '') || norm(d.getAttribute('aria-label'));
+          const named = textFromIds(d.getAttribute('aria-labelledby') || '', d.getRootNode()) || norm(d.getAttribute('aria-label'));
           if (!named) dialogIssues.push({ el: d, note: 'Dialog has no name (add aria-labelledby or aria-label)' });
           else if (d.tagName !== 'DIALOG' && d.getAttribute('aria-modal') !== 'true' &&
                    flagged.some((f) => f.el === d || f.el.contains(d) || d.contains(f.el))) {
@@ -1286,20 +1403,20 @@
     },
     {
       id: 'shadow-dom', category: 'interaction', weight: 0, info: true,
-      title: 'Controls inside shadow DOM',
-      why: 'Shadow DOM hides elements from ordinary selectors. Many agents handle open shadow roots, but scripts and some tools don’t, and closed shadow roots are hidden from all of them.',
-      fix: 'Make sure web components expose their names and roles. This audit doesn’t look inside shadow roots, so test those controls separately.',
+      title: 'Controls inside shadow DOM and frames',
+      why: 'Shadow DOM and iframes hide elements from ordinary selectors. Agents built on Playwright or the DevTools protocol read open shadow roots and same-site frames, but simpler scripts don’t, and closed shadow roots are hidden from all of them.',
+      fix: 'Prefer open shadow roots, make sure web components expose their names and roles, and keep key flows out of cross-site frames.',
       run(ctx) {
-        const hosts = ctx.shadowHosts.filter((h) => h.shadowRoot);
-        if (!hosts.length) return { score: null, status: 'pass', issues: 0, summary: 'No shadow DOM components found.' };
-        let inner = 0;
-        for (const h of hosts) {
-          try { inner += h.shadowRoot.querySelectorAll(`${CONTROL_SEL}, ${FIELD_SEL}`).length; } catch { /* ignore */ }
-        }
+        const hosts = ctx.roots.filter((r) => r.kind === 'shadow').map((r) => r.host);
+        const frames = ctx.roots.filter((r) => r.root.nodeType === 9).map((r) => r.host);
+        if (!hosts.length && !frames.length) return { score: null, status: 'pass', issues: 0, summary: 'No open shadow DOM components or same-site frames found.' };
+        const parts = [];
+        if (hosts.length) parts.push(`${pl(hosts.length, 'component')} ${vb(hosts.length, 'uses', 'use')} open shadow DOM, with ${pl(ctx.coverage.shadow, 'control')} inside`);
+        if (frames.length) parts.push(`${pl(frames.length, 'same-site frame')} ${vb(frames.length, 'holds', 'hold')} ${pl(ctx.coverage.frame, 'control')}`);
         return {
-          score: null, status: 'info', issues: hosts.length,
-          summary: `${pl(hosts.length, 'component')} ${vb(hosts.length, 'uses', 'use')} shadow DOM${inner ? `, containing ${pl(inner, 'control')} this audit didn’t check` : ''}.`,
-          findings: findings(hosts, (h) => `<${h.tagName.toLowerCase()}> with an open shadow root`),
+          score: null, status: 'info', issues: hosts.length + frames.length,
+          summary: `${parts.join('; ')}. They were checked along with the rest of the page.`,
+          findings: findings([...hosts, ...frames], (h) => (h.tagName === 'IFRAME' || h.tagName === 'FRAME' ? 'Same-site frame, checked' : `<${h.tagName.toLowerCase()}> with an open shadow root, checked`)),
         };
       },
     },
@@ -2066,6 +2183,8 @@
         controls: ctx.controls.length,
         fields: ctx.fields.length,
         tokens: ctx.view.tokens,
+        inShadow: ctx.coverage.shadow,
+        inFrames: ctx.coverage.frame,
       },
       categories,
       agentView: {

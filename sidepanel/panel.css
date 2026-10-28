@@ -735,3 +735,4 @@ button.scan-path:hover { text-decoration: underline; }
 .scope-details > summary::-webkit-details-marker { display: none; }
 .scope-details[open] .chev { transform: rotate(90deg); }
 .scope-details .scope { margin-top: 10px; }
+.fix-actions { display: flex; flex-wrap: wrap; gap: 6px; }

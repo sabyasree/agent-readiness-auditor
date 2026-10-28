@@ -693,11 +693,17 @@ function renderFinding(f, label) {
           h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), 'Show on page')
         : null,
     ),
-    f.fix ? h('details', { class: 'fix' },
-      h('summary', {}, 'Suggested fix'),
-      h('pre', { text: f.fix }),
-      h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(f.fix, 'Fix copied') }, 'Copy code'),
-    ) : null,
+    f.fix ? (() => {
+      const pre = h('pre', { text: f.fix });
+      return h('details', { class: 'fix' },
+        h('summary', {}, 'Suggested fix'),
+        pre,
+        h('div', { class: 'fix-actions' },
+          h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(f.fix, 'Fix copied') }, 'Copy code'),
+          suggestNameButton(f, pre),
+        ),
+      );
+    })() : null,
   );
 }
 
@@ -916,7 +922,9 @@ function auditFoot(r) {
   const when = new Date(r.timestamp);
   return h('p', { class: 'foot' },
     `Audited ${when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} in ${(r.durationMs / 1000).toFixed(1)} s. `,
-    `${r.stats.elements.toLocaleString()} elements, ${r.stats.controls.toLocaleString()} controls and ${r.stats.fields.toLocaleString()} form fields checked in the top frame. Scores are heuristics: use them to find problems, then confirm with a real agent.`,
+    `${r.stats.elements.toLocaleString()} elements, ${r.stats.controls.toLocaleString()} controls and ${r.stats.fields.toLocaleString()} form fields checked`,
+    r.stats.inShadow || r.stats.inFrames ? `, including ${[r.stats.inShadow ? `${r.stats.inShadow} in shadow DOM` : '', r.stats.inFrames ? `${r.stats.inFrames} in same-site frames` : ''].filter(Boolean).join(' and ')}. ` : '. ',
+    'Scores are heuristics: use them to find problems, then confirm with a real agent.',
   );
 }
 
