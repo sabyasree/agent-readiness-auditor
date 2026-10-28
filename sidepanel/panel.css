@@ -736,3 +736,5 @@ button.scan-path:hover { text-decoration: underline; }
 .scope-details[open] .chev { transform: rotate(90deg); }
 .scope-details .scope { margin-top: 10px; }
 .fix-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.scan-monitor { margin: 16px 16px 0; }
+.scan-monitor .tool { width: 100%; }

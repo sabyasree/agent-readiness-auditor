@@ -5,127 +5,6 @@
 // in a shared template, so one fix there fixes them all.
 
 const SCAN_SIZES = [10, 25];
-const SCAN_LOAD_TIMEOUT_MS = 25000;
-const SCAN_SETTLE_MS = 1200;
-const scanKey = (origin) => `sitescan:${origin}`;
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-// Serialized and run inside the page. Same-site links worth auditing, in page order.
-function collectLinksInPage() {
-  const out = [];
-  const seen = new Set();
-  const files = /\.(pdf|jpe?g|png|gif|svg|webp|avif|zip|gz|mp4|mp3|mov|dmg|exe|docx?|xlsx?|pptx?|csv|xml|json|txt)$/i;
-  const risky = /log-?out|sign-?out|delete|remove|unsubscribe|cart\/(add|clear|change)|\/api\/|\/admin|\/wp-admin|\/checkout/i;
-  for (const a of document.querySelectorAll('a[href]')) {
-    let u;
-    try { u = new URL(a.getAttribute('href'), location.href); } catch (e) { continue; }
-    if (u.origin !== location.origin || !/^https?:$/.test(u.protocol)) continue;
-    if (files.test(u.pathname) || risky.test(u.pathname + u.search)) continue;
-    const key = u.pathname.replace(/\/$/, '') || '/';
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push(u.origin + u.pathname);
-    if (out.length >= 400) break;
-  }
-  return { origin: location.origin, url: location.href.split('#')[0], links: out };
-}
-
-async function fetchTextFrom(url) {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), 6000);
-  try {
-    const res = await fetch(url, { signal: ctrl.signal, credentials: 'omit', cache: 'no-store' });
-    return res.ok ? (await res.text()).slice(0, 3000000) : '';
-  } catch {
-    return '';
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-/** Page URLs from the site's sitemaps (robots.txt first, then /sitemap.xml), same origin only. */
-async function sitemapUrls(origin) {
-  const robots = await fetchTextFrom(`${origin}/robots.txt`);
-  const queue = [...robots.matchAll(/^\s*sitemap\s*:\s*(\S+)/gim)].map((m) => m[1]).filter((u) => !/\.gz$/i.test(u)).slice(0, 3);
-  if (!queue.length) queue.push(`${origin}/sitemap.xml`);
-  const urls = [];
-  for (let fetched = 0; queue.length && fetched < 6 && urls.length < 3000; fetched++) {
-    const xml = await fetchTextFrom(queue.shift());
-    const locs = [...xml.matchAll(/<loc>\s*(?:<!\[CDATA\[)?\s*([^<\s\]]+)/gi)].map((m) => m[1].replace(/&amp;/g, '&'));
-    if (/<sitemapindex/i.test(xml)) queue.push(...locs.filter((u) => !/\.gz$/i.test(u)).slice(0, 5));
-    else urls.push(...locs);
-  }
-  return urls.filter((u) => { try { return new URL(u).origin === origin; } catch { return false; } });
-}
-
-/** `n` pages starting with the current one, taken in turn from each top-level section so templates are covered. */
-function pickPages(current, urls, n) {
-  const groups = new Map();
-  for (const u of urls) {
-    if (u === current) continue;
-    let section;
-    try { section = new URL(u).pathname.split('/').filter(Boolean)[0] || ''; } catch { continue; }
-    if (!groups.has(section)) groups.set(section, []);
-    groups.get(section).push(u);
-  }
-  const out = [current];
-  const lists = [...groups.values()];
-  for (let i = 0; out.length < n && lists.some((l) => l.length > i); i++) {
-    for (const l of lists) if (l[i] && out.length < n && !out.includes(l[i])) out.push(l[i]);
-  }
-  return out;
-}
-
-/** Resolves when the tab finishes loading; rejects at once if the tab is closed. */
-function waitForLoad(tabId) {
-  return new Promise((resolve, reject) => {
-    const done = (fn, v) => {
-      clearTimeout(timer);
-      chrome.tabs.onUpdated.removeListener(onUpdated);
-      chrome.tabs.onRemoved.removeListener(onRemoved);
-      fn(v);
-    };
-    const onUpdated = (id, info) => { if (id === tabId && info.status === 'complete') done(resolve, 'ok'); };
-    const onRemoved = (id) => { if (id === tabId) done(reject, new Error('The background tab was closed')); };
-    const timer = setTimeout(() => done(resolve, 'timeout'), SCAN_LOAD_TIMEOUT_MS);
-    chrome.tabs.onUpdated.addListener(onUpdated);
-    chrome.tabs.onRemoved.addListener(onRemoved);
-  });
-}
-
-/** The parts of a report the site summary needs. */
-function compactPage(rep) {
-  return {
-    url: rep.url,
-    title: rep.title,
-    score: rep.score,
-    grade: rep.grade,
-    cats: Object.fromEntries(rep.categories.filter((c) => c.scored !== false && c.score != null).map((c) => [c.name, c.score])),
-    issues: rep.categories.flatMap((c) => c.checks
-      .filter((k) => (k.status === 'fail' || k.status === 'warn') && c.scored !== false)
-      .map((k) => ({ id: k.id, title: k.title, cat: c.name, status: k.status, n: k.issues, weight: k.weight, fix: k.fix }))),
-  };
-}
-
-/** Average score, and every problem with the pages it appears on, most widespread first. */
-function summarizeScan(pages) {
-  const done = pages.filter((p) => p.result);
-  const avg = done.length ? Math.round(done.reduce((a, p) => a + p.result.score, 0) / done.length) : 0;
-  const byId = new Map();
-  for (const p of done) {
-    for (const i of p.result.issues) {
-      if (!byId.has(i.id)) byId.set(i.id, { id: i.id, title: i.title, cat: i.cat, fix: i.fix, weight: i.weight, pages: [], total: 0, fails: 0 });
-      const s = byId.get(i.id);
-      s.pages.push(p.result.url);
-      s.total += i.n || 1;
-      if (i.status === 'fail') s.fails++;
-    }
-  }
-  const shared = [...byId.values()].sort((a, b) => b.pages.length - a.pages.length || b.fails - a.fails || (b.weight || 0) - (a.weight || 0));
-  return { avg, done: done.length, shared, worst: done.slice().sort((a, b) => a.result.score - b.result.score) };
-}
-
-const pathOf = (url) => { try { const u = new URL(url); return u.pathname + u.search || '/'; } catch { return url; } };
 
 function scanCsv(scan) {
   const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
@@ -237,7 +116,7 @@ function renderSiteScan(r) {
         h('p', { class: 'scan-note', text: 'Pages open one at a time in a background tab, which closes when the scan ends. Keep this panel open. Nothing is sent anywhere.' }),
       ),
       last ? h('div', { class: 'scan-last' },
-        h('span', { text: `Last scan ${timeAgo(last.ts)}: ${summarizeScan(last.pages).done} pages, average ${summarizeScan(last.pages).avg}.` }),
+        h('span', { text: `${last.auto ? 'Last weekly re-scan' : 'Last scan'} ${timeAgo(last.ts)}: ${summarizeScan(last.pages).done} pages, average ${summarizeScan(last.pages).avg}.` }),
         h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { Object.assign(site, { phase: 'done', pages: last.pages, ts: last.ts }); draw(); } }, 'View'),
       ) : null,
     ];
@@ -294,12 +173,46 @@ function renderSiteScan(r) {
         h('span', { class: `scan-score tone-${toneFor(p.result.score)}`, text: String(p.result.score) }),
         h('button', { type: 'button', class: 'btn-link scan-path', title: 'Open this page in the current tab', onclick: () => openInTab(p.result.url) }, pathOf(p.result.url)),
       ))),
+      monitorTile(),
       h('div', { class: 'test-actions' },
         s.shared.length ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(scanPrompt(scan), 'Prompt for the shared problems copied') }, 'Copy fix prompt') : null,
         h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => openBlob(scanHtml(scan), 'text/html') }, 'Open site report'),
         h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => saveBlob(scanCsv(scan), 'text/csv', `agent-readiness-${host}.csv`) }, 'Download CSV'),
       ),
     ];
+  }
+
+  // Weekly re-scan of the same pages, run by the background worker; alerts if the site gets worse.
+  function monitorTile() {
+    const m = site.monitor;
+    const on = !!(m && m.enabled);
+    const next = on ? Math.max(0, Math.ceil(((m.lastRun || Date.now()) + MONITOR_EVERY_DAYS * 864e5 - Date.now()) / 864e5)) : 0;
+    return h('div', { class: 'scan-monitor' },
+      h('button', {
+        type: 'button', class: `tool${on ? ' is-on' : ''}`, 'aria-pressed': String(on), onclick: toggleMonitor,
+      },
+      icon(TOOL_ICONS.rerun, 'tool-ico'),
+      h('span', { class: 'tool-text' },
+        h('strong', { text: on ? 'Weekly re-scan: on' : 'Re-scan every week' }),
+        h('span', { text: on ? `Next in ${next === 1 ? '1 day' : `${next} days`}. ${m.alerts ? 'You’ll get an alert if the score drops.' : 'Alerts are off.'}` : 'Get an alert if the score drops or a new problem spreads' }),
+      )),
+    );
+  }
+
+  async function toggleMonitor() {
+    if (site.monitor && site.monitor.enabled) {
+      site.monitor = { ...site.monitor, enabled: false };
+      await chrome.storage.local.set({ [monitorKey(origin)]: site.monitor });
+      toast('Weekly re-scan turned off.');
+      return draw();
+    }
+    let alerts = false;
+    try { alerts = await chrome.permissions.request({ permissions: ['notifications'] }); } catch { alerts = false; }
+    const urls = site.pages.filter((p) => p.result).map((p) => p.url);
+    site.monitor = { origin, urls, enabled: true, alerts, lastRun: site.ts || Date.now(), every: MONITOR_EVERY_DAYS };
+    await chrome.storage.local.set({ [monitorKey(origin)]: site.monitor });
+    toast(alerts ? `These ${urls.length} pages will be re-scanned every week.` : 'Weekly re-scan is on. Allow notifications to get alerts.');
+    draw();
   }
 
   function openInTab(url) {
@@ -327,46 +240,7 @@ function renderSiteScan(r) {
     site.pages = pickPages(pageKey(r.url), [...new Set(urls)], site.size).map((url) => ({ url }));
     draw();
 
-    let tab;
-    try {
-      tab = await chrome.tabs.create({ url: 'about:blank', active: false });
-      const auditPage = async (url) => {
-        // The background tab can disappear (closed by the person, or its page crashed): open a fresh one.
-        try { await chrome.tabs.get(tab.id); } catch { tab = await chrome.tabs.create({ url: 'about:blank', active: false }); }
-        const loaded = waitForLoad(tab.id);
-        await chrome.tabs.update(tab.id, { url });
-        await loaded;
-        await sleep(SCAN_SETTLE_MS);
-        const now = await chrome.tabs.get(tab.id);
-        if (now.url && new URL(now.url).origin !== origin) {
-          const err = new Error('Went to another site (maybe a sign-in page)');
-          err.final = true;
-          throw err;
-        }
-        await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['content/auditor.js'] });
-        const [res] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: (o) => window.__ARA.run(o), args: [{ siteScan: true }] });
-        if (!res || !res.result) throw new Error('No result');
-        return compactPage(res.result);
-      };
-      for (const p of site.pages) {
-        if (site.cancel) break;
-        p.running = true;
-        draw();
-        for (let attempt = 0; attempt < 2 && !p.result && !site.cancel; attempt++) {
-          try {
-            p.result = await auditPage(p.url);
-            delete p.error;
-          } catch (e) {
-            p.error = String((e && e.message) || e).slice(0, 120);
-            if (e && e.final) break; // retrying won't help
-          }
-        }
-        p.running = false;
-        draw();
-      }
-    } finally {
-      if (tab) chrome.tabs.remove(tab.id).catch(() => {});
-    }
+    await runScan({ origin, pages: site.pages, onChange: draw, isCancelled: () => site.cancel });
     site.phase = 'done';
     site.ts = Date.now();
     const pages = site.pages.map(({ url, result, error }) => ({ url, result, error }));
@@ -377,9 +251,10 @@ function renderSiteScan(r) {
 
   if (site.saved === undefined) {
     site.saved = null;
-    chrome.storage.local.get(scanKey(origin)).then((got) => {
+    chrome.storage.local.get([scanKey(origin), monitorKey(origin)]).then((got) => {
       site.saved = got[scanKey(origin)] || null;
-      if (site.phase === 'idle') draw();
+      site.monitor = got[monitorKey(origin)] || null;
+      draw();
     }).catch(() => {});
   }
   draw();
