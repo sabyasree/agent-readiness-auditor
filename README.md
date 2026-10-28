@@ -115,6 +115,7 @@ sidepanel/site-scan.js    Site scan: page discovery, background-tab audits, shar
 welcome/               Welcome tab shown on first install
 icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
+cli/                   npm package "agent-readiness": command line, CI score gate and MCP server; not part of the extension zip
 netlify.toml           Netlify settings: publishes site/ only
 store/                 Chrome Web Store description and 1280×800 screenshots; not part of the extension zip
 site/                  Static website deployed to Netlify: homepage, privacy policy, demo store (demo/), uninstall survey (goodbye.html, a Netlify form); not part of the extension zip
@@ -149,7 +150,7 @@ Add an object to the `CHECKS` array in `content/auditor.js`:
 ## Publishing to the Chrome Web Store
 
 1. Bump `version` in `manifest.json`.
-2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x 'site/*' -x netlify.toml -x 'store/*'`.
+2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x 'site/*' -x netlify.toml -x 'store/*' -x 'cli/*'`.
 3. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), create a new item and upload the zip.
 4. Listing assets you'll need: at least one 1280×800 screenshot of the side panel next to a page, a 440×280 small promo tile, and the 128 px icon from `icons/`.
 5. Netlify: under **Forms**, turn on form detection so the uninstall survey (`site/goodbye.html`) collects responses.
