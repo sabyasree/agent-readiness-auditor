@@ -45,13 +45,29 @@ function markAllInPage(items, runId, opts) {
   const fails = marks.filter((m) => m.tone === 'fail').length;
   const bar = document.createElement('div');
   bar.className = 'bar';
-  if (steps) {
-    bar.innerHTML = '<span>Agent test: <b></b></span><button type="button">Hide</button>';
-    bar.querySelector('b').textContent = items.length === 1 ? '1 step' : items.length + ' steps';
-  } else {
-    bar.innerHTML = '<span>Agent-Readiness: <b></b> marked<i style="background:#B3261E"></i>failing<i style="background:#9A5A00"></i>warning</span><button type="button">Hide</button>';
-    bar.querySelector('b').textContent = marks.length === 1 ? '1 element' : marks.length + ' elements';
+  // Labels come translated from the panel (opts.text); English otherwise.
+  const L = Object.assign({
+    test: 'Agent test: $1', step: '1 step', steps: '$1 steps', marked: 'Agent-Readiness: $1 marked',
+    element: '1 element', elements: '$1 elements', failing: 'failing', warning: 'warning', hide: 'Hide',
+  }, opts && opts.text);
+  const label = document.createElement('span');
+  const count = steps ? (items.length === 1 ? L.step : L.steps.replace('$1', items.length))
+    : (marks.length === 1 ? L.element : L.elements.replace('$1', marks.length));
+  const [pre, post] = (steps ? L.test : L.marked).split('$1');
+  const b = document.createElement('b');
+  b.textContent = count;
+  label.append(pre || '', b, post || '');
+  if (!steps) {
+    for (const [color, text] of [['#B3261E', L.failing], ['#9A5A00', L.warning]]) {
+      const dot = document.createElement('i');
+      dot.style.background = color;
+      label.append(dot, text);
+    }
   }
+  const hide = document.createElement('button');
+  hide.type = 'button';
+  hide.textContent = L.hide;
+  bar.append(label, hide);
   root.appendChild(bar);
 
   const nodes = marks.map((m, i) => {

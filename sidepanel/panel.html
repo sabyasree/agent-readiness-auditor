@@ -8,6 +8,7 @@
 </head>
 <body>
   <header class="topbar">
+    <div class="topbar-row">
     <div class="brand">
       <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
         <rect width="32" height="32" rx="7" fill="#2F4BD0"/>
@@ -20,16 +21,22 @@
       </div>
     </div>
     <button id="runBtn" class="btn btn-primary" type="button">Run audit</button>
+    </div>
+    <nav id="tabs" class="tabs" role="tablist" aria-label="Results" data-i18n-label hidden></nav>
   </header>
 
   <div id="banner" class="banner" role="status" hidden></div>
   <main id="view" tabindex="-1"></main>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
+  <script src="i18n.js"></script>
+  <script src="../lib/scan-core.js"></script>
   <script src="scoring.js"></script>
   <script src="overlay.js"></script>
   <script src="report-html.js"></script>
   <script src="agent-test.js"></script>
+  <script src="ai-name.js"></script>
+  <script src="site-scan.js"></script>
   <script src="panel.js"></script>
 </body>
 </html>

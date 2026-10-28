@@ -1,0 +1,3594 @@
+{
+ "extName": {
+  "message": "Agent-Readiness Auditor – Comprobador web para agentes de IA"
+ },
+ "extDescription": {
+  "message": "Comprueba si los agentes de IA pueden leer y usar una página: puntuación, problemas y correcciones. Todo en tu navegador."
+ },
+ "m1lx5ym": {
+  "message": " y ",
+  "description": " and "
+ },
+ "m5uvg12": {
+  "message": " de media",
+  "description": " average"
+ },
+ "m35hj9v": {
+  "message": "$P1$ control tiene un nombre que no dice lo que hace.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control has a name that doesn’t say what it does."
+ },
+ "mat607l": {
+  "message": "La tecla Tab se salta $P1$ control.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control is skipped by the Tab key."
+ },
+ "m10834ua": {
+  "message": "$P1$ control es demasiado pequeño para acertar con seguridad.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control is too small to hit reliably."
+ },
+ "m1ho712k": {
+  "message": "$P1$ control se movió.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 control moved."
+ },
+ "m2h0qzy": {
+  "message": "La tecla Tab se salta $P1$ controles.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls are skipped by the Tab key."
+ },
+ "mwxl2sd": {
+  "message": "$P1$ controles son demasiado pequeños para acertar con seguridad.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls are too small to hit reliably."
+ },
+ "mk6sgfj": {
+  "message": "$P1$ controles tienen nombres que no dicen lo que hacen.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls have names that don’t say what they do."
+ },
+ "m15amktb": {
+  "message": "$P1$ controles se movieron.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 controls moved."
+ },
+ "m1etgkpy": {
+  "message": "$P1$ marco de otro origen contiene contenido al que los agentes quizá no lleguen.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 cross-origin frame holds content agents may not reach."
+ },
+ "m1o5pmue": {
+  "message": "$P1$ marcos de otro origen contienen contenido al que los agentes quizá no lleguen.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 cross-origin frames hold content agents may not reach."
+ },
+ "mrgvq": {
+  "message": "hace $P1$ días",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 days ago"
+ },
+ "mlib1tp": {
+  "message": "$P1$ diálogo es difícil de identificar para los agentes.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 dialog is hard for agents to identify."
+ },
+ "mnsva76": {
+  "message": "$P1$ diálogos son difíciles de identificar para los agentes.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 dialogs are hard for agents to identify."
+ },
+ "movsnm2": {
+  "message": "$P1$ elemento tiene ARIA que confunde a los agentes.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 element has ARIA that misleads agents."
+ },
+ "m10pk21u": {
+  "message": "$P1$ elemento parece clicable, pero no se expone como botón o enlace.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 element looks clickable but isn’t exposed as a button or link."
+ },
+ "m49071v": {
+  "message": "$P1$ elemento usa un tabindex positivo.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 element uses a positive tabindex."
+ },
+ "mhkvjkt": {
+  "message": "$P1$ elementos",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements"
+ },
+ "m19lv6yh": {
+  "message": "$P1$ elementos tienen ARIA que confunde a los agentes.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements have ARIA that misleads agents."
+ },
+ "m1uhrzwv": {
+  "message": "$P1$ elementos parecen clicables, pero no se exponen como botones o enlaces.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements look clickable but aren’t exposed as buttons or links."
+ },
+ "mdcovo3": {
+  "message": "$P1$ elementos usan un tabindex positivo.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 elements use a positive tabindex."
+ },
+ "mxzmzxr": {
+  "message": "$P1$ elementos, $P2$ controles y $P3$ campos de formulario revisados",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "$1 elements, $2 controls and $3 form fields checked"
+ },
+ "meb516n": {
+  "message": "$P1$ elementos, anidados hasta $P2$ niveles. Como instantánea de accesibilidad son unos $P3$ tokens.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "$1 elements, nested up to $2 levels deep. As an accessibility snapshot it’s about $3 tokens."
+ },
+ "mfe5p6y": {
+  "message": "$P1$ existe, pero no es JSON válido.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 exists but isn’t valid JSON."
+ },
+ "m1glkdte": {
+  "message": "$P1$ con fallos",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 failing"
+ },
+ "m49x6vo": {
+  "message": "$P1$ campo parece obligatorio, pero no está marcado como obligatorio.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 field looks required but isn’t marked as required."
+ },
+ "m1tf0azc": {
+  "message": "$P1$ campos parecen obligatorios, pero no están marcados como obligatorios.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 fields look required but aren’t marked as required."
+ },
+ "mw0h6bq": {
+  "message": "$P1$ corregidas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 fixed"
+ },
+ "m1xviscz": {
+  "message": "$P1$ formulario declarado como herramienta: $P2$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 form declared as a tool: $2."
+ },
+ "m1syx1le": {
+  "message": "$P1$ formularios declarados como herramientas: $P2$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 forms declared as tools: $2."
+ },
+ "mw0fnom": {
+  "message": "$P1$ encontrados",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 found"
+ },
+ "mw0au41": {
+  "message": "hace $P1$ h",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 h ago"
+ },
+ "m4hluk5": {
+  "message": "$P1$ encabezado en una estructura limpia.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 heading in a clean outline."
+ },
+ "m85s6vv": {
+  "message": "$P1$ encabezado o precio solo aparece tras ejecutarse JavaScript.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 heading or price only appears after JavaScript runs."
+ },
+ "mmy2xi6": {
+  "message": "$P1$ encabezados y precios solo aparecen tras ejecutarse JavaScript.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 headings and prices only appear after JavaScript runs."
+ },
+ "m5a2pl2": {
+  "message": "$P1$ encabezados en una estructura limpia.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 headings in a clean outline."
+ },
+ "m18yz4r2": {
+  "message": "$P1$ mejoradas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 improved"
+ },
+ "mjky3tx": {
+  "message": "$P1$ en marcos del mismo sitio",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 in same-site frames"
+ },
+ "m1or3sl3": {
+  "message": "$P1$ en shadow DOM",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 in shadow DOM"
+ },
+ "mvxzvbd": {
+  "message": "$P1$ problema",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 issue"
+ },
+ "m1nqaxp6": {
+  "message": "$P1$ problemas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 issues"
+ },
+ "m176lu2r": {
+  "message": "$P1$ enlace no tiene un destino real.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 link has no real destination."
+ },
+ "m1jv70ts": {
+  "message": "$P1$ enlaces no tienen un destino real.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 links have no real destination."
+ },
+ "m2vg8b7": {
+  "message": "hace $P1$ min",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 min ago"
+ },
+ "m1dln38s": {
+  "message": "$P1$ nuevas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 new"
+ },
+ "m251g4g": {
+  "message": "$P1$ de $P2$ botones y enlaces no tienen nombre.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 of $2 buttons and links have no name."
+ },
+ "matnsqa": {
+  "message": "$P1$ de $P2$ ID de controles parecen generados automáticamente.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 of $2 control IDs look auto-generated."
+ },
+ "mohiyr8": {
+  "message": "$P1$ de $P2$ controles solo se pueden seleccionar por clases generadas.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 of $2 controls can only be targeted by generated class names."
+ },
+ "m1u1vm0d": {
+  "message": "$P1$ de $P2$ campos no tienen etiqueta.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 of $2 fields have no label."
+ },
+ "mv3yqgb": {
+  "message": "$P1$ de $P2$ imágenes no tienen atributo alt.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 of $2 images have no alt attribute."
+ },
+ "mw74go2": {
+  "message": "A $P1$ de $P2$ campos de información personal les falta el tipo o la pista de autocompletado.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 of $2 personal-information fields are missing a type or autocomplete hint."
+ },
+ "m1b2vrwf": {
+  "message": "$P1$ de $P2$ controles probados no cambian al recibir el foco.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 of $2 tested controls show no change when focused."
+ },
+ "msejz1m": {
+  "message": "Otro ($P1$) no es un botón real.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 other one isn’t a real button."
+ },
+ "m1y43ahv": {
+  "message": "Otros $P1$ no son botones reales.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 others aren’t real buttons."
+ },
+ "m1nw8lm8": {
+  "message": "$P1$ superposición tapa la página.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 overlay covers the page."
+ },
+ "m1fxoys0": {
+  "message": "$P1$ superposiciones tapan la página.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 overlays cover the page."
+ },
+ "mvi1r80": {
+  "message": "$P1$ páginas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 pages"
+ },
+ "m1fmshhc": {
+  "message": "$P1$ páginas analizadas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 pages scanned"
+ },
+ "m194a6n4": {
+  "message": "$P1$ superadas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 passed"
+ },
+ "m34kp5s": {
+  "message": "$P1$ problema con las herramientas declaradas.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 problem with declared tools."
+ },
+ "mjw1l77": {
+  "message": "$P1$ problemas con las herramientas declaradas.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 problems with declared tools."
+ },
+ "mvlzbyp": {
+  "message": "$P1$ pasos",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 steps"
+ },
+ "m1ywqd3s": {
+  "message": "$P1$ bloque de datos estructurados se añade por script.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 structured data block is added by script."
+ },
+ "m1p8rtxj": {
+  "message": "$P1$ bloques de datos estructurados se añaden por script.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 structured data blocks are added by script."
+ },
+ "mpdz2xo": {
+  "message": "$P1$ controles sin nombre",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 unnamed controls"
+ },
+ "m1bber5m": {
+  "message": "$P1$ advertencia",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 warning"
+ },
+ "m1xt5qo9": {
+  "message": "$P1$ advertencias",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 warnings"
+ },
+ "mv472tw": {
+  "message": "$P1$ sin nombre",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 with no name"
+ },
+ "mvod9zg": {
+  "message": "$P1$ empeoradas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 worse"
+ },
+ "m7ypcvb": {
+  "message": "$P1$ «$P2$»",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "$1 “$2”"
+ },
+ "m1ta2hdu": {
+  "message": "(sin nombre)",
+  "description": "(no name)"
+ },
+ "m3v2b51": {
+  "message": ", incluidos $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": ", including $1"
+ },
+ "m1e13aay": {
+  "message": "1 elemento",
+  "description": "1 element"
+ },
+ "m1quntye": {
+  "message": "1 paso",
+  "description": "1 step"
+ },
+ "mikv0tw": {
+  "message": "Un botón claro de «Añadir al carrito»",
+  "description": "A clear “Add to cart” button"
+ },
+ "m47wlz7": {
+  "message": "Un enlace promete navegación. Los enlaces sin href, con «#» o «javascript:» solo funcionan con scripts, así que los agentes pueden abrirlos en una pestaña nueva sin obtener nada, o ignorarlos.",
+  "description": "A link promises navigation. Links with no href, “#” or “javascript:” only work through scripts, so agents may open them in a new tab, get nothing, or skip them."
+ },
+ "msddtdw": {
+  "message": "Una meta descripción y las etiquetas Open Graph dan a los agentes un resumen de la página antes de leerla y les ayudan a citarla correctamente.",
+  "description": "A meta description and Open Graph tags give agents a one-line summary of the page before they read it, and help them cite it correctly."
+ },
+ "m1a3a2gt": {
+  "message": "Una valoración rápida en Chrome Web Store ayuda a otros desarrolladores a encontrarla. Son diez segundos.",
+  "description": "A quick rating on the Chrome Web Store helps other developers find it. It takes ten seconds."
+ },
+ "m17jrxrt": {
+  "message": "Un análisis de todo el sitio",
+  "description": "A scan of the whole site"
+ },
+ "m1230naz": {
+  "message": "Una puntuación y qué corregir primero",
+  "description": "A score and what to fix first"
+ },
+ "m1kme5f7": {
+  "message": "Un sitemap enumera las páginas que un agente puede visitar. Las cabeceras de respuesta Link (RFC 8288) pueden llevar al agente directamente a un catálogo de API, a la documentación o a una versión en Markdown.",
+  "description": "A sitemap lists the pages an agent can visit. Link response headers (RFC 8288) can point an agent straight to an API catalog, documentation or a Markdown version."
+ },
+ "m4bh78k": {
+  "message": "Una prueba de una tarea real",
+  "description": "A test run of a real task"
+ },
+ "m9qu37k": {
+  "message": "Los agentes de compra con IA comparan productos a partir de datos estructurados, no del diseño. Sin un bloque Product tienen que adivinar el nombre, la marca y el modelo a partir del texto, y a menudo descartan el producto.",
+  "description": "AI shopping agents compare products from structured data, not from the layout. Without a Product block they have to guess the name, brand and model from the page text, and often skip the product."
+ },
+ "mu0j7vv": {
+  "message": "Descubrimiento de API, inicio de sesión y skills",
+  "description": "API, sign-in and skills discovery"
+ },
+ "m1tu7mrg": {
+  "message": "ARIA que da información errónea a los agentes",
+  "description": "ARIA that gives agents wrong information"
+ },
+ "m1th96l1": {
+  "message": "Unos $P1$ tokens",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "About $1 tokens"
+ },
+ "mgtzui8": {
+  "message": "Unos $P2$ tokens, $P1$ control sin nombre",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "About $2 tokens, $1 unnamed control"
+ },
+ "m1ma2kw3": {
+  "message": "Unos $P2$ tokens, $P1$ controles sin nombre",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "About $2 tokens, $1 unnamed controls"
+ },
+ "m18ijjfp": {
+  "message": "No se concedió el acceso. Haz clic en el icono de la barra de herramientas estando en la página para auditarla una vez.",
+  "description": "Access wasn’t granted. Click the toolbar icon while on the page to audit it once."
+ },
+ "mr67ktp": {
+  "message": "Árbol de accesibilidad",
+  "description": "Accessibility tree"
+ },
+ "m1nej05f": {
+  "message": "En $P1$ páginas. La más baja: $P2$ ($P3$).",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "Across $1 pages. Lowest: $2 ($3)."
+ },
+ "m12votl": {
+  "message": "Añade <meta name=\"description\">, og:title, og:description y un <link rel=\"canonical\"> que apunte a la URL preferida.",
+  "description": "Add <meta name=\"description\">, og:title, og:description, and a <link rel=\"canonical\"> pointing at the preferred URL."
+ },
+ "m16rmtok": {
+  "message": "Añade JSON-LD para el tema principal de la página, como Product, Article, Organization, Event o FAQPage.",
+  "description": "Add JSON-LD for the page’s main subject, such as Product, Article, Organization, Event or FAQPage."
+ },
+ "monnxzo": {
+  "message": "Añade JSON-LD de tipo Product con name, image, description, brand y un identificador como sku, gtin o mpn. La mayoría de plataformas de tienda y plugins de SEO pueden generarlo.",
+  "description": "Add JSON-LD of type Product with name, image, description, brand, and an identifier such as sku, gtin or mpn. Most shop platforms and SEO plugins can output it."
+ },
+ "m1fmdnz8": {
+  "message": "Añade una línea como Content-Signal: search=yes, ai-input=yes, ai-train=no a robots.txt.",
+  "description": "Add a line such as Content-Signal: search=yes, ai-input=yes, ai-train=no to robots.txt."
+ },
+ "mc1x0vn": {
+  "message": "Añade un identificador estable a los controles importantes: un id con significado, un name o un atributo data como data-testid o data-action.",
+  "description": "Add a stable hook to important controls: a meaningful id, a name, or a data attribute such as data-testid or data-action."
+ },
+ "mrif9bp": {
+  "message": "Añade un texto alt que describa la imagen. Para imágenes puramente decorativas, usa alt=\"\" para que los agentes las ignoren.",
+  "description": "Add alt text that describes the image. For purely decorative images, use alt=\"\" so agents can skip them."
+ },
+ "m7rnbwt": {
+  "message": "Añade un objeto offers al Product con price, priceCurrency y availability (por ejemplo https://schema.org/InStock), y mantén el mismo precio que se muestra en la página.",
+  "description": "Add an offers object to the Product with price, priceCurrency and availability (for example https://schema.org/InStock), and keep the price the same as the one shown on the page."
+ },
+ "m1269udb": {
+  "message": "Añade shippingDetails y hasMerchantReturnPolicy a la oferta, y aggregateRating (o review) al Product.",
+  "description": "Add shippingDetails and hasMerchantReturnPolicy to the offer, and aggregateRating (or review) to the Product."
+ },
+ "m1lvpdnh": {
+  "message": "Añade el atributo required, o aria-required=\"true\", a cada campo que el formulario necesite.",
+  "description": "Add the required attribute, or aria-required=\"true\", to every field the form needs."
+ },
+ "m12v5k33": {
+  "message": "Añadir este producto al carrito",
+  "description": "Add this product to the cart"
+ },
+ "m13uot5m": {
+  "message": "Añade toolname y tooldescription a los formularios clave, da a cada campo un name y una etiqueta, o registra herramientas por script con el método registerTool() de document.modelContext.",
+  "description": "Add toolname and tooldescription to key forms, give every field a name and a label, or register tools in script with the registerTool() method of document.modelContext."
+ },
+ "mtez6o6": {
+  "message": "Añade texto visible, un aria-label o texto alt en la imagen del icono. Para iconos SVG, pon el aria-label en el propio botón.",
+  "description": "Add visible text, an aria-label, or alt text on the icon image. For SVG icons, put aria-label on the button itself."
+ },
+ "mo3evzt": {
+  "message": "Protocolos para agentes",
+  "description": "Agent protocols"
+ },
+ "mnpdj5s": {
+  "message": "Seguridad para agentes",
+  "description": "Agent safety"
+ },
+ "m1dq1fbe": {
+  "message": "Prueba de agente",
+  "description": "Agent test"
+ },
+ "m1q5tked": {
+  "message": "Prueba de agente: $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Agent test: $1"
+ },
+ "m1dpzosx": {
+  "message": "Vista del agente",
+  "description": "Agent view"
+ },
+ "mdt8g3p": {
+  "message": "Vista del agente copiada",
+  "description": "Agent view copied"
+ },
+ "m1kjfmre": {
+  "message": "Agent-Readiness: $P1$ marcados",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Agent-Readiness: $1 marked"
+ },
+ "m28revp": {
+  "message": "Agent-readiness empeoró en $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Agent-readiness got worse on $1"
+ },
+ "m3uao7u": {
+  "message": "Lista para agentes",
+  "description": "Agent-ready"
+ },
+ "m1djf8o3": {
+  "message": "Los agentes y las automatizaciones vuelven a encontrar elementos por sus atributos. Los nombres de clase e ID generados cambian con cada compilación.",
+  "description": "Agents and automations re-find elements by their attributes. Generated class names and IDs change with every build."
+ },
+ "m1uk8kvl": {
+  "message": "Los agentes y sus herramientas a menudo no pueden leer ni hacer clic dentro de iframes de otro dominio. Los widgets de pago, inicio de sesión o reserva integrados así pueden quedar inaccesibles.",
+  "description": "Agents and their tools often can’t read or click inside iframes from another domain. Checkout, login or booking widgets embedded this way can be unreachable."
+ },
+ "m1bh3v3w": {
+  "message": "Es probable que los agentes se atasquen aquí. Las comprobaciones con fallos de abajo son los mayores obstáculos.",
+  "description": "Agents are likely to get stuck here. The failing checks below are the biggest blockers."
+ },
+ "m1o7bvrr": {
+  "message": "Los agentes pueden usar esta página, pero algunos problemas los ralentizarán o causarán errores.",
+  "description": "Agents can use this page, but a few issues will slow them down or cause mistakes."
+ },
+ "mc1z2p2": {
+  "message": "Los agentes rellenan formularios relacionando las etiquetas de los campos con la información que tienen. Un campo sin etiqueta, o solo con texto de marcador, es una suposición, y el marcador desaparece al empezar a escribir.",
+  "description": "Agents fill forms by matching field labels to the information they have. A field with no label, or only placeholder text, is a guess, and placeholders vanish once typing starts."
+ },
+ "mp3af9r": {
+  "message": "Los agentes encuentran dónde hacer clic por el rol. Los controles hechos con simples div y span les resultan invisibles.",
+  "description": "Agents find things to click by their role. Controls built from plain divs and spans are invisible to them."
+ },
+ "m9yonkr": {
+  "message": "Los agentes buscan botones y enlaces en el árbol de accesibilidad. Un div que solo parece clicable no aparece ahí, así que los agentes lo ignoran o tienen que adivinarlo a partir de píxeles.",
+  "description": "Agents look for buttons and links in the accessibility tree. A div that only looks clickable isn’t listed there, so agents skip it or have to guess from pixels."
+ },
+ "m164ziva": {
+  "message": "Los agentes leen una copia recortada de la página dentro de un contexto limitado. Las páginas muy grandes o muy anidadas se cortan, así que el contenido del final puede no verse nunca.",
+  "description": "Agents read a trimmed copy of the page within a limited context. Very large or deeply nested pages get cut off, so content near the end may never be seen."
+ },
+ "m1os8djj": {
+  "message": "Los agentes leen la página desde arriba y a menudo la cortan para que quepa en su contexto. Si primero vienen menús, mega navegación y banners, el agente gasta ahí su presupuesto y puede no llegar nunca al contenido.",
+  "description": "Agents read the page from the top and often cut it off to fit their context. If menus, mega-navigation and banners come first, the agent spends its budget on them and may never reach the content."
+ },
+ "mww4r46": {
+  "message": "Los agentes leen la página, deciden dónde hacer clic y luego hacen clic. Si los botones se mueven entretanto porque imágenes, anuncios o banners cargan tarde, el clic cae en el sitio equivocado.",
+  "description": "Agents read the page, decide where to click, then click. If buttons move in between, because images, ads or banners load late, the click lands on the wrong thing."
+ },
+ "m1o0nal8": {
+  "message": "Los agentes deberían poder leer esta página y completar la mayoría de tareas en ella.",
+  "description": "Agents should be able to read this page and complete most tasks on it."
+ },
+ "m1puojyf": {
+  "message": "Los agentes que manejan la página con el teclado, y las personas que no pueden usar un ratón, pasan de un control a otro con Tab. Un botón o enlace con tabindex=\"-1\" se salta, así que solo se puede alcanzar haciendo clic.",
+  "description": "Agents that drive the page with the keyboard, and people who can’t use a mouse, move between controls with Tab. A button or link with tabindex=\"-1\" is skipped, so it can only be reached by clicking."
+ },
+ "mpgeljw": {
+  "message": "Los agentes que leen la página como texto no ven nada en una imagen sin alt. Las fotos de producto, los gráficos y los iconos con significado desaparecen.",
+  "description": "Agents that read the page as text see nothing for an image without alt. Product photos, charts and meaningful icons disappear."
+ },
+ "m1pe8g6v": {
+  "message": "Los agentes que trabajan con capturas de pantalla hacen clic por coordenadas. Los objetivos diminutos, de menos de 24 × 24 píxeles o de menos de 16 píxeles de grosor, son fáciles de fallar o de confundir con sus vecinos.",
+  "description": "Agents that work from screenshots click by coordinates. Tiny targets, smaller than 24 × 24 pixels or thinner than 16 pixels, are easy to miss or to confuse with their neighbours."
+ },
+ "m1eoj8h6": {
+  "message": "Los agentes confían plenamente en ARIA. Un elemento enfocable marcado con aria-hidden, una etiqueta que apunta a un id inexistente o un aria-label que no coincide con el texto visible le dicen algo falso al agente, y este no puede saber que algo va mal.",
+  "description": "Agents trust ARIA completely. A focusable element marked aria-hidden, a label that points at a missing id, or an aria-label that doesn’t match the visible text tells the agent something false, and it "
+ },
+ "m1hkigni": {
+  "message": "Los agentes tendrán dificultades con partes de esta página. Empieza por las comprobaciones con fallos.",
+  "description": "Agents will struggle with parts of this page. Start with the failing checks."
+ },
+ "m8o8x7z": {
+  "message": "Las alertas están desactivadas.",
+  "description": "Alerts are off."
+ },
+ "m3765b8": {
+  "message": "Todo",
+  "description": "All"
+ },
+ "mny5ony": {
+  "message": "Los $P1$ botones y enlaces tienen nombre.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 buttons and links have a name."
+ },
+ "mx4m42n": {
+  "message": "Los $P1$ campos tienen etiqueta.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 fields are labeled."
+ },
+ "mcyo0zr": {
+  "message": "Las $P1$ imágenes tienen atributo alt.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 images have alt attributes."
+ },
+ "m11y3eqb": {
+  "message": "Los $P1$ controles probados muestran un indicador de foco.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "All $1 tested controls show a focus indicator."
+ },
+ "m13e2vcr": {
+  "message": "Todos los enlaces llevan a destinos reales.",
+  "description": "All links point to real destinations."
+ },
+ "muz3ptn": {
+  "message": "Permitir acceso a archivos locales",
+  "description": "Allow access to local files"
+ },
+ "m19kslz8": {
+  "message": "Permitir en todos los sitios",
+  "description": "Allow on all sites"
+ },
+ "mtg11ol": {
+  "message": "Una tarjeta de servidor MCP en /.well-known/mcp/server-card.json indica a los agentes que el sitio ofrece herramientas mediante el Model Context Protocol, y cómo conectarse e iniciar sesión. Es un borrador con muy poca adopción por ahora.",
+  "description": "An MCP server card at /.well-known/mcp/server-card.json tells agents the site offers tools over the Model Context Protocol, and how to connect and sign in. It’s a draft with very little adoption so fa"
+ },
+ "m5fwgr5": {
+  "message": "Un agente probablemente podría hacerlo",
+  "description": "An agent could likely do this"
+ },
+ "mkad2zf": {
+  "message": "Un agente podría lograrlo, con problemas",
+  "description": "An agent might manage, with problems"
+ },
+ "mh54lue": {
+  "message": "Un agente al que se le dice «haz clic en Guardar» busca un control llamado Guardar. Los botones solo con icono y los enlaces vacíos no tienen nombre que coincida, así que el agente tiene que adivinar.",
+  "description": "An agent told to “click Save” looks for a control named Save. Icon-only buttons and empty links have no name to match, so the agent has to guess."
+ },
+ "m1rhgi03": {
+  "message": "Un agente probablemente se atascaría",
+  "description": "An agent would probably get stuck"
+ },
+ "m19rs9ka": {
+  "message": "Un asterisco es solo visual. Sin el atributo required, los agentes envían formularios con campos vacíos y luego tienen que recuperarse de los errores.",
+  "description": "An asterisk is only visual. Without the required attribute, agents submit forms with missing fields and then have to recover from errors."
+ },
+ "mv06b5s": {
+  "message": "¿Los elementos clicables son botones y enlaces reales?",
+  "description": "Are clickable things real buttons and links?"
+ },
+ "mtwjzta": {
+  "message": "¿Los campos tienen etiqueta, tipo y marca de obligatorio?",
+  "description": "Are fields labeled, typed and marked as required?"
+ },
+ "m1sbwlvi": {
+  "message": "Audita antes otra página, como la portada o una página de producto de un competidor, y compárala aquí con esta.",
+  "description": "Audit another page first, such as a competitor’s homepage or product page, then compare it with this one here."
+ },
+ "muoj8gi": {
+  "message": "Historial de auditorías borrado",
+  "description": "Audit history cleared"
+ },
+ "mg6pm0e": {
+  "message": "Audita la página en la que estás",
+  "description": "Audit the page you’re on"
+ },
+ "mmj2es7": {
+  "message": "Audita hasta 25 páginas de $P1$ y encuentra los problemas que comparten. Un problema presente en la mayoría de páginas suele venir de una plantilla, así que una sola corrección los resuelve todos.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Audit up to 25 pages of $1 and find the problems they share. A problem on most pages usually comes from one template, so one fix covers them all."
+ },
+ "m1oepb91": {
+  "message": "Audita hasta 25 páginas de este sitio",
+  "description": "Audit up to 25 pages of this site"
+ },
+ "m1cwx0z4": {
+  "message": "Auditada a las $P1$ en $P2$ s.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Audited $1 in $2 s."
+ },
+ "m1wzanns": {
+  "message": "Auditando",
+  "description": "Auditing"
+ },
+ "m1wneqmc": {
+  "message": "Auditando $P1$ de $P2$…",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Auditing $1 of $2…"
+ },
+ "m3d63xq": {
+  "message": "Auditando…",
+  "description": "Auditing…"
+ },
+ "ml4joae": {
+  "message": "ID generados automáticamente",
+  "description": "Auto-generated IDs"
+ },
+ "mifclip": {
+  "message": "La puntuación media pasó de $P1$ a $P2$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Average score $1 → $2."
+ },
+ "mvyxsts": {
+  "message": "Antes de recomendar o comprar un producto, un agente necesita el precio, la moneda y si hay existencias. Si los datos estructurados los omiten o muestran un precio distinto al de la página, los agentes descartan el producto o citan un precio erróneo.",
+  "description": "Before an agent recommends or buys a product, it needs the price, the currency and whether it’s in stock. If structured data leaves these out, or shows a different price than the page, agents skip the"
+ },
+ "mn49vts": {
+  "message": "Bloquea a agentes que navegan para una persona: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Blocks agents browsing for a person: $1."
+ },
+ "m8z9qcx": {
+  "message": "Bloquea rastreadores: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Blocks crawlers: $1."
+ },
+ "m1c2m8jw": {
+  "message": "Desafíos anti-bots",
+  "description": "Bot challenges"
+ },
+ "mlojp22": {
+  "message": "Página del navegador",
+  "description": "Browser page"
+ },
+ "my5uomj": {
+  "message": "Los CAPTCHA y las comprobaciones anti-bots están hechos para frenar a visitantes automatizados, incluidos los agentes que actúan por una persona real. Un desafío en un flujo clave puede acabar con la tarea.",
+  "description": "CAPTCHAs and bot checks are built to stop automated visitors, including agents acting for a real person. A challenge on a key flow can end the task."
+ },
+ "m1gxt4tr": {
+  "message": "¿Puede un agente distinguir los controles por su nombre?",
+  "description": "Can an agent tell controls apart by name?"
+ },
+ "mdvzitr": {
+  "message": "¿Puede un agente «añadir al carrito» o «registrarse» aquí?",
+  "description": "Can an agent “add to cart” or “sign up” here?"
+ },
+ "m18x3nqb": {
+  "message": "Cancelar",
+  "description": "Cancel"
+ },
+ "mdonbir": {
+  "message": "Botones de carrito encontrados: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Cart buttons found: $1."
+ },
+ "m1hlydds": {
+  "message": "Las puntuaciones por categoría aparecen en páginas auditadas con la versión 1.4 o posterior.",
+  "description": "Category scores appear for pages audited with version 1.4 or later."
+ },
+ "m881kqe": {
+  "message": "Se comprueba una vez para todo el sitio, no por página.",
+  "description": "Checked once for the whole site, not per page."
+ },
+ "mzc8ir2": {
+  "message": "Comprobando la IA integrada de Chrome…",
+  "description": "Checking for Chrome’s built-in AI…"
+ },
+ "m1misvnu": {
+  "message": "Elegir en $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Choose in $1"
+ },
+ "m19hns4d": {
+  "message": "Elegir «$P1$» en $P2$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Choose “$1” in $2"
+ },
+ "m1drs9vz": {
+  "message": "Chrome no permite que las extensiones lean sus propias páginas, Chrome Web Store ni otras extensiones. Abre un sitio web normal y ejecuta la auditoría allí.",
+  "description": "Chrome doesn’t let extensions read its own pages, the Chrome Web Store, or other extensions. Open a regular website and run the audit there."
+ },
+ "m171qjiw": {
+  "message": "Chrome está descargando su modelo de IA integrado. Hasta que esté listo, las pruebas usan coincidencia de nombres.",
+  "description": "Chrome is downloading its built-in AI model. Until it’s ready, tests use name matching."
+ },
+ "mkmft6z": {
+  "message": "Chrome necesita tu permiso para leer esta página",
+  "description": "Chrome needs your OK to read this page"
+ },
+ "m13ziwmm": {
+  "message": "Los nombres de clase como css-1x2y3z o Button_root__a8F3k cambian cada vez que se recompila el sitio. Los agentes y automatizaciones que recuerdan esos selectores fallan tras cada versión.",
+  "description": "Class names like css-1x2y3z or Button_root__a8F3k change whenever the site is rebuilt. Agents and automations that remember these selectors break after every release."
+ },
+ "m17cmr1v": {
+  "message": "Borrar historial de auditorías",
+  "description": "Clear audit history"
+ },
+ "m6vzlzy": {
+  "message": "Hacer clic en $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Click $1"
+ },
+ "m1l91z4h": {
+  "message": "Los objetivos de clic tienen un tamaño cómodo.",
+  "description": "Click targets are a comfortable size."
+ },
+ "mp59e8o": {
+  "message": "Haz clic en el icono de la extensión en la barra de herramientas estando en la página para permitir una auditoría puntual y pulsa Ejecutar auditoría. O permite el auditor en todos los sitios para que funcione en cualquier parte sin preguntar.",
+  "description": "Click the extension’s toolbar icon while you’re on the page to allow a one-time audit, then press Run audit. Or allow the auditor on all sites so it works anywhere without asking."
+ },
+ "m1l37z3p": {
+  "message": "Haz clic en el icono de la pieza de puzle <span class=\"kbd\" aria-label=\"Extensions\">⧉</span> arriba a la derecha de Chrome y luego en la chincheta junto a <b>Agent-Readiness Auditor</b>. Mostrará la puntuación de cada página en el propio icono.",
+  "description": "Click the puzzle-piece <span class=\"kbd\" aria-label=\"Extensions\">⧉</span> icon at the top right of Chrome, then the pin next to <b>Agent-Readiness Auditor</b>. It’ll show each page’s score right on th"
+ },
+ "m11haw1e": {
+  "message": "Elementos clicables sin rol de control",
+  "description": "Clickable elements without a control role"
+ },
+ "m1ohrlfm": {
+  "message": "Comparar",
+  "description": "Compare"
+ },
+ "m1gx820l": {
+  "message": "Comparar esta página con",
+  "description": "Compare this page with"
+ },
+ "m19wyrsu": {
+  "message": "Componentes con shadow DOM abierto: $P1$, con $P2$ controles dentro.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Components with open shadow DOM: $1, with $2 controls inside."
+ },
+ "mi3polt": {
+  "message": "Conecta un <label for> a cada campo o envuelve el campo en un <label>. Usa aria-label solo cuando no sea posible una etiqueta visible.",
+  "description": "Connect a <label for> to each field, or wrap the field in a <label>. Use aria-label only when a visible label isn’t possible."
+ },
+ "m120i3bb": {
+  "message": "Content Signals en robots.txt",
+  "description": "Content Signals in robots.txt"
+ },
+ "m11e3akm": {
+  "message": "Content Signals permite a un sitio indicar por separado si su contenido puede usarse para búsqueda, para respuestas de IA (ai-input) y para entrenar IA (ai-train), en lugar de bloquear los rastreadores por completo.",
+  "description": "Content Signals let a site say separately whether its content may be used for search, for AI answers (ai-input) and for AI training (ai-train), instead of blocking crawlers outright."
+ },
+ "m2gul5l": {
+  "message": "Contenido dentro de marcos de otro origen",
+  "description": "Content inside cross-origin frames"
+ },
+ "mmr8t0v": {
+  "message": "Contenido que necesita JavaScript",
+  "description": "Content that needs JavaScript"
+ },
+ "m1uahxug": {
+  "message": "Los ID de los controles parecen estables.",
+  "description": "Control IDs look stable."
+ },
+ "m18qld33": {
+  "message": "Los nombres de los controles son específicos y distintos.",
+  "description": "Control names are specific and distinct."
+ },
+ "m5i9k9d": {
+  "message": "Controles",
+  "description": "Controls"
+ },
+ "mj3bsfx": {
+  "message": "Los controles no dependen de clases generadas.",
+  "description": "Controls don’t depend on generated class names."
+ },
+ "mbvzc3i": {
+  "message": "Controles identificados solo por clases generadas",
+  "description": "Controls identified only by generated class names"
+ },
+ "m1cbsk7c": {
+  "message": "Controles dentro de shadow DOM y marcos",
+  "description": "Controls inside shadow DOM and frames"
+ },
+ "m13lisfp": {
+  "message": "Controles sin nombre",
+  "description": "Controls with no name"
+ },
+ "mgb7rqt": {
+  "message": "Controles a los que no se llega con la tecla Tab",
+  "description": "Controls you can’t reach with the Tab key"
+ },
+ "m1jk8av9": {
+  "message": "Los banners de cookies, las ventanas de registro y los intersticiales se colocan sobre el contenido. Los agentes a menudo hacen clic en la superposición por error, o no pueden llegar a lo que hay debajo hasta cerrarla.",
+  "description": "Cookie banners, sign-up modals and interstitials sit on top of the content. Agents often click the overlay by mistake, or can’t reach what’s underneath until it’s dismissed."
+ },
+ "m11101k": {
+  "message": "Copia un prompt que pide a un agente de programación corregir y probar este problema",
+  "description": "Copy a prompt that asks a coding agent to fix and test this issue"
+ },
+ "moxz5in": {
+  "message": "Copiar como texto",
+  "description": "Copy as text"
+ },
+ "m1nmiyh9": {
+  "message": "Copiar código",
+  "description": "Copy code"
+ },
+ "m1bnoamr": {
+  "message": "Copiar prompt de corrección",
+  "description": "Copy fix prompt"
+ },
+ "m1f8uij4": {
+  "message": "Copiar prompt para estas",
+  "description": "Copy prompt for these"
+ },
+ "mhmsczf": {
+  "message": "Copiar informe como Markdown",
+  "description": "Copy report as Markdown"
+ },
+ "m1cqaz94": {
+  "message": "Copiar informe como prompt",
+  "description": "Copy report as prompt"
+ },
+ "m1nnce5r": {
+  "message": "No se pudo comprobar llms.txt desde esta página.",
+  "description": "Couldn’t check for llms.txt from this page."
+ },
+ "m8xsgwt": {
+  "message": "No se pudo comprobar robots.txt desde esta página.",
+  "description": "Couldn’t check robots.txt from this page."
+ },
+ "megojnf": {
+  "message": "No se pudo comparar: la URL de la página devolvió $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Couldn’t compare: the page URL returned $1."
+ },
+ "m2tqd0i": {
+  "message": "No se pudo copiar. Usa Descargar Markdown.",
+  "description": "Couldn’t copy. Use Download Markdown instead."
+ },
+ "modgrbv": {
+  "message": "No se pudo obtener el HTML de esta página para comparar.",
+  "description": "Couldn’t fetch this page’s HTML to compare."
+ },
+ "mlfqwj8": {
+  "message": "No se pudo obtener una sugerencia. Puede que la IA integrada de Chrome aún se esté descargando.",
+  "description": "Couldn’t get a suggestion. Chrome’s built-in AI may still be downloading."
+ },
+ "m18dpshp": {
+  "message": "No se pudo acceder a la página. Vuelve a ejecutar la auditoría.",
+  "description": "Couldn’t reach the page. Run the audit again."
+ },
+ "m1milpcv": {
+  "message": "No se pudo llegar a esos elementos. Vuelve a ejecutar la auditoría.",
+  "description": "Couldn’t reach those elements. Run the audit again."
+ },
+ "mc7rwy1": {
+  "message": "No se pudo leer robots.txt desde esta página.",
+  "description": "Couldn’t read robots.txt from this page."
+ },
+ "m42yzu3": {
+  "message": "No se pudo simular el foco del teclado en este navegador.",
+  "description": "Couldn’t simulate keyboard focus in this browser."
+ },
+ "m1ft03jl": {
+  "message": "Decide de forma consciente qué agentes permitir. Bloquear rastreadores de entrenamiento (GPTBot, ClaudeBot, Google-Extended) es distinto de bloquear agentes que navegan en nombre de alguien.",
+  "description": "Decide deliberately which agents to allow. Blocking training crawlers (GPTBot, ClaudeBot, Google-Extended) is separate from blocking agents that browse on someone’s behalf."
+ },
+ "m1vooihc": {
+  "message": "Describe primero una tarea.",
+  "description": "Describe a task first."
+ },
+ "msmmp3": {
+  "message": "Describe algo que una persona pediría a un agente que hiciera aquí. La prueba lee la página como lo hacen los agentes, planifica los clics y muestra dónde se atascaría un agente. No se hace clic en nada de la página.",
+  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked."
+ },
+ "mrzztvp": {
+  "message": "Descripción y metadatos de enlace",
+  "description": "Description and link metadata"
+ },
+ "md9dltx": {
+  "message": "Están la descripción, Open Graph y la etiqueta canonical.",
+  "description": "Description, Open Graph and canonical tags are all present."
+ },
+ "mm0yiiq": {
+  "message": "Título de página descriptivo",
+  "description": "Descriptive page title"
+ },
+ "m19xqb96": {
+  "message": "El diálogo no tiene nombre (añade aria-labelledby o aria-label)",
+  "description": "Dialog has no name (add aria-labelledby or aria-label)"
+ },
+ "msdjbbb": {
+  "message": "¿Bloquean el paso superposiciones, CAPTCHA o marcos?",
+  "description": "Do overlays, CAPTCHAs or frames block the way?"
+ },
+ "mxssd9w": {
+  "message": "No volver a preguntar",
+  "description": "Don’t ask again"
+ },
+ "mfnyy6x": {
+  "message": "No elimines el contorno de foco. Si el diseño necesita uno propio, aplica estilo a :focus-visible con un outline o un box-shadow que contraste con el fondo.",
+  "description": "Don’t remove the focus outline. If the design needs a custom one, style :focus-visible with an outline or a box-shadow that contrasts with the background."
+ },
+ "m1f9pqt3": {
+  "message": "Descargar CSV",
+  "description": "Download CSV"
+ },
+ "m1m776h5": {
+  "message": "Descargar JSON",
+  "description": "Download JSON"
+ },
+ "ma1xd3q": {
+  "message": "Descargar Markdown",
+  "description": "Download Markdown"
+ },
+ "my7pm4k": {
+  "message": "Descargar informe para compartir (HTML)",
+  "description": "Download shareable report (HTML)"
+ },
+ "m7f191s": {
+  "message": "Descargado",
+  "description": "Downloaded"
+ },
+ "m1jiwawk": {
+  "message": "Descargando el modelo de IA de Chrome… $P1$ %",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Downloading Chrome’s AI model… $1%"
+ },
+ "m12sg01l": {
+  "message": "Todas las comprobaciones se han superado o no se aplican a esta página.",
+  "description": "Every check passed or doesn’t apply to this page."
+ },
+ "m3u3sfl": {
+  "message": "Todas las comprobaciones, con correcciones",
+  "description": "Every check, with fixes"
+ },
+ "mtc6lb4": {
+  "message": "Todo lo que parece clicable es un control real.",
+  "description": "Every clickable-looking element is a real control."
+ },
+ "mnc2hr1": {
+  "message": "Se puede llegar a todos los controles con la tecla Tab.",
+  "description": "Every control can be reached with the Tab key."
+ },
+ "m1ml31ld": {
+  "message": "Cada control necesita un nombre que un agente pueda relacionar con una instrucción como «haz clic en Añadir al carrito».",
+  "description": "Every control needs a name an agent can match to an instruction like “click Add to cart”."
+ },
+ "m1iahjyp": {
+  "message": "Cada paso usa un control que un agente puede encontrar por su nombre.",
+  "description": "Every step uses a control an agent can find by name."
+ },
+ "m1c596is": {
+  "message": "Todo",
+  "description": "Everything"
+ },
+ "mtzq1wz": {
+  "message": "Todo se ejecuta en tu navegador. No se envía nada de la página a ningún sitio.",
+  "description": "Everything runs in your browser. Nothing about the page is sent anywhere."
+ },
+ "m5n61xj": {
+  "message": "Todo se ejecuta en tu navegador. La extensión solo lee una página cuando haces clic en su icono y no envía nada a ningún sitio. <a href=\"https://agent-readiness-auditor.netlify.app/privacy-policy.html\">Política de privacidad</a>",
+  "description": "Everything runs in your browser. The extension only reads a page when you click its icon, and sends nothing anywhere. <a href=\"https://agent-readiness-auditor.netlify.app/privacy-policy.html\">Privacy "
+ },
+ "mhweyeh": {
+  "message": "Explorar más",
+  "description": "Explore more"
+ },
+ "m1305875": {
+  "message": "Exportar",
+  "description": "Export"
+ },
+ "mnl3hon": {
+  "message": "Con fallos",
+  "description": "Failing"
+ },
+ "m13fdvho": {
+  "message": "Menos problemas",
+  "description": "Fewer issues"
+ },
+ "ma1u4u3": {
+  "message": "Campos sin tipo ni pistas de autocompletado",
+  "description": "Fields missing type or autocomplete hints"
+ },
+ "mmsuays": {
+  "message": "Los campos que parecen obligatorios están marcados como obligatorios.",
+  "description": "Fields that look required are marked as required."
+ },
+ "mbxo00f": {
+  "message": "Busca un nombre o un rol",
+  "description": "Find a name or role"
+ },
+ "m1nwyqlm": {
+  "message": "Buscar en la vista del agente",
+  "description": "Find in the agent view"
+ },
+ "m6c26i": {
+  "message": "Encontrar la página de contacto",
+  "description": "Find the contact page"
+ },
+ "m17xy841": {
+  "message": "Encontrar los precios",
+  "description": "Find the pricing"
+ },
+ "m1gb0s11": {
+  "message": "¿Te resulta útil?",
+  "description": "Finding this useful?"
+ },
+ "my5br52": {
+  "message": "Corrección copiada",
+  "description": "Fix copied"
+ },
+ "m6p34te": {
+  "message": "Prompt de corrección copiado",
+  "description": "Fix prompt copied"
+ },
+ "mcgssdj": {
+  "message": "Corrige esto primero",
+  "description": "Fix these first"
+ },
+ "m1adaw7x": {
+  "message": "Corrige y vuelve a ejecutar",
+  "description": "Fix, then run it again"
+ },
+ "m3f1ylv": {
+  "message": "Corregidas",
+  "description": "Fixed"
+ },
+ "m1fzolxr": {
+  "message": "Enfocable, pero oculto a los agentes con aria-hidden=\"true\"",
+  "description": "Focusable, but hidden from agents with aria-hidden=\"true\""
+ },
+ "mgoz6jt": {
+  "message": "Para cuando estás editando el sitio",
+  "description": "For when you’re editing the site"
+ },
+ "md6y56j": {
+  "message": "Campos de formulario sin etiqueta",
+  "description": "Form fields without labels"
+ },
+ "m3f6srk": {
+  "message": "Formularios",
+  "description": "Forms"
+ },
+ "me07t6s": {
+  "message": "Se encontró $P1$ para «$P2$».",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Found $1 for “$2”."
+ },
+ "m12njdup": {
+  "message": "Se encontró $P1$ fragmento de texto oculto que parece una instrucción para un agente de IA.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $1 piece of hidden text that reads like instructions to an AI agent."
+ },
+ "m1j9l5lt": {
+  "message": "Se encontraron $P1$ fragmentos de texto oculto que parecen instrucciones para un agente de IA.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $1 pieces of hidden text that read like instructions to an AI agent."
+ },
+ "m12g9oo8": {
+  "message": "Se encontró $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $1."
+ },
+ "mktkm9x": {
+  "message": "Se encontró $P2$/llms.txt ($P1$ líneas).",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found $2/llms.txt ($1 lines)."
+ },
+ "mdcjdyq": {
+  "message": "Se encontró $P2$/llms.txt (1 línea).",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Found $2/llms.txt (1 line)."
+ },
+ "m1517x8m": {
+  "message": "Encontrado en esta página: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found on this page: $1."
+ },
+ "m1p6tvg2": {
+  "message": "Encontrado: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Found: $1."
+ },
+ "me5y9j5": {
+  "message": "Recibe una alerta si baja la puntuación de un sitio.",
+  "description": "Get an alert if a site’s score drops."
+ },
+ "mvk81j3": {
+  "message": "Recibe una alerta si la puntuación baja o se extiende un problema nuevo",
+  "description": "Get an alert if the score drops or a new problem spreads"
+ },
+ "m61exxf": {
+  "message": "Da a los controles importantes ID legibles y permanentes, o usa en su lugar los atributos name y data-testid.",
+  "description": "Give important controls readable, permanent IDs, or rely on name and data-testid attributes instead."
+ },
+ "m101a7sm": {
+  "message": "Da a las superposiciones un botón de cierre con nombre claro, mantenlas lejos del contenido principal y marca los modales con role=\"dialog\", aria-modal=\"true\" y un nombre.",
+  "description": "Give overlays a clearly named close button, keep them away from main content, and mark modals with role=\"dialog\", aria-modal=\"true\" and a name."
+ },
+ "mofk3bu": {
+  "message": "Da a los enlaces reales una URL de destino. Si el elemento realiza una acción, conviértelo en un <button>.",
+  "description": "Give real links a destination URL. If the element performs an action instead, make it a <button>."
+ },
+ "m16gh86c": {
+  "message": "Entendido",
+  "description": "Got it"
+ },
+ "m1y1o72j": {
+  "message": "Difícil para agentes",
+  "description": "Hard for agents"
+ },
+ "mn0ekja": {
+  "message": "Tiene un manejador onclick, pero no un rol de control",
+  "description": "Has an onclick handler but no control role"
+ },
+ "m4gkcdp": {
+  "message": "Estructura de encabezados",
+  "description": "Heading outline"
+ },
+ "m6tznov": {
+  "message": "Los encabezados son la forma en que los agentes leen por encima. Un h1 claro y una estructura lógica les permiten encontrar rápido la sección correcta.",
+  "description": "Headings are how agents skim. One clear h1 and a logical outline let them find the right section quickly."
+ },
+ "m1jqqa1r": {
+  "message": "Instrucciones ocultas dirigidas a agentes",
+  "description": "Hidden instructions aimed at agents"
+ },
+ "mpluayg": {
+  "message": "Texto oculto que intenta dar instrucciones a los agentes. Los agentes pueden seguirlo o marcar todo el sitio como inseguro.",
+  "description": "Hidden text that tries to give agents instructions. Agents may follow it, or flag the whole site as unsafe."
+ },
+ "myjtsh1": {
+  "message": "Ocultar",
+  "description": "Hide"
+ },
+ "ml99m1v": {
+  "message": "Ocultar marcas",
+  "description": "Hide marks"
+ },
+ "myjtufe": {
+  "message": "Inicio",
+  "description": "Home"
+ },
+ "mtn6fzu": {
+  "message": "Aloja los flujos clave en tu propio dominio, o usa la opción de redirección o de API de tu proveedor en lugar de un marco incrustado.",
+  "description": "Host key flows on your own domain, or use your provider’s redirect or API option instead of an embedded frame."
+ },
+ "m1v3ecoe": {
+  "message": "Cuántas",
+  "description": "How many"
+ },
+ "m1xjt7zi": {
+  "message": "Cuántas páginas",
+  "description": "How many pages"
+ },
+ "mu3dncp": {
+  "message": "Cómo corregirlo",
+  "description": "How to fix"
+ },
+ "m1a9ufcw": {
+  "message": "¿Qué tan bien pueden usar esta página los agentes de IA?",
+  "description": "How well can AI agents use this page?"
+ },
+ "mrig626": {
+  "message": "Los ID como :r4: o input-83412 se crean en tiempo de ejecución y cambian entre visitas. Los selectores y vínculos de etiqueta que apuntan a ellos son frágiles.",
+  "description": "IDs like :r4: or input-83412 are created at runtime and change between visits. Selectors and label links that point at them are fragile."
+ },
+ "m3kzn4l": {
+  "message": "Control solo con icono y sin etiqueta",
+  "description": "Icon-only control with no label"
+ },
+ "m1cuy86g": {
+  "message": "Si ofreces una API, publica /.well-known/api-catalog. Si los agentes deben iniciar sesión, publica los metadatos OAuth de authorization-server y protected-resource. Los sitios solo de contenido pueden omitirlo.",
+  "description": "If you offer an API, publish /.well-known/api-catalog. If agents should sign in, publish OAuth authorization-server and protected-resource metadata. Content-only sites can skip this."
+ },
+ "m1s4d867": {
+  "message": "Si tienes un servidor MCP, publica su tarjeta en /.well-known/mcp/server-card.json con su nombre, la URL de transporte y los datos de autenticación.",
+  "description": "If you run an MCP server, publish its card at /.well-known/mcp/server-card.json with its name, transport URL and authentication details."
+ },
+ "m1s6v86x": {
+  "message": "Imágenes sin texto alt",
+  "description": "Images without alt text"
+ },
+ "m1rjk8jj": {
+  "message": "Parece que hay scripts en línea que registran herramientas WebMCP, pero este navegador no pudo listarlas.",
+  "description": "Inline scripts appear to register WebMCP tools, but this browser couldn’t list them."
+ },
+ "mtlgx23": {
+  "message": "Trampas de interacción",
+  "description": "Interaction traps"
+ },
+ "mmu1vnl": {
+  "message": "¿Hay texto oculto que intenta dar instrucciones a los agentes?",
+  "description": "Is there hidden text trying to give agents instructions?"
+ },
+ "m1ak6k27": {
+  "message": "Problemas",
+  "description": "Issues"
+ },
+ "m1149fxp": {
+  "message": "No encuentra los controles que necesita esta tarea.",
+  "description": "It can’t find the controls this task needs."
+ },
+ "m3e3mm2": {
+  "message": "Su árbol de accesibilidad, con cada botón sin nombre señalado.",
+  "description": "Its accessibility tree, with every unnamed button flagged."
+ },
+ "mtqwy4o": {
+  "message": "JSON descargado",
+  "description": "JSON downloaded"
+ },
+ "m1mz5zdn": {
+  "message": "Evita los desafíos en flujos rutinarios, prefiere comprobaciones basadas en riesgo que rara vez muestran un acertijo y usa las opciones de tu proveedor para agentes verificados cuando estén disponibles.",
+  "description": "Keep challenges off routine flows, prefer risk-based checks that rarely show a puzzle, and use your provider’s options for verified agents where available."
+ },
+ "mmnqyiv": {
+  "message": "Mantén ligeros la cabecera y la navegación, pon los menús largos tras un botón que los despliegue, mueve los bloques secundarios después de <main> y marca el contenido principal con <main>.",
+  "description": "Keep the header and navigation lean, put long menus behind a button that expands them, move secondary blocks after <main>, and mark the main content with <main>."
+ },
+ "mxfs6pk": {
+  "message": "La etiqueta dice obligatorio, pero el campo no",
+  "description": "Label says required, but the field doesn’t"
+ },
+ "mmzszrh": {
+  "message": "Los campos con etiqueta y tipo permiten a los agentes rellenar formularios bien a la primera.",
+  "description": "Labeled, typed fields let agents fill forms correctly the first time."
+ },
+ "mi0gegf": {
+  "message": "Etiquetas y nombres",
+  "description": "Labels and names"
+ },
+ "mixufep": {
+  "message": "Los landmarks permiten a un agente saltar directamente al contenido principal o a la navegación del sitio en lugar de leer toda la página en orden.",
+  "description": "Landmarks let an agent jump straight to the main content or the site navigation instead of reading the whole page in order."
+ },
+ "mxidshk": {
+  "message": "Idioma: $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Language: $1"
+ },
+ "m3g7ocf": {
+  "message": "Último análisis $P1$: $P2$ páginas, media $P3$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "Last scan $1: $2 pages, average $3."
+ },
+ "mxaxouk": {
+  "message": "Último reanálisis semanal $P1$: $P2$ páginas, media $P3$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "Last weekly re-scan $1: $2 pages, average $3."
+ },
+ "m8aw8kw": {
+  "message": "Puntuación de saltos de diseño desde la carga: $P1$ (0,1 o menos es bueno).",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Layout shift score $1 since the page loaded (0.1 or less is good)."
+ },
+ "m1hk940l": {
+  "message": "Saltos de diseño durante la carga",
+  "description": "Layout shifts while loading"
+ },
+ "mtk7o6m": {
+  "message": "Relaciones en cabeceras Link: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Link header relations: $1."
+ },
+ "meui1ij": {
+  "message": "Enlaza una versión en Markdown: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Links a Markdown version: $1."
+ },
+ "m1ejjg2q": {
+  "message": "Enlaces de esta página",
+  "description": "Links on this page"
+ },
+ "m1bdqt7o": {
+  "message": "Enlaces que no llevan a ninguna parte",
+  "description": "Links that don’t go anywhere"
+ },
+ "m1656e5d": {
+  "message": "Se muestran los primeros $P1$ de $P2$. Corrígelos y vuelve a auditar para ver el resto.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Listing the first $1 of $2. Fix these and run the audit again to see the rest."
+ },
+ "m10sw4bl": {
+  "message": "Cargando tus auditorías recientes…",
+  "description": "Loading your recent audits…"
+ },
+ "mgrytzf": {
+  "message": "Parece un botón de añadir al carrito, pero no tiene rol de botón",
+  "description": "Looks like an add-to-cart button, but has no button role"
+ },
+ "m18j3282": {
+  "message": "Se ve igual con y sin foco",
+  "description": "Looks the same focused and unfocused"
+ },
+ "mpv0wlm": {
+  "message": "Tarjeta de servidor MCP",
+  "description": "MCP server card"
+ },
+ "ml0fkk8": {
+  "message": "Señales legibles por máquinas",
+  "description": "Machine-readable signals"
+ },
+ "m1g9f9x8": {
+  "message": "El contenido principal y la navegación están marcados como landmarks.",
+  "description": "Main content and navigation are marked up as landmarks."
+ },
+ "m1u98zgn": {
+  "message": "Landmarks de contenido principal y navegación",
+  "description": "Main content and navigation landmarks"
+ },
+ "m1xvewg5": {
+  "message": "Haz que las zonas clicables midan al menos 24 × 24 píxeles, usando padding si el icono visible es más pequeño.",
+  "description": "Make clickable areas at least 24 × 24 pixels, using padding if the visible icon is smaller."
+ },
+ "mo6nnns": {
+  "message": "Haz que cada nombre describa su destino, como «Leer la guía de precios». Si el texto visible debe ser corto, añade un aria-label con el significado completo.",
+  "description": "Make each name describe its target, like “Read the pricing guide”. If the visible text must stay short, add an aria-label with the full meaning."
+ },
+ "md7ys1k": {
+  "message": "Muchos agentes y rastreadores de IA obtienen la página sin ejecutar sus scripts. Todo lo que añade JavaScript, como precios, detalles de producto o una aplicación de página única entera, no existe para ellos.",
+  "description": "Many agents and AI crawlers fetch a page without running its scripts. Anything added by JavaScript, such as prices, product details or a whole single-page app, is missing for them."
+ },
+ "mkllr6i": {
+  "message": "Marcar problemas",
+  "description": "Mark issues"
+ },
+ "m43qh7s": {
+  "message": "Marcar problemas en la página",
+  "description": "Mark issues on page"
+ },
+ "msl5tpz": {
+  "message": "Markdown descargado",
+  "description": "Markdown downloaded"
+ },
+ "m12o4l61": {
+  "message": "Versión en Markdown para agentes",
+  "description": "Markdown version for agents"
+ },
+ "mgint75": {
+  "message": "Markdown, MCP, WebMCP, API y descubrimiento de inicio de sesión. Se muestra como información, sin puntuar.",
+  "description": "Markdown, MCP, WebMCP, API and sign-in discovery. Shown for information, not scored."
+ },
+ "m3mh5n0": {
+  "message": "$P1$ elemento marcado en la página. Pasa el ratón por un número para ver detalles.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Marked $1 element on the page. Hover a number for details."
+ },
+ "mgw3x3z": {
+  "message": "$P1$ elementos marcados en la página. Pasa el ratón por un número para ver detalles.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Marked $1 elements on the page. Hover a number for details."
+ },
+ "m88tcp6": {
+  "message": "Coincidencia por nombres de control. Con la IA integrada de Chrome, la prueba planifica tareas de varios pasos.",
+  "description": "Matched by control names. With Chrome’s built-in AI the test plans multi-step tasks."
+ },
+ "m1il4od7": {
+  "message": "Metadatos, datos estructurados y archivos del sitio que dicen a los agentes de qué trata la página.",
+  "description": "Metadata, structured data and site files that tell agents what the page is about."
+ },
+ "m1cvoi2t": {
+  "message": "Metadatos, datos estructurados, llms.txt y robots.txt.",
+  "description": "Metadata, structured data, llms.txt and robots.txt."
+ },
+ "myoo9vk": {
+  "message": "Falta: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Missing: $1."
+ },
+ "m1id537q": {
+  "message": "Al modal le falta aria-modal=\"true\"",
+  "description": "Modal is missing aria-modal=\"true\""
+ },
+ "m1g1a1qy": {
+  "message": "Más problemas",
+  "description": "More issues"
+ },
+ "m1idn8ic": {
+  "message": "Más cosas que puedes hacer",
+  "description": "More you can do"
+ },
+ "mg6sdzy": {
+  "message": "Casi lista",
+  "description": "Mostly ready"
+ },
+ "m1609qxd": {
+  "message": "Nombres como «Haz clic aquí», o diez enlaces llamados «Más información», no dicen adónde llevan. Los agentes no pueden distinguirlos sin estudiar el diseño a su alrededor.",
+  "description": "Names like “Click here”, or ten links all called “Learn more”, don’t say where they lead. Agents can’t tell them apart without studying the layout around them."
+ },
+ "mocpk7x": {
+  "message": "Necesita trabajo",
+  "description": "Needs work"
+ },
+ "mdgssi3": {
+  "message": "Novedades de la $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "New in $1"
+ },
+ "m1xs8gvw": {
+  "message": "Nuevo en la mayoría de páginas: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "New on most pages: $1."
+ },
+ "m8nz8n5": {
+  "message": "Problemas nuevos",
+  "description": "New problems"
+ },
+ "m15awy2u": {
+  "message": "Nuevo análisis",
+  "description": "New scan"
+ },
+ "m1ywqiic": {
+  "message": "Estándares nuevos que permiten a los agentes descubrir Markdown, API y herramientas. Pocos sitios los publican y pocos agentes los leen aún, así que se muestran como información y no afectan a la puntuación.",
+  "description": "Newer standards that let agents discover Markdown, APIs and tools. Few sites publish them and few agents read them yet, so they’re shown for information and don’t affect the score."
+ },
+ "mqhs2le": {
+  "message": "El próximo en $P1$ día.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Next in $1 day."
+ },
+ "mlxdsa9": {
+  "message": "El próximo en $P1$ días.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Next in $1 days."
+ },
+ "moobxda": {
+  "message": "Junto a otra página que auditaste",
+  "description": "Next to another page you audited"
+ },
+ "m1s0ffih": {
+  "message": "No se encontró catálogo de API, metadatos OAuth ni índice de Agent Skills.",
+  "description": "No API catalog, OAuth metadata or Agent Skills index found."
+ },
+ "m1hiikxv": {
+  "message": "No se encontró ningún CAPTCHA ni desafío anti-bots en esta página.",
+  "description": "No CAPTCHA or bot challenge found on this page."
+ },
+ "mki6ipj": {
+  "message": "No hay cabeceras Link para agentes.",
+  "description": "No Link headers for agents."
+ },
+ "ma6l0ib": {
+  "message": "No se encontró tarjeta de servidor MCP.",
+  "description": "No MCP server card found."
+ },
+ "mrexwu8": {
+  "message": "No hay datos estructurados Product, así que los agentes no pueden leer el precio ni las existencias.",
+  "description": "No Product structured data, so agents can’t read the price or stock."
+ },
+ "mionqld": {
+  "message": "No hay datos estructurados Product, así que no se pueden leer envíos, devoluciones ni reseñas.",
+  "description": "No Product structured data, so shipping, returns and reviews can’t be read."
+ },
+ "m1531b15": {
+  "message": "No se encontraron herramientas WebMCP.",
+  "description": "No WebMCP tools found."
+ },
+ "m88fpsf": {
+  "message": "No se encontraron herramientas WebMCP. Este navegador es compatible con WebMCP.",
+  "description": "No WebMCP tools found. This browser supports WebMCP."
+ },
+ "m14brns1": {
+  "message": "Sin atributo alt",
+  "description": "No alt attribute"
+ },
+ "m162nbhl": {
+  "message": "No se encontró ningún botón llamado como «Añadir al carrito» o «Comprar ahora». Si solo aparece tras elegir talla o color, asegúrate de que su nombre diga lo que hace.",
+  "description": "No button named like “Add to cart” or “Buy now” found. If it only appears after choosing a size or color, make sure its name says what it does."
+ },
+ "mwicvyt": {
+  "message": "No hay botones ni enlaces en esta página.",
+  "description": "No buttons or links on this page."
+ },
+ "m1fpvbim": {
+  "message": "Ninguna comprobación cambió.",
+  "description": "No check changed."
+ },
+ "m1jmuwqh": {
+  "message": "No hay contenido incrustado en marcos de otro origen.",
+  "description": "No content is embedded in cross-origin frames."
+ },
+ "m1m9q75a": {
+  "message": "Ningún control de esta página tiene ID.",
+  "description": "No controls on this page have IDs."
+ },
+ "m1tj94tt": {
+  "message": "Ningún nombre de control coincide con la tarea.",
+  "description": "No control’s name matches the task."
+ },
+ "m17emk7h": {
+  "message": "Ningún nombre de control coincide con la tarea. $P1$ control no tiene nombre y puede ser el que necesitas.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No control’s name matches the task. $1 control has no name, and it may be the one you need."
+ },
+ "mo2gzh": {
+  "message": "Ningún nombre de control coincide con la tarea. $P1$ controles no tienen nombre y el que necesitas puede estar entre ellos.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No control’s name matches the task. $1 controls have no name, and the one you need may be among them."
+ },
+ "mqa1d5v": {
+  "message": "Sin descripción: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No description: $1."
+ },
+ "m1fk9oon": {
+  "message": "No hay elementos que marcar. Los problemas de esta página afectan a toda la página.",
+  "description": "No elements to mark. The issues on this page are page-wide."
+ },
+ "m1qovyux": {
+  "message": "No hay campos de formulario en esta página.",
+  "description": "No form fields on this page."
+ },
+ "ma5mnt2": {
+  "message": "No se encontraron instrucciones ocultas dirigidas a agentes.",
+  "description": "No hidden instructions aimed at agents found."
+ },
+ "m1gpmazl": {
+  "message": "Sin atributo href",
+  "description": "No href attribute"
+ },
+ "m1xn2uyy": {
+  "message": "No hay imágenes en esta página.",
+  "description": "No images on this page."
+ },
+ "m4p7qc8": {
+  "message": "No se encontraron problemas",
+  "description": "No issues found"
+ },
+ "mj3orhq": {
+  "message": "Sin etiqueta ni toolparamdescription",
+  "description": "No label or toolparamdescription"
+ },
+ "m16yyzs3": {
+  "message": "Sin etiqueta, aria-label ni title",
+  "description": "No label, aria-label or title"
+ },
+ "m1am8eh8": {
+  "message": "No hay enlaces ni botones que probar.",
+  "description": "No links or buttons to test."
+ },
+ "m10ab2at": {
+  "message": "No hay llms.txt en $P1$/llms.txt.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "No llms.txt at $1/llms.txt."
+ },
+ "m6e5wwn": {
+  "message": "No se encontró landmark main ni de navegación.",
+  "description": "No main landmark and no navigation landmark found."
+ },
+ "mbx5n5x": {
+  "message": "No se encontró landmark main.",
+  "description": "No main landmark found."
+ },
+ "mwzph1e": {
+  "message": "No hay landmark main ni h1 desde el que medir.",
+  "description": "No main landmark or h1 to measure from."
+ },
+ "mh7v872": {
+  "message": "No se encontró ARIA engañoso ni roto.",
+  "description": "No misleading or broken ARIA found."
+ },
+ "m1dpk603": {
+  "message": "Sin nombre",
+  "description": "No name"
+ },
+ "mfpqr34": {
+  "message": "Sin atributo name, así que no puede ser un parámetro de herramienta",
+  "description": "No name attribute, so it can’t become a tool parameter"
+ },
+ "mbbimro": {
+  "message": "No se encontró landmark de navegación.",
+  "description": "No navigation landmark found."
+ },
+ "m1w360or": {
+  "message": "No se encontraron componentes con shadow DOM abierto ni marcos del mismo sitio.",
+  "description": "No open shadow DOM components or same-site frames found."
+ },
+ "m5cpxw2": {
+  "message": "No se pudo auditar ninguna página. Puede que requieran iniciar sesión o que el sitio bloqueara la pestaña en segundo plano.",
+  "description": "No pages could be audited. They may need a sign-in, or the site blocked the background tab."
+ },
+ "mv5osh6": {
+  "message": "No hay campos de información personal que necesiten tipo o pistas de autocompletado.",
+  "description": "No personal-information fields that need type or autocomplete hints."
+ },
+ "m3sy94g": {
+  "message": "No hay valores positivos de tabindex.",
+  "description": "No positive tabindex values."
+ },
+ "m1ryhwqh": {
+  "message": "Ningún problema en ninguna página. ¡Bien!",
+  "description": "No problems on any page. Nice."
+ },
+ "m1ro0d08": {
+  "message": "No hay controles de producto ni de carrito en esta página.",
+  "description": "No product or cart controls on this page."
+ },
+ "mombuc8": {
+  "message": "No se encontró robots.txt, así que no se bloquea a ningún agente.",
+  "description": "No robots.txt found, so no agents are blocked."
+ },
+ "m1j9mosd": {
+  "message": "No se encontró robots.txt.",
+  "description": "No robots.txt found."
+ },
+ "m8z7oq3": {
+  "message": "No se encontró sitemap.",
+  "description": "No sitemap found."
+ },
+ "mq0mnb1": {
+  "message": "No se encontraron datos estructurados.",
+  "description": "No structured data found."
+ },
+ "m1fo829k": {
+  "message": "Sin texto, aria-label ni title",
+  "description": "No text, aria-label or title"
+ },
+ "mifirpj": {
+  "message": "Sin indicador de foco visible",
+  "description": "No visible focus indicator"
+ },
+ "mz0f7od": {
+  "message": "No aplica",
+  "description": "Not applicable"
+ },
+ "m1f5nb52": {
+  "message": "Ahora no",
+  "description": "Not now"
+ },
+ "m1j9lmxo": {
+  "message": "Sin puntuar",
+  "description": "Not scored"
+ },
+ "mh0bm23": {
+  "message": "¿No sabes por dónde empezar? Prueba nuestra tienda de demostración. Tiene problemas puestos a propósito para que la auditoría los encuentre.",
+  "description": "Not sure where to start? Try our demo store. It has problems planted for the audit to find."
+ },
+ "m17t1zdr": {
+  "message": "JSON no válido: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Not valid JSON: $1."
+ },
+ "myjpeph": {
+  "message": "Nota",
+  "description": "Note"
+ },
+ "mdmp9r1": {
+  "message": "Ahora mismo nada tapa la página.",
+  "description": "Nothing is covering the page right now."
+ },
+ "meqfjoz": {
+  "message": "No hay coincidencias.",
+  "description": "Nothing matches."
+ },
+ "mmdic2o": {
+  "message": "Nada que mostrar",
+  "description": "Nothing to show"
+ },
+ "mkztme3": {
+  "message": "Numera cada problema en la página",
+  "description": "Number every problem on the page"
+ },
+ "m1l97e0v": {
+  "message": "En páginas de producto: ¿puede un agente de compra con IA leer el precio, las existencias y el botón del carrito?",
+  "description": "On product pages: can an AI shopping agent read the price, stock and cart button?"
+ },
+ "mg5ec4k": {
+  "message": "Abrir $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Open $1"
+ },
+ "mkuxspg": {
+  "message": "Abre una página y haz clic en el icono",
+  "description": "Open a page and click the icon"
+ },
+ "mvrhjwt": {
+  "message": "Abrir ajustes de la extensión",
+  "description": "Open extension settings"
+ },
+ "m1sz6zp0": {
+  "message": "Abrir informe del sitio",
+  "description": "Open site report"
+ },
+ "m1qknqic": {
+  "message": "Abrir la tienda de demostración",
+  "description": "Open the demo store"
+ },
+ "m1jyji90": {
+  "message": "Abrir esta página en la pestaña actual",
+  "description": "Open this page in the current tab"
+ },
+ "m1fzz17t": {
+  "message": "Abierta en la pestaña actual. Ejecuta allí la auditoría para ver todos los detalles.",
+  "description": "Opened in the current tab. Run the audit there for full details."
+ },
+ "m3lrcg1": {
+  "message": "Otra",
+  "description": "Other"
+ },
+ "m6bbpn7": {
+  "message": "Otras coincidencias cercanas: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Other close matches: $1."
+ },
+ "mjkq4vq": {
+  "message": "La otra página se auditó $P1$. Vuelve a auditarla para una comparación actualizada.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Other page audited $1. Run it again for a fresh comparison."
+ },
+ "mes0iju": {
+  "message": "General",
+  "description": "Overall"
+ },
+ "miiwb0i": {
+  "message": "Puntuación general",
+  "description": "Overall score"
+ },
+ "mvszmbv": {
+  "message": "Superposiciones que tapan la página",
+  "description": "Overlays covering the page"
+ },
+ "m16nbe47": {
+  "message": "Superposiciones, desafíos anti-bots y marcos incrustados que detienen a los agentes a mitad de tarea.",
+  "description": "Overlays, bot challenges and embedded frames that stop agents mid-task."
+ },
+ "m1pi8jpi": {
+  "message": "Resumen",
+  "description": "Overview"
+ },
+ "mcbx20o": {
+  "message": "Idioma de la página declarado",
+  "description": "Page language declared"
+ },
+ "ml74jas": {
+  "message": "Tamaño y anidamiento de la página",
+  "description": "Page size and nesting"
+ },
+ "m1g8w2zn": {
+  "message": "Estructura de la página",
+  "description": "Page structure"
+ },
+ "m1jch3bn": {
+  "message": "Páginas desde",
+  "description": "Pages from"
+ },
+ "mrhvc1c": {
+  "message": "Las páginas se abren de una en una en una pestaña en segundo plano, que se cierra al terminar. Mantén este panel abierto. No se envía nada a ningún sitio.",
+  "description": "Pages open one at a time in a background tab, which closes when the scan ends. Keep this panel open. Nothing is sent anywhere."
+ },
+ "m10g9abx": {
+  "message": "Páginas, de menor a mayor puntuación",
+  "description": "Pages, lowest score first"
+ },
+ "m1jrbxf9": {
+  "message": "Superadas",
+  "description": "Passed"
+ },
+ "m190oc59": {
+  "message": "Los campos de información personal tienen el tipo y las pistas de autocompletado correctos.",
+  "description": "Personal-information fields have the right type and autocomplete hints."
+ },
+ "mc8ryio": {
+  "message": "Fija el icono",
+  "description": "Pin the icon"
+ },
+ "mm913fy": {
+  "message": "Fijado ✓",
+  "description": "Pinned ✓"
+ },
+ "m59o7jx": {
+  "message": "Planificado por Gemini Nano en tu dispositivo. Los modelos pequeños se equivocan; tómalo como una comprobación rápida, no como una prueba.",
+  "description": "Planned by Gemini Nano on your device. Small models make mistakes; treat this as a quick check, not proof."
+ },
+ "m1iqbr45": {
+  "message": "Cursor de puntero, pero sin rol de botón o enlace",
+  "description": "Pointer cursor, but no button or link role"
+ },
+ "m1n8qnjz": {
+  "message": "Valores positivos de tabindex",
+  "description": "Positive tabindex values"
+ },
+ "mdevum4": {
+  "message": "Prefiere shadow roots abiertos, asegúrate de que los web components expongan sus nombres y roles, y mantén los flujos clave fuera de marcos de otros sitios.",
+  "description": "Prefer open shadow roots, make sure web components expose their names and roles, and keep key flows out of cross-site frames."
+ },
+ "m1x9bg2r": {
+  "message": "Precio y disponibilidad para agentes",
+  "description": "Price and availability for agents"
+ },
+ "m4y19qr": {
+  "message": "Precio: $P1$, $P2$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Price: $1, $2."
+ },
+ "m1btlmi3": {
+  "message": "Problemas compartidos entre páginas",
+  "description": "Problems shared across pages"
+ },
+ "m198qhgv": {
+  "message": "Datos estructurados de producto",
+  "description": "Product structured data"
+ },
+ "m8un4zc": {
+  "message": "El producto «$P1$» tiene name, image, description, brand y un identificador.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Product “$1” has name, image, description, brand and an identifier."
+ },
+ "ms4um1h": {
+  "message": "Prompt copiado",
+  "description": "Prompt copied"
+ },
+ "mhtf1vq": {
+  "message": "Prompt de los problemas compartidos copiado",
+  "description": "Prompt for the shared problems copied"
+ },
+ "m11dnazh": {
+  "message": "Prompt de las correcciones principales copiado",
+  "description": "Prompt for the top fixes copied"
+ },
+ "mvhvwxs": {
+  "message": "Publica /llms.txt en la raíz del sitio con una breve descripción y enlaces Markdown a sus páginas más útiles.",
+  "description": "Publish /llms.txt at the root of the site with a short description and Markdown links to its most useful pages."
+ },
+ "m1o21asj": {
+  "message": "Publica /sitemap.xml y referéncialo desde robots.txt con una línea Sitemap:. Si tienes una API o documentación, añade cabeceras Link como rel=\"api-catalog\" o rel=\"service-doc\".",
+  "description": "Publish /sitemap.xml and reference it from robots.txt with a Sitemap: line. If you have an API or docs, add Link headers such as rel=\"api-catalog\" or rel=\"service-doc\"."
+ },
+ "m2h687i": {
+  "message": "Ordenadas por los puntos que vale cada corrección, con código que puedes copiar.",
+  "description": "Ranked by how many points each fix is worth, with code you can copy."
+ },
+ "mo1pzyy": {
+  "message": "Valorar",
+  "description": "Rate it"
+ },
+ "m57s493": {
+  "message": "Valorar la extensión",
+  "description": "Rate the extension"
+ },
+ "m1yc003q": {
+  "message": "Repetir al recargar",
+  "description": "Re-run on reload"
+ },
+ "mux043n": {
+  "message": "Repetir al recargar necesita acceso a este sitio.",
+  "description": "Re-run on reload needs access to this site."
+ },
+ "mwx2ubh": {
+  "message": "Repetir al recargar: activado",
+  "description": "Re-run on reload: on"
+ },
+ "mh3lwch": {
+  "message": "Reanalizar cada semana",
+  "description": "Re-scan every week"
+ },
+ "m1t1s2ee": {
+  "message": "Leyendo la página como un agente…",
+  "description": "Reading the page like an agent…"
+ },
+ "morxabi": {
+  "message": "Leyendo la página como lo haría un agente…",
+  "description": "Reading the page the way an agent would…"
+ },
+ "m1maf5pn": {
+  "message": "Controles reales",
+  "description": "Real controls"
+ },
+ "mga0lhs": {
+  "message": "Auditorías recientes",
+  "description": "Recent audits"
+ },
+ "mk9ss7b": {
+  "message": "Herramientas registradas: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Registered tools: $1."
+ },
+ "mzcjeo9": {
+  "message": "Recarga la página y vuelve a ejecutar la auditoría. Si sigue ocurriendo, puede que la página bloquee scripts. Detalles: ",
+  "description": "Reload the page and run the audit again. If it keeps happening, the page may be blocking scripts. Details: "
+ },
+ "mno0z6v": {
+  "message": "Quita aria-hidden de todo lo enfocable, haz que aria-labelledby y aria-describedby apunten a ids existentes, usa roles y valores true/false válidos, y empieza cada aria-label con el texto visible del control.",
+  "description": "Remove aria-hidden from anything focusable, point aria-labelledby and aria-describedby at ids that exist, use valid roles and true/false values, and start each aria-label with the control’s visible te"
+ },
+ "m2hixa8": {
+  "message": "Elimina el marcado duplicado oculto, virtualiza las listas largas y aplana los contenedores que solo existen para dar estilo.",
+  "description": "Remove hidden duplicate markup, virtualize long lists, and flatten wrappers that only exist for styling."
+ },
+ "msh3yxh": {
+  "message": "Elimina el texto oculto dirigido a agentes de IA. Si quieres guiar a los agentes, hazlo abiertamente: en texto visible, en llms.txt o en datos estructurados.",
+  "description": "Remove hidden text that addresses AI agents. If you want to guide agents, say it openly: in visible text, in llms.txt, or in structured data."
+ },
+ "mlw90r0": {
+  "message": "Quita tabindex=\"-1\" de los controles independientes. Mantenlo solo en elementos dentro de un widget que gestiona el foco por sí mismo, como elementos de menú, pestañas u opciones con navegación por flechas.",
+  "description": "Remove tabindex=\"-1\" from standalone controls. Keep it only for items inside a widget that manages focus itself, such as menu items, tabs or options with arrow-key navigation."
+ },
+ "m1cp1mpr": {
+  "message": "Renderiza en el servidor el contenido principal, los encabezados, los precios y las acciones principales (renderizado en servidor o generación estática), e incluye los datos estructurados en el HTML en lugar de añadirlos con un gestor de etiquetas.",
+  "description": "Render the main content, headings, prices and primary actions on the server (server-side rendering or static generation), and include structured data in the HTML rather than adding it with a tag manag"
+ },
+ "mcmfq2n": {
+  "message": "Informe copiado",
+  "description": "Report copied"
+ },
+ "mmfju72": {
+  "message": "Informe descargado",
+  "description": "Report downloaded"
+ },
+ "m1kbn5ew": {
+  "message": "Informe abierto en una pestaña nueva. Usa Imprimir → Guardar como PDF para enviarlo.",
+  "description": "Report opened in a new tab. Use Print → Save as PDF to send it."
+ },
+ "m1515ssn": {
+  "message": "Campos obligatorios no marcados como obligatorios",
+  "description": "Required fields not marked as required"
+ },
+ "md1ub86": {
+  "message": "Reserva espacio para imágenes, anuncios, contenidos incrustados y banners con width y height o aspect-ratio, y no insertes contenido por encima de lo que ya está en pantalla.",
+  "description": "Reserve space for images, ads, embeds and banners with width and height or aspect-ratio, and don’t insert content above what’s already on screen."
+ },
+ "mlk9n7j": {
+  "message": "Resultados",
+  "description": "Results"
+ },
+ "m1cfd894": {
+  "message": "Devuelve una versión en Markdown cuando una solicitud envíe Accept: text/markdown (y envía Vary: Accept), o enlaza una con <link rel=\"alternate\" type=\"text/markdown\" href=\"…\">.",
+  "description": "Return a Markdown rendering when a request sends Accept: text/markdown (and send Vary: Accept), or link one with <link rel=\"alternate\" type=\"text/markdown\" href=\"…\">."
+ },
+ "mj1nfk1": {
+  "message": "Devuelve Markdown para Accept: text/markdown.",
+  "description": "Returns Markdown for Accept: text/markdown."
+ },
+ "m84rihl": {
+  "message": "Aproximadamente lo que lee un agente: el árbol de accesibilidad de la página como texto. Un control sin nombre aparece solo como un rol, así que el agente no puede distinguirlo de los demás. Selecciona una línea para encontrarla en la página.",
+  "description": "Roughly what an agent reads: the page’s accessibility tree as text. A control without a name shows up as a bare role, so the agent can’t tell it from the others. Select a line to find it on the page."
+ },
+ "m1js5gss": {
+  "message": "Ejecutar de nuevo",
+  "description": "Run again"
+ },
+ "mnkjpo0": {
+  "message": "Ejecuta una auditoría para ver con qué facilidad agentes como Claude, Gemini y ChatGPT pueden leer esta página, encontrar sus controles y completar tareas en ella. Obtendrás una puntuación y correcciones concretas.",
+  "description": "Run an audit to see how easily agents like Claude, Gemini and ChatGPT can read this page, find its controls and finish tasks on it. You’ll get a score and specific fixes."
+ },
+ "m1jsj681": {
+  "message": "Ejecutar auditoría",
+  "description": "Run audit"
+ },
+ "malrgb5": {
+  "message": "Volver a ejecutar",
+  "description": "Run it again"
+ },
+ "mvtyxlm": {
+  "message": "Ejecutar prueba",
+  "description": "Run test"
+ },
+ "mdt4afs": {
+  "message": "Volver a ejecutar la auditoría",
+  "description": "Run the audit again"
+ },
+ "mk45151": {
+  "message": "Se ejecuta de nuevo tras cada recarga",
+  "description": "Runs again after each reload"
+ },
+ "m1fkg1an": {
+  "message": "Marco del mismo sitio, revisado",
+  "description": "Same-site frame, checked"
+ },
+ "m1f17pmu": {
+  "message": "Marcos del mismo sitio: $P1$, con $P2$ controles dentro.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Same-site frames: $1, with $2 controls inside."
+ },
+ "m1knjxcf": {
+  "message": "Analizar $P1$ páginas",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Scan $1 pages"
+ },
+ "mdeoxip": {
+  "message": "Analizar todo el sitio",
+  "description": "Scan the whole site"
+ },
+ "m1hj22fj": {
+  "message": "Analiza hasta 25 páginas y encuentra los problemas que comparten.",
+  "description": "Scan up to 25 pages and find the problems they share."
+ },
+ "m15ycy0b": {
+  "message": "Los datos de Schema.org expresan datos como precio, disponibilidad, autor y fechas de forma que los agentes pueden leerlos sin interpretar el diseño.",
+  "description": "Schema.org data states facts like price, availability, author and dates in a form agents can read without interpreting the layout."
+ },
+ "m1n9360q": {
+  "message": "Puntuación y qué corregir primero",
+  "description": "Score and what to fix first"
+ },
+ "ms2mg58": {
+  "message": "Solo se puntúa en páginas de producto. Los agentes de compra con IA comparan productos a partir de datos estructurados y compran mediante el botón del carrito.",
+  "description": "Scored only on product pages. AI shopping agents compare products from structured data and buy through the cart button."
+ },
+ "mzlt4e1": {
+  "message": "Las puntuaciones son heurísticas: úsalas para encontrar problemas y confírmalos con un agente real.",
+  "description": "Scores are heuristics: use them to find problems, then confirm with a real agent."
+ },
+ "m17wkofp": {
+  "message": "Puntuación por categoría",
+  "description": "Scores by category"
+ },
+ "m16ybxd9": {
+  "message": "Desplazarse a este elemento y resaltarlo",
+  "description": "Scroll to this element and highlight it"
+ },
+ "m98asbv": {
+  "message": "Buscar «tarjeta regalo» en el sitio",
+  "description": "Search the site for “gift card”"
+ },
+ "m9mre02": {
+  "message": "Ver todas las comprobaciones",
+  "description": "See all checks"
+ },
+ "msnhake": {
+  "message": "Mira qué tan bien pueden leer y usar cualquier página agentes de IA como Claude, Gemini y ChatGPT, y qué corregir exactamente.",
+  "description": "See how well AI agents like Claude, Gemini and ChatGPT can read and use any page, and exactly what to fix."
+ },
+ "mypzs4v": {
+  "message": "Verla como un agente",
+  "description": "See it as an agent"
+ },
+ "mhw16fj": {
+  "message": "Ver las comprobaciones de $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "See the $1 checks"
+ },
+ "m1us7e71": {
+  "message": "Mira la página como la lee un agente, con un recuento de tokens.",
+  "description": "See the page as an agent reads it, with a token count."
+ },
+ "mpj4plr": {
+  "message": "Envía un informe limpio a un cliente o guárdalo como PDF.",
+  "description": "Send a clean report to a client or save it as PDF."
+ },
+ "m1qou2tw": {
+  "message": "Envíalo o guárdalo como PDF",
+  "description": "Send it, or save as PDF"
+ },
+ "m19lyhsu": {
+  "message": "Define lang en el elemento <html>, como <html lang=\"es\">.",
+  "description": "Set lang on the <html> element, like <html lang=\"en\">."
+ },
+ "m1u7ygzv": {
+  "message": "Shadow DOM y los iframes ocultan elementos a los selectores normales. Los agentes basados en Playwright o en el protocolo DevTools leen shadow roots abiertos y marcos del mismo sitio, pero los scripts más simples no, y los shadow roots cerrados quedan ocultos para todos.",
+  "description": "Shadow DOM and iframes hide elements from ordinary selectors. Agents built on Playwright or the DevTools protocol read open shadow roots and same-site frames, but simpler scripts don’t, and closed sha"
+ },
+ "m1g1w7ly": {
+  "message": "Compartir informe",
+  "description": "Share report"
+ },
+ "mdqv78x": {
+  "message": "Envíos, política de devoluciones y valoraciones están en los datos estructurados.",
+  "description": "Shipping, return policy and ratings are all in structured data."
+ },
+ "m7zo8u8": {
+  "message": "Envíos, devoluciones y reseñas",
+  "description": "Shipping, returns and reviews"
+ },
+ "mhe2797": {
+  "message": "Agentes de compra",
+  "description": "Shopping agents"
+ },
+ "m2jqogs": {
+  "message": "Los agentes de compra valoran el coste de envío, las condiciones de devolución y las valoraciones al comparar tiendas. Si solo están en el texto de la página o en otra página, puede que el agente no los encuentre.",
+  "description": "Shopping agents weigh delivery cost, return terms and ratings when they compare stores. If these are only in the page text or on another page, the agent may not find them at all."
+ },
+ "myjzr6u": {
+  "message": "Mostrar",
+  "description": "Show"
+ },
+ "msjdx9i": {
+  "message": "Mostrar $P1$ más",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Show $1 more"
+ },
+ "m5tsv5e": {
+  "message": "Mostrar las $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Show all $1"
+ },
+ "m23mnub": {
+  "message": "Mostrar comprobaciones",
+  "description": "Show checks"
+ },
+ "m12uvznf": {
+  "message": "Mostrar líneas",
+  "description": "Show lines"
+ },
+ "mvbdeer": {
+  "message": "Mostrar más",
+  "description": "Show more"
+ },
+ "m7mi3bo": {
+  "message": "Mostrar en la página",
+  "description": "Show on page"
+ },
+ "mdefl5h": {
+  "message": "Mostrar pasos en la página",
+  "description": "Show steps on page"
+ },
+ "mcajnys": {
+  "message": "Se muestran las primeras $P1$ líneas. La estimación de tokens abarca toda la página.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Showing the first $1 lines. The token estimate covers the whole page."
+ },
+ "mnhapmn": {
+  "message": "Iniciar sesión en mi cuenta",
+  "description": "Sign in to my account"
+ },
+ "m1o4t37k": {
+  "message": "Suscribirse al boletín",
+  "description": "Sign up for the newsletter"
+ },
+ "m14x9cmp": {
+  "message": "Análisis del sitio",
+  "description": "Site scan"
+ },
+ "mdkupr2": {
+  "message": "Los análisis del sitio funcionan en sitios web normales.",
+  "description": "Site scans work on regular websites."
+ },
+ "m1h4rjpu": {
+  "message": "Sitemap",
+  "description": "Sitemap"
+ },
+ "m11xgead": {
+  "message": "Sitemap y cabeceras Link",
+  "description": "Sitemap and Link headers"
+ },
+ "m7meuvn": {
+  "message": "Sitemap: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Sitemap: $1."
+ },
+ "m1vj9kpx": {
+  "message": "Los sitios con API o cuentas pueden decir a los agentes dónde está cada cosa: un catálogo de API (RFC 9727), metadatos OAuth (RFC 8414 y RFC 9728) para que los agentes pidan acceso en lugar de usar la sesión de una persona, y un índice de Agent Skills.",
+  "description": "Sites with an API or accounts can tell agents where things are: an API catalog (RFC 9727), OAuth metadata (RFC 8414 and RFC 9728) so agents can ask for access instead of borrowing a person’s session, "
+ },
+ "m1hntra0": {
+  "message": "Algunos agentes piden la página con Accept: text/markdown. Servir Markdown les ahorra los tokens que gastan en marcado, scripts y navegación.",
+  "description": "Some agents ask for a page with Accept: text/markdown. Serving Markdown saves them the tokens spent on markup, scripts and navigation."
+ },
+ "m13p5594": {
+  "message": "Algunos agentes consultan robots.txt antes de actuar por una persona. Bloquear agentes activados por usuarios, como ChatGPT-User o Claude-User, puede impedirles abrir tus páginas.",
+  "description": "Some agents check robots.txt before acting for a person. Blocking user-triggered agents such as ChatGPT-User or Claude-User can stop them from opening your pages at all."
+ },
+ "mlyx2rg": {
+  "message": "Algunos pasos dependen de suposiciones, o parte de la tarea está oculta para los agentes.",
+  "description": "Some steps rely on guesswork, or part of the task is hidden from agents."
+ },
+ "mllo2yh": {
+  "message": "Selección estable",
+  "description": "Stable targeting"
+ },
+ "m70rzww": {
+  "message": "Empieza por <b>Corrige esto primero</b>, usa <b>Marcar problemas en la página</b> para verlos todos a la vez, o copia un prompt de corrección en Claude Code, Cursor o Copilot. Vuelve a ejecutar para ver subir tu puntuación.",
+  "description": "Start with <b>Fix these first</b>, use <b>Mark issues on page</b> to see every problem at once, or copy a fix prompt into Claude Code, Cursor or Copilot. Re-run to see your score go up."
+ },
+ "myjz4al": {
+  "message": "Detener",
+  "description": "Stop"
+ },
+ "m8gv6f8": {
+  "message": "Datos estructurados",
+  "description": "Structured data"
+ },
+ "mcdxlp7": {
+  "message": "Faltan en los datos estructurados: $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Structured data is missing: $1."
+ },
+ "m104e953": {
+  "message": "Sugerir un nombre",
+  "description": "Suggest a name"
+ },
+ "mmoursa": {
+  "message": "Sugerir otro",
+  "description": "Suggest another"
+ },
+ "m12szk9j": {
+  "message": "Corrección sugerida",
+  "description": "Suggested fix"
+ },
+ "m1upu1z2": {
+  "message": "Tareas sugeridas",
+  "description": "Suggested tasks"
+ },
+ "m1oqxqxc": {
+  "message": "Cambia a Todo para ver todas las comprobaciones.",
+  "description": "Switch to All to see every check."
+ },
+ "myjx1qg": {
+  "message": "Tarea",
+  "description": "Task"
+ },
+ "m1896gwv": {
+  "message": "Probar una tarea",
+  "description": "Test a task"
+ },
+ "m1ysge6y": {
+  "message": "Prueba una tarea como lo haría un agente",
+  "description": "Test a task the way an agent would"
+ },
+ "mj0lrfa": {
+  "message": "Prueba cancelada.",
+  "description": "Test cancelled."
+ },
+ "m17pu6lz": {
+  "message": "El texto que las personas no ven pero los agentes leen, como span invisibles, bloques fuera de pantalla, aria-label o comentarios HTML que dicen «ignora las instrucciones anteriores», es una inyección de prompt. Los agentes pueden seguirlo, y los navegadores con agentes avisan cada vez más de los sitios que lo contienen o los rechazan.",
+  "description": "Text that people can’t see but agents read, such as invisible spans, off-screen blocks, aria-labels or HTML comments saying “ignore previous instructions”, is a prompt injection. Agents may follow it,"
+ },
+ "m1xz1av6": {
+  "message": "Ese elemento ya no está en la página. Vuelve a ejecutar la auditoría.",
+  "description": "That element is no longer on the page. Run the audit again."
+ },
+ "muou6o": {
+  "message": "El elemento <html> no tiene atributo lang.",
+  "description": "The <html> element has no lang attribute."
+ },
+ "m10f7hlu": {
+  "message": "El HTML que envía el servidor contiene el $P1$ % del texto de la página renderizada.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The HTML the server sends contains $1% of the text on the rendered page."
+ },
+ "mvxz7ts": {
+  "message": "El bloque Product no tiene offers, así que los agentes no pueden leer el precio ni las existencias.",
+  "description": "The Product block has no offers, so agents can’t read the price or stock."
+ },
+ "miq9lvf": {
+  "message": "Al bloque Product le falta $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The Product block is missing $1."
+ },
+ "m1d3spks": {
+  "message": "El plan del agente",
+  "description": "The agent’s plan"
+ },
+ "m1fnp06r": {
+  "message": "La auditoría no devolvió resultados.",
+  "description": "The audit didn’t return any results."
+ },
+ "mqgf8dq": {
+  "message": "La auditoría se detuvo antes de terminar",
+  "description": "The audit stopped before it finished"
+ },
+ "m10234x1": {
+  "message": "La auditoría se ejecutará de nuevo cada vez que se recargue esta página.",
+  "description": "The audit will run again each time this page reloads."
+ },
+ "m73wn3l": {
+  "message": "El botón o enlace de esta página tiene nombre.",
+  "description": "The button or link on this page has a name."
+ },
+ "mdhne8x": {
+  "message": "El ID del control parece generado automáticamente.",
+  "description": "The control ID looks auto-generated."
+ },
+ "mvvvqyc": {
+  "message": "El control solo se puede seleccionar por clases generadas.",
+  "description": "The control can only be targeted by generated class names."
+ },
+ "mmwhqel": {
+  "message": "El campo tiene etiqueta.",
+  "description": "The field is labeled."
+ },
+ "m1txdx2d": {
+  "message": "La imagen tiene atributo alt.",
+  "description": "The image has an alt attribute."
+ },
+ "mgqgk0b": {
+  "message": "La imagen no tiene atributo alt.",
+  "description": "The image has no alt attribute."
+ },
+ "m2ocqbg": {
+  "message": "El atributo lang indica a los agentes en qué idioma leer y escribir, lo que importa para formularios, traducciones y fechas.",
+  "description": "The lang attribute tells agents which language to read and write in, which matters for form input, translation and dates."
+ },
+ "m6fhat7": {
+  "message": "El contenido principal empieza unos $P1$ tokens después del inicio de la página (el $P2$ % de unos $P3$).",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   },
+   "p3": {
+    "content": "$3"
+   }
+  },
+  "description": "The main content starts about $1 tokens into the page ($2% of roughly $3)."
+ },
+ "mcmlzbb": {
+  "message": "El modelo eligió un elemento que no está en la página.",
+  "description": "The model picked an element that isn’t on the page."
+ },
+ "m1q4zja9": {
+  "message": "A la oferta le falta $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The offer is missing $1."
+ },
+ "m1c2u0th": {
+  "message": "El único botón o enlace de esta página no tiene nombre.",
+  "description": "The only button or link on this page has no name."
+ },
+ "mbo1lzh": {
+  "message": "El único campo de esta página no tiene etiqueta.",
+  "description": "The only field on this page has no label."
+ },
+ "m1fvpxj8": {
+  "message": "La estructura se salta un nivel $P1$ veces.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The outline skips a level $1 times."
+ },
+ "m1353iq8": {
+  "message": "La estructura se salta un nivel una vez.",
+  "description": "The outline skips a level once."
+ },
+ "myyy247": {
+  "message": "La página tal como la lee un agente",
+  "description": "The page as an agent reads it"
+ },
+ "mmm5nxy": {
+  "message": "La página tal como la ve un agente",
+  "description": "The page as an agent sees it"
+ },
+ "mr68yw5": {
+  "message": "La página no responde a Accept: text/markdown ni enlaza una versión en Markdown.",
+  "description": "The page doesn’t answer Accept: text/markdown and doesn’t link a Markdown version."
+ },
+ "mqaz8z1": {
+  "message": "El árbol de accesibilidad de la página",
+  "description": "The page’s accessibility tree"
+ },
+ "m1ivtj72": {
+  "message": "Al campo de información personal le falta el tipo o la pista de autocompletado.",
+  "description": "The personal-information field is missing a type or autocomplete hint."
+ },
+ "m16te35r": {
+  "message": "El análisis necesita acceso a $P1$ para abrir sus páginas.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The scan needs access to $1 to open its pages."
+ },
+ "m1a92mgn": {
+  "message": "Se abre el panel lateral. Pulsa <b>Ejecutar auditoría</b>. Atajo: <span class=\"kbd\">Alt</span> + <span class=\"kbd\">Shift</span> + <span class=\"kbd\">A</span>.",
+  "description": "The side panel opens. Press <b>Run audit</b>. Shortcut: <span class=\"kbd\">Alt</span> + <span class=\"kbd\">Shift</span> + <span class=\"kbd\">A</span>."
+ },
+ "mv8oltx": {
+  "message": "El precio de los datos estructurados ($P1$) no aparece en la página.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The structured-data price ($1) doesn’t appear on the page."
+ },
+ "m1gpp63g": {
+  "message": "La prueba no terminó: $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The test didn’t finish: $1"
+ },
+ "mb99cvy": {
+  "message": "El control probado muestra un indicador de foco.",
+  "description": "The tested control shows a focus indicator."
+ },
+ "m652t0s": {
+  "message": "El control probado no cambia al recibir el foco.",
+  "description": "The tested control shows no change when focused."
+ },
+ "ma55xmb": {
+  "message": "El título suele ser lo primero que lee un agente para confirmar que está en la página correcta, y es como distingue las pestañas.",
+  "description": "The title is often the first thing an agent reads to confirm it’s on the right page, and it’s how the agent tells tabs apart."
+ },
+ "m140c8v4": {
+  "message": "El título «$P1$» no describe esta página.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The title “$1” doesn’t describe this page."
+ },
+ "maewx8c": {
+  "message": "El control «añadir al carrito» no es un botón real, así que puede que los agentes no lo encuentren.",
+  "description": "The “add to cart” control isn’t a real button, so agents may not find it."
+ },
+ "m1kjm0qs": {
+  "message": "Hay $P1$ encabezados h1.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "There are $1 h1 headings."
+ },
+ "m1xdw5w7": {
+  "message": "No hay h1.",
+  "description": "There’s no h1."
+ },
+ "m1jzri0z": {
+  "message": "Estas $P1$ páginas se reanalizarán cada semana.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "These $1 pages will be re-scanned every week."
+ },
+ "m12w0je2": {
+  "message": "Se revisaron junto con el resto de la página.",
+  "description": "They were checked along with the rest of the page."
+ },
+ "m1sji4z7": {
+  "message": "Pensando…",
+  "description": "Thinking…"
+ },
+ "m1y494vs": {
+  "message": "Este navegador no informa de los saltos de diseño.",
+  "description": "This browser doesn’t report layout shifts."
+ },
+ "mk69p68": {
+  "message": "Esta comprobación no pudo ejecutarse en esta página ($P1$).",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "This check couldn’t run on this page ($1)."
+ },
+ "m1lo2og5": {
+  "message": "Este control no tiene nombre, así que un agente tendría que adivinar.",
+  "description": "This control has no name, so an agent would be guessing."
+ },
+ "m1x7se86": {
+  "message": "Esta no parece una página de producto.",
+  "description": "This doesn’t look like a product page."
+ },
+ "m1uxsxvk": {
+  "message": "Parece un listado de productos, no la página de un solo producto.",
+  "description": "This looks like a product listing, not a single product page."
+ },
+ "mcdbn48": {
+  "message": "Parece una página de producto, pero no tiene datos estructurados Product.",
+  "description": "This looks like a product page, but it has no Product structured data."
+ },
+ "m1babq0g": {
+  "message": "Esta página",
+  "description": "This page"
+ },
+ "m667tbu": {
+  "message": "Esta página no se puede auditar",
+  "description": "This page can’t be audited"
+ },
+ "m11p5bt0": {
+  "message": "Esta página tiene $P1$ landmarks main visibles; debería tener uno.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "This page has $1 visible main landmarks; it should have one."
+ },
+ "m18b11s0": {
+  "message": "Esta página ha cambiado desde la auditoría.",
+  "description": "This page has changed since the audit."
+ },
+ "m1sl09a6": {
+  "message": "Esta página no tiene encabezados.",
+  "description": "This page has no headings."
+ },
+ "myarbyd": {
+  "message": "Esta página no tiene título.",
+  "description": "This page has no title."
+ },
+ "m5tjpgm": {
+  "message": "Esta página tiene demasiados controles para el modelo del dispositivo.",
+  "description": "This page has too many controls for the on-device model."
+ },
+ "m9sk7la": {
+  "message": "Esta página de producto usa microdatos, pero no un bloque Product en JSON-LD, que leen más agentes.",
+  "description": "This product page uses microdata but no JSON-LD Product block, which more agents read."
+ },
+ "m16f39zz": {
+  "message": "Este informe se hizo con una versión anterior, antes de que existiera la vista del agente.",
+  "description": "This report was made by an older version, before the agent view existed."
+ },
+ "msukoc1": {
+  "message": "Esos elementos ya no están en la página. Vuelve a ejecutar la auditoría.",
+  "description": "Those elements are no longer on the page. Run the audit again."
+ },
+ "m1u7t3d2": {
+  "message": "Título, landmarks, encabezados, tamaño de la página y contenido que necesita JavaScript.",
+  "description": "Title, landmarks, headings, page size, and content that needs JavaScript."
+ },
+ "mb98kx7": {
+  "message": "Título: «$P1$»",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Title: “$1”"
+ },
+ "m7a4gdj": {
+  "message": "El título, los landmarks y los encabezados dan a los agentes un mapa de la página, y un DOM ligero la mantiene legible.",
+  "description": "Titles, landmarks and headings give agents a map of the page, and a lean DOM keeps it readable."
+ },
+ "mpean9y": {
+  "message": "Para auditar archivos abiertos desde tu ordenador, activa «Permitir acceso a URLs de archivo» para esta extensión y vuelve a ejecutar la auditoría.",
+  "description": "To audit files opened from your computer, turn on “Allow access to file URLs” for this extension, then run the audit again."
+ },
+ "m3zg8gd": {
+  "message": "Para comprar, un agente busca un botón llamado como «Añadir al carrito». Si el botón es un div con estilo, un icono sin nombre o usa palabras que los agentes no esperan, la compra se atasca.",
+  "description": "To buy, an agent looks for a button named like “Add to cart”. If the button is a styled div, an icon without a name, or uses wording agents don’t expect, the purchase stalls."
+ },
+ "m17u9dam": {
+  "message": "Muy pocos controles con estilo para valorar.",
+  "description": "Too few styled controls to judge."
+ },
+ "mr1rcti": {
+  "message": "Muy poco texto en esta página para comparar.",
+  "description": "Too little text on this page to compare."
+ },
+ "m3rvhla": {
+  "message": "Herramientas",
+  "description": "Tools"
+ },
+ "mgi8tbu": {
+  "message": "Reintentar",
+  "description": "Try again"
+ },
+ "mwuzv1b": {
+  "message": "Prueba la tienda de demostración",
+  "description": "Try the demo store"
+ },
+ "mi2d0x": {
+  "message": "Escribe una tarea",
+  "description": "Type a task"
+ },
+ "mxa6mac": {
+  "message": "Escribir en $P1$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Type into $1"
+ },
+ "mmcn0gz": {
+  "message": "Escribir «$P1$» en $P2$",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "Type “$1” into $2"
+ },
+ "mwn40ai": {
+  "message": "Escribe «añadir al carrito» o «registrarse» y mira dónde se atasca un agente.",
+  "description": "Type “add to cart” or “sign up” and see where an agent gets stuck."
+ },
+ "ml6bdth": {
+  "message": "Error desconocido",
+  "description": "Unknown error"
+ },
+ "m12bamuy": {
+  "message": "Sin título",
+  "description": "Untitled"
+ },
+ "m16gsbt6": {
+  "message": "$P1$ puntos más. ¡Buen trabajo!",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Up $1 points. Nice work."
+ },
+ "m19xps3d": {
+  "message": "Hasta 25 páginas y los problemas que comparten.",
+  "description": "Up to 25 pages, and the problems they share."
+ },
+ "m1hxvngk": {
+  "message": "Hasta 25 páginas, gratis",
+  "description": "Up to 25 pages, free"
+ },
+ "mi6mk9n": {
+  "message": "Usa un <button> o un <a href> reales. Si no es posible, añade role=\"button\", tabindex=\"0\" y controladores de teclado.",
+  "description": "Use a real <button> or <a href>. If that isn’t possible, add role=\"button\", tabindex=\"0\" and keyboard handlers."
+ },
+ "m1pi6h6p": {
+  "message": "Usa un <button> real con texto visible como «Añadir al carrito», «Añadir a la cesta» o «Comprar ahora». Si es un icono, añade un aria-label.",
+  "description": "Use a real <button> with visible text such as “Add to cart”, “Add to bag” or “Buy now”. If it’s an icon, add an aria-label."
+ },
+ "m1fwwrwy": {
+  "message": "Usa un único h1 para el tema de la página y baja de nivel de uno en uno (h2, luego h3) sin saltarte niveles.",
+  "description": "Use one h1 for the page topic, and step down one level at a time (h2, then h3) without skipping levels."
+ },
+ "mxmvsuq": {
+  "message": "Usa tabindex=\"0\" o elimínalo, y ordena los elementos en el DOM en el orden en que deben alcanzarse.",
+  "description": "Use tabindex=\"0\" or remove it, and order elements in the DOM the way they should be reached."
+ },
+ "m18kqhwq": {
+  "message": "Usa el tipo de input adecuado (email, tel, url, date) y añade valores de autocomplete como name, email, tel, street-address y postal-code.",
+  "description": "Use the matching input type (email, tel, url, date) and add autocomplete tokens such as name, email, tel, street-address and postal-code."
+ },
+ "mcs1bsv": {
+  "message": "Usa la IA integrada de Chrome (Gemini Nano), que se ejecuta en tu ordenador. Nada sale de tu navegador.",
+  "description": "Uses Chrome’s built-in AI (Gemini Nano), running on your computer. Nothing leaves your browser."
+ },
+ "m1dwze18": {
+  "message": "Usa la IA integrada de Chrome (Gemini Nano). La primera prueba pide a Chrome que descargue el modelo una vez; hasta entonces, las pruebas usan coincidencia de nombres.",
+  "description": "Uses Chrome’s built-in AI (Gemini Nano). The first test asks Chrome to download the model once; until then, tests use name matching."
+ },
+ "mdmzbf6": {
+  "message": "Usando coincidencia de nombres. En ordenadores con la IA integrada de Chrome (Gemini Nano), la prueba planifica cada paso.",
+  "description": "Using name matching. On computers with Chrome’s built-in AI (Gemini Nano), the test plans every step instead."
+ },
+ "mnisu3c": {
+  "message": "Nombres de control vagos o duplicados",
+  "description": "Vague or duplicated control names"
+ },
+ "mcxg7e6": {
+  "message": "Objetivos de clic muy pequeños",
+  "description": "Very small click targets"
+ },
+ "myjvsso": {
+  "message": "Ver",
+  "description": "View"
+ },
+ "mo30akn": {
+  "message": "Visible para las personas, invisible para los agentes",
+  "description": "Visible to people, invisible to agents"
+ },
+ "mximv9r": {
+  "message": "Advertencia",
+  "description": "Warning"
+ },
+ "m13skb79": {
+  "message": "WebMCP permite que una página ofrezca a los agentes herramientas con nombre, como «search_flights», en lugar de obligarles a hacer clic por la interfaz. Es una prueba de origen en Chrome con casi ninguna adopción todavía, así que es opcional.",
+  "description": "WebMCP lets a page offer agents named tools, like “search_flights”, instead of making them click through the interface. It’s an origin trial in Chrome with almost no adoption yet, so it’s optional."
+ },
+ "m13xjt40": {
+  "message": "Herramientas WebMCP",
+  "description": "WebMCP tools"
+ },
+ "m12wmwuh": {
+  "message": "Reanálisis semanal",
+  "description": "Weekly re-scan"
+ },
+ "mwtrgg5": {
+  "message": "El reanálisis semanal está activado. Permite las notificaciones para recibir alertas.",
+  "description": "Weekly re-scan is on. Allow notifications to get alerts."
+ },
+ "m1b6siac": {
+  "message": "Reanálisis semanal desactivado.",
+  "description": "Weekly re-scan turned off."
+ },
+ "m1pkpjlc": {
+  "message": "Reanálisis semanal · abre el sitio y la pestaña Análisis del sitio para ver detalles",
+  "description": "Weekly re-scan · open the site and the Site scan tab for details"
+ },
+ "m57qeo5": {
+  "message": "Reanálisis semanales que te avisan si un sitio empeora, comprobaciones de teclado y foco, botones dentro de shadow DOM y marcos, nombres sugeridos por IA para botones sin nombre y la interfaz en 6 idiomas.",
+  "description": "Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages."
+ },
+ "m1g2zi34": {
+  "message": "Te damos la bienvenida a Agent-Readiness Auditor",
+  "description": "Welcome to Agent-Readiness Auditor"
+ },
+ "moj6ax3": {
+  "message": "Qué comprueba",
+  "description": "What it checks"
+ },
+ "m1tj8t7j": {
+  "message": "Lo que no encontró: ",
+  "description": "What it couldn’t find: "
+ },
+ "me66w7i": {
+  "message": "Qué comprueba la auditoría",
+  "description": "What the audit checks"
+ },
+ "mexy3ne": {
+  "message": "Qué obtienes",
+  "description": "What you get"
+ },
+ "mms1pnd": {
+  "message": "Novedades",
+  "description": "What’s new"
+ },
+ "mu27h7a": {
+  "message": "Cuando un agente o un usuario de teclado pasa a un control, un contorno visible muestra dónde está. Los agentes que trabajan con capturas lo comprueban para confirmar que el control correcto tiene el foco antes de pulsar Intro.",
+  "description": "When an agent or a keyboard user moves to a control, a visible outline shows where they are. Agents that work from screenshots check it to confirm the right control is focused before they press Enter."
+ },
+ "m1xqy37k": {
+  "message": "Dónde empieza el contenido principal",
+  "description": "Where the main content starts"
+ },
+ "m1go2miz": {
+  "message": "Donde la otra página lo hace mejor",
+  "description": "Where the other page does better"
+ },
+ "m1krwck0": {
+  "message": "Donde esta página lo hace mejor",
+  "description": "Where this page does better"
+ },
+ "m1ooppw6": {
+  "message": "Dónde buscar páginas",
+  "description": "Where to find pages"
+ },
+ "m5glo3a": {
+  "message": "Por qué importa",
+  "description": "Why it matters"
+ },
+ "mghh9ku": {
+  "message": "¿Seguirán funcionando los selectores tras la próxima versión?",
+  "description": "Will selectors still work after the next release?"
+ },
+ "m1ycfdaw": {
+  "message": "Envuelve el contenido principal en <main> y la navegación del sitio en <nav>, y usa <header> y <footer> para el marco de la página.",
+  "description": "Wrap the primary content in <main> and site navigation in <nav>, and use <header> and <footer> for page chrome."
+ },
+ "m1rg8nyu": {
+  "message": "Escribe un título único que nombre la página y el sitio, como «Historial de pedidos | Acme».",
+  "description": "Write a unique title that names the page and the site, like “Order history | Acme”."
+ },
+ "m1l1cxc2": {
+  "message": "Recibirás una alerta si la puntuación baja.",
+  "description": "You’ll get an alert if the score drops."
+ },
+ "mwgphmh": {
+  "message": "Todo listo. Tu primera auditoría en menos de un minuto.",
+  "description": "You’re set up. Here’s your first audit in under a minute."
+ },
+ "mnncif0": {
+  "message": "un elemento desconocido",
+  "description": "an unknown element"
+ },
+ "miuw45i": {
+  "message": "control sin nombre",
+  "description": "control with no name"
+ },
+ "mpbq9jp": {
+  "message": "controles sin nombre",
+  "description": "controls with no name"
+ },
+ "momdb1j": {
+  "message": "con fallos",
+  "description": "failing"
+ },
+ "m1ts3t3f": {
+  "message": "ahora mismo",
+  "description": "just now"
+ },
+ "m1rmc1kz": {
+  "message": "probablemente una plantilla compartida",
+  "description": "likely a shared template"
+ },
+ "m2v44ew": {
+  "message": "líneas",
+  "description": "lines"
+ },
+ "m127crzf": {
+  "message": "Archivo llms.txt",
+  "description": "llms.txt file"
+ },
+ "mwuji42": {
+  "message": "llms.txt es una convención emergente: una guía en texto plano de un sitio, escrita para modelos de lenguaje. Pocos sitios tienen uno aún, así que es una forma barata de ayudar a los agentes.",
+  "description": "llms.txt is an emerging convention: a plain-text guide to a site, written for language models. Few sites have one yet, so it’s an inexpensive way to help agents."
+ },
+ "m375lnp": {
+  "message": "n/d",
+  "description": "n/a"
+ },
+ "m1c2t9kz": {
+  "message": "sin nombre",
+  "description": "no name"
+ },
+ "m1ae6av4": {
+  "message": "Reglas de robots.txt para agentes de IA",
+  "description": "robots.txt rules for AI agents"
+ },
+ "m1q2cysr": {
+  "message": "desde la auditoría del $P1$ (era $P2$).",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "since the audit on $1 (was $2)."
+ },
+ "mxrp6h6": {
+  "message": "Un tabindex mayor que 0 anula el orden natural de la página, así que los agentes que se mueven con el teclado saltan de forma impredecible.",
+  "description": "tabindex above 0 overrides the natural order of the page, so agents that move with the keyboard jump around unpredictably."
+ },
+ "mt0bt2l": {
+  "message": "tokens",
+  "description": "tokens"
+ },
+ "milu1m8": {
+  "message": "type=\"email\" y autocomplete=\"email\" dicen a un agente exactamente qué pide un campo. Sin ellos, lo deduce del texto cercano y a menudo da mal formato a los datos.",
+  "description": "type=\"email\" and autocomplete=\"email\" tell an agent exactly what a field wants. Without them it infers from nearby text and often formats the data wrong."
+ },
+ "mtj5kmn": {
+  "message": "advertencia",
+  "description": "warning"
+ },
+ "m1ngt6ad": {
+  "message": "ayer",
+  "description": "yesterday"
+ },
+ "m1cwwvnv": {
+  "message": "«$P1$» parece clicable, pero no es un botón ni un enlace, así que los agentes no pueden usarlo.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "“$1” looks clickable, but it isn’t a button or link, so agents can’t use it."
+ }
+}

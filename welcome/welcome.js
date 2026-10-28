@@ -1,5 +1,8 @@
 'use strict';
 
+localizePage();
+document.title = t('Welcome to Agent-Readiness Auditor');
+
 // Show "Pinned ✓" as soon as the toolbar icon is pinned.
 async function checkPinned() {
   try {

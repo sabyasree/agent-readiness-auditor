@@ -14,43 +14,45 @@
       <span>Agent-Readiness Auditor</span>
     </header>
 
-    <h1>You’re set up. Here’s your first audit in under a minute.</h1>
-    <p class="lead">See how well AI agents like Claude, Gemini and ChatGPT can read and use any page, and exactly what to fix.</p>
+    <h1 data-i18n>You’re set up. Here’s your first audit in under a minute.</h1>
+    <p class="lead" data-i18n>See how well AI agents like Claude, Gemini and ChatGPT can read and use any page, and exactly what to fix.</p>
 
     <ol class="steps">
       <li class="step" id="step-pin">
         <div class="num" aria-hidden="true">1</div>
         <div>
-          <h2>Pin the icon <span class="done" id="pinned" hidden>Pinned ✓</span></h2>
-          <p>Click the puzzle-piece <span class="kbd" aria-label="Extensions">⧉</span> icon at the top right of Chrome, then the pin next to <b>Agent-Readiness Auditor</b>. It’ll show each page’s score right on the icon.</p>
+          <h2><span data-i18n>Pin the icon</span> <span class="done" id="pinned" hidden data-i18n>Pinned ✓</span></h2>
+          <p data-i18n>Click the puzzle-piece <span class="kbd" aria-label="Extensions">⧉</span> icon at the top right of Chrome, then the pin next to <b>Agent-Readiness Auditor</b>. It’ll show each page’s score right on the icon.</p>
         </div>
       </li>
       <li class="step">
         <div class="num" aria-hidden="true">2</div>
         <div>
-          <h2>Open a page and click the icon</h2>
-          <p>The side panel opens. Press <b>Run audit</b>. Shortcut: <span class="kbd">Alt</span> + <span class="kbd">Shift</span> + <span class="kbd">A</span>.</p>
-          <p>Not sure where to start? Try our demo store. It has problems planted for the audit to find.</p>
-          <p><a class="btn" id="demo" href="https://agent-readiness-auditor.netlify.app/demo/">Open the demo store</a></p>
+          <h2 data-i18n>Open a page and click the icon</h2>
+          <p data-i18n>The side panel opens. Press <b>Run audit</b>. Shortcut: <span class="kbd">Alt</span> + <span class="kbd">Shift</span> + <span class="kbd">A</span>.</p>
+          <p data-i18n>Not sure where to start? Try our demo store. It has problems planted for the audit to find.</p>
+          <p><a class="btn" id="demo" href="https://agent-readiness-auditor.netlify.app/demo/" data-i18n>Open the demo store</a></p>
         </div>
       </li>
       <li class="step">
         <div class="num" aria-hidden="true">3</div>
         <div>
-          <h2>Fix, then run it again</h2>
-          <p>Start with <b>Fix these first</b>, use <b>Mark issues on page</b> to see every problem at once, or copy a fix prompt into Claude Code, Cursor or Copilot. Re-run to see your score go up.</p>
+          <h2 data-i18n>Fix, then run it again</h2>
+          <p data-i18n>Start with <b>Fix these first</b>, use <b>Mark issues on page</b> to see every problem at once, or copy a fix prompt into Claude Code, Cursor or Copilot. Re-run to see your score go up.</p>
         </div>
       </li>
     </ol>
 
-    <section class="tips" aria-label="More you can do">
-      <div><b>Agent view</b><span>See the page as an agent reads it, with a token count.</span></div>
-      <div><b>Share report</b><span>Send a clean report to a client or save it as PDF.</span></div>
-      <div><b>Shopping agents</b><span>On product pages, check price, stock and the cart button.</span></div>
+    <section class="tips" aria-label="More you can do" data-i18n-label>
+      <div><b data-i18n>Agent view</b><span data-i18n>See the page as an agent reads it, with a token count.</span></div>
+      <div><b data-i18n>Share report</b><span data-i18n>Send a clean report to a client or save it as PDF.</span></div>
+      <div><b data-i18n>Site scan</b><span data-i18n>Scan up to 25 pages and find the problems they share.</span></div>
+      <div><b data-i18n>Weekly re-scan</b><span data-i18n>Get an alert if a site’s score drops.</span></div>
     </section>
 
-    <p class="privacy">Everything runs in your browser. The extension only reads a page when you click its icon, and sends nothing anywhere. <a href="https://agent-readiness-auditor.netlify.app/privacy-policy.html">Privacy policy</a></p>
+    <p class="privacy" data-i18n>Everything runs in your browser. The extension only reads a page when you click its icon, and sends nothing anywhere. <a href="https://agent-readiness-auditor.netlify.app/privacy-policy.html">Privacy policy</a></p>
   </main>
+  <script src="../sidepanel/i18n.js"></script>
   <script src="welcome.js"></script>
 </body>
 </html>

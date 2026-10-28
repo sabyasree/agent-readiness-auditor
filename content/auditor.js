@@ -8,7 +8,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.3.0';
+  const VERSION = '1.5.0';
   if (window.__ARA && window.__ARA.version === VERSION) return;
 
   const FINDING_CAP = 50;
@@ -46,8 +46,27 @@
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   const norm = (s) => (s == null ? '' : String(s)).replace(/\s+/g, ' ').trim();
   const clamp01 = (n) => Math.max(0, Math.min(1, n));
-  const pl = (n, one, many = one + 's') => `${n.toLocaleString()} ${n === 1 ? one : many}`;
+  const fmtN = (n) => n.toLocaleString('en-US');
+  const pl = (n, one, many = one + 's') => `${fmtN(n)} ${n === 1 ? one : many}`;
   const vb = (n, one, many) => (n === 1 ? one : many);
+
+  // A summary is English text that also carries its template and values, so
+  // the side panel can show it in the reader's language: say('$1 of $2 …', a, b).
+  function say(tpl, ...args) {
+    const s = new String(tpl.replace(/\$(\d)/g, (_, i) => String(args[i - 1])));
+    s.parts = [[tpl, ...args.map(String)]];
+    return s;
+  }
+  /** say() with the singular or plural template; the count is $1. */
+  const sayN = (n, one, many, ...rest) => say(n === 1 ? one : many, fmtN(n), ...rest);
+  /** "n of total" summaries, with a sentence of its own when there's only one. */
+  const sayOf = (n, total, only, tpl) => (total === 1 ? say(only) : say(tpl, fmtN(n), fmtN(total)));
+  /** Several sentences as one summary, each still translatable on its own. */
+  function sayAll(parts) {
+    const s = new String(parts.map(String).join(' '));
+    s.parts = parts.flatMap((p) => p.parts || [[String(p)]]);
+    return s;
+  }
 
   /** Score a share of bad items: 0 bad = 1.0, `tolerance` share bad = 0. */
   function ratioScore(bad, total, tolerance) {
@@ -79,17 +98,40 @@
     return visible(el) && !el.closest('[aria-hidden="true"], [inert]');
   }
 
-  function textFromIds(ids) {
+  /** Text of the elements with these ids, looked up in `root` (the element's document or shadow root). */
+  function textFromIds(ids, root = document) {
+    const find = (id) => (root && root.getElementById ? root.getElementById(id) : null) || document.getElementById(id);
     return norm(ids.split(/\s+/).map((id) => {
-      const n = document.getElementById(id);
+      const n = find(id);
       return n ? n.textContent : '';
     }).join(' '));
+  }
+
+  // Open shadow roots and same-origin iframes hold controls too. These roots
+  // are searched alongside the page; closed shadow roots and cross-origin
+  // frames can't be read from here.
+  const ROOT_CAP = 300;
+  function extraRoots() {
+    const out = [];
+    const visit = (root, inFrame) => {
+      const walker = (root.ownerDocument || root).createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+      for (let n = walker.nextNode(); n && out.length < ROOT_CAP; n = walker.nextNode()) {
+        if (n.shadowRoot) { out.push({ root: n.shadowRoot, kind: inFrame ? 'frame' : 'shadow', host: n }); visit(n.shadowRoot, inFrame); }
+        if (n.tagName === 'IFRAME' || n.tagName === 'FRAME') {
+          let doc = null;
+          try { doc = n.contentDocument; } catch { doc = null; }
+          if (doc && doc.documentElement && usable(n)) { out.push({ root: doc, kind: 'frame', host: n }); visit(doc.documentElement, true); }
+        }
+      }
+    };
+    visit(document.documentElement, false);
+    return out;
   }
 
   /** A practical approximation of the accessible name computation. */
   function accName(el) {
     const lb = el.getAttribute('aria-labelledby');
-    if (lb) { const t = textFromIds(lb); if (t) return t; }
+    if (lb) { const t = textFromIds(lb, el.getRootNode()); if (t) return t; }
     const al = norm(el.getAttribute('aria-label'));
     if (al) return al;
 
@@ -123,7 +165,7 @@
     const parts = [];
     if (el.labels) for (const l of el.labels) parts.push(l.innerText || l.textContent);
     const lb = el.getAttribute('aria-labelledby');
-    if (lb) parts.push(textFromIds(lb));
+    if (lb) parts.push(textFromIds(lb, el.getRootNode()));
     parts.push(el.getAttribute('aria-label') || '');
     return norm(parts.join(' '));
   }
@@ -178,19 +220,171 @@
     return open.length > 200 ? open.slice(0, 199) + '…' : open;
   }
 
-  function finding(el, note) {
+  function finding(el, note, fix, hint) {
     const ref = refs.push(el) - 1;
     let selector = '';
     try { selector = cssPath(el); } catch { /* ignore */ }
-    return { ref, selector, snippet: snippet(el), note: note || '' };
+    const out = { ref, selector, snippet: snippet(el), note: note || '' };
+    if (fix) out.fix = fix;
+    if (hint) out.hint = hint;
+    return out;
   }
 
-  function findings(items, noteFn) {
+  /** Findings for up to FINDING_CAP items. `fixFn(item)` returns suggested code, or '' for none. */
+  function findings(items, noteFn, fixFn, withHint) {
     return items.slice(0, FINDING_CAP).map((it) => {
       const el = it.el || it;
-      return finding(el, noteFn ? noteFn(it) : '');
+      let fix = '';
+      if (fixFn) { try { fix = fixFn(it) || ''; } catch { fix = ''; } }
+      let hint = '';
+      if (withHint) { try { hint = elementHint(el); } catch { hint = ''; } }
+      return finding(el, noteFn ? noteFn(it) : '', fix, hint);
     });
   }
+
+  /** What surrounds an element, for naming it: nearby text, the section heading, class names, link or image. */
+  function elementHint(el) {
+    const parts = [];
+    const own = norm(el.innerText || el.textContent);
+    for (let a = el.parentElement, i = 0; a && i < 3; a = a.parentElement, i++) {
+      const t = norm(a.innerText).replace(own, '').trim();
+      if (t.length > 200) break; // a whole section says nothing about this one control
+      if (t.length >= 3) { parts.push(`Nearby text: ${t.slice(0, 120)}`); break; }
+    }
+    const headings = Array.from(el.ownerDocument.querySelectorAll('h1, h2, h3'));
+    const before = headings.filter((h) => h.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING).pop();
+    if (before) parts.push(`Section: ${norm(before.innerText).slice(0, 60)}`);
+    const classes = [el.id, typeof el.className === 'string' ? el.className : '',
+      ...Array.from(el.querySelectorAll('svg, i, img, use')).map((d) => d.getAttribute('class') || d.getAttribute('data-icon') || d.getAttribute('href') || d.getAttribute('src') || '')]
+      .join(' ').replace(/\s+/g, ' ').trim();
+    if (classes) parts.push(`Classes and icons: ${classes.slice(0, 120)}`);
+    const href = el.getAttribute('href');
+    if (href && !/^(#|javascript:)/i.test(href)) parts.push(`Links to: ${href.slice(0, 80)}`);
+    if (el.tagName === 'IMG') parts.push(`Image file: ${(el.getAttribute('src') || '').split('/').pop().split('?')[0].slice(0, 60)}`);
+    return parts.join('\n');
+  }
+
+  // ------------------------------------------------------- suggested fixes
+  // Each finding can carry `fix`: the element's opening tag rewritten the way
+  // the check recommends, with a name guessed from the page where one is needed.
+
+  const ICON_WORDS = [
+    [/search|magnif|loupe/, 'Search'], [/cart|basket|trolley|\bbag\b|shopping/, 'Cart'], [/close|dismiss|\bx\b|times/, 'Close'],
+    [/menu|hamburger|burger|nav-?toggle|drawer/, 'Menu'], [/account|profile|\buser\b|avatar|login|sign-?in/, 'Account'],
+    [/heart|wish|favou?rite|\bfav\b|save/, 'Save to wishlist'], [/share/, 'Share'], [/next|arrow-?right|chevron-?right|forward/, 'Next'],
+    [/prev|previous|arrow-?left|chevron-?left|back/, 'Previous'], [/play/, 'Play'], [/pause/, 'Pause'], [/mute|volume|sound/, 'Mute'],
+    [/setting|gear|\bcog\b/, 'Settings'], [/filter/, 'Filter'], [/sort/, 'Sort'], [/edit|pencil/, 'Edit'],
+    [/delete|trash|\bbin\b|remove/, 'Remove'], [/minus|decrement|decrease/, 'Decrease'], [/plus|increment|increase/, 'Increase'],
+    [/download/, 'Download'], [/upload/, 'Upload'], [/copy|clipboard/, 'Copy'], [/print/, 'Print'], [/help|question/, 'Help'],
+    [/\binfo\b|information/, 'More information'], [/bell|notif/, 'Notifications'], [/\bhome\b|house/, 'Home'],
+    [/facebook/, 'Facebook'], [/twitter|\bx-logo/, 'X (Twitter)'], [/instagram/, 'Instagram'], [/linkedin/, 'LinkedIn'],
+    [/youtube/, 'YouTube'], [/github/, 'GitHub'], [/tiktok/, 'TikTok'], [/pinterest/, 'Pinterest'],
+    [/mail|envelope|newsletter/, 'Email'], [/phone|call/, 'Call'], [/location|map-?pin|\bpin\b|marker/, 'Location'],
+    [/calendar|date/, 'Choose a date'], [/globe|language|\blang\b/, 'Language'], [/expand|more|ellipsis|dots|kebab/, 'More options'],
+  ];
+
+  const humanize = (s) => {
+    const t = String(s || '').replace(/\.[a-z0-9]{2,5}$/i, '').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/[-_.+/]+/g, ' ')
+      .replace(/\b[0-9a-f]{6,}\b|\b\d+x\d+\b|\b\d{2,}\b/gi, '').replace(/\s+/g, ' ').trim();
+    return t ? t[0].toUpperCase() + t.slice(1).toLowerCase() : '';
+  };
+
+  /** A likely name for an unnamed control, from what the page already says about it. */
+  function guessName(el) {
+    const direct = norm(el.getAttribute('title') || el.getAttribute('data-tooltip') || el.getAttribute('data-title') ||
+      el.getAttribute('data-label') || el.getAttribute('data-tip') || el.getAttribute('placeholder'));
+    if (direct) return { name: direct.slice(0, 60), sure: true };
+    const hints = [el.id, typeof el.className === 'string' ? el.className : '', el.getAttribute('name'), el.getAttribute('data-testid'),
+      el.getAttribute('data-action'), el.getAttribute('aria-controls')];
+    for (const d of el.querySelectorAll('svg, i, span, img, use')) {
+      hints.push(d.getAttribute('class'), d.getAttribute('data-icon'), d.getAttribute('href') || d.getAttribute('xlink:href'),
+        d.tagName === 'IMG' ? (d.getAttribute('src') || '').split('/').pop() : '');
+    }
+    const hay = hints.filter(Boolean).join(' ').toLowerCase();
+    const icon = ICON_WORDS.find(([re]) => re.test(hay));
+    if (icon) return { name: icon[1], sure: false };
+    const href = el.getAttribute('href');
+    if (href && !/^(#|javascript:)/i.test(href)) {
+      try {
+        const u = new URL(href, location.href);
+        const seg = u.pathname.split('/').filter(Boolean).pop();
+        if (seg) return { name: humanize(decodeURIComponent(seg)), sure: false };
+        if (u.origin === location.origin) return { name: 'Home', sure: false };
+        return { name: humanize(u.hostname.replace(/^www\./, '').split('.')[0]), sure: false };
+      } catch { /* ignore */ }
+    }
+    return { name: '', sure: false };
+  }
+
+  const escAttr = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+  /** The opening tag of `el`, renamed to `tag`, with attributes set or removed. Long values are shortened. */
+  function openTag(el, { tag, set = {}, remove = [] } = {}) {
+    const name = (tag || el.tagName).toLowerCase();
+    const attrs = [];
+    for (const a of Array.from(el.attributes)) {
+      if (remove.includes(a.name) || a.name in set) continue;
+      let v = a.name === 'style' ? '…' : a.value;
+      if (v.length > 50) v = v.slice(0, 47) + '…';
+      attrs.push(v === '' ? a.name : `${a.name}="${escAttr(v)}"`);
+    }
+    for (const [k, v] of Object.entries(set)) attrs.push(v === true ? k : `${k}="${escAttr(v)}"`);
+    return `<${name}${attrs.length ? ' ' + attrs.join(' ') : ''}>`;
+  }
+
+  const VOID = new Set(['INPUT', 'IMG', 'BR', 'HR', 'AREA', 'SOURCE']);
+  const shortText = (el) => { const t = norm(el.innerText || el.textContent); return t.length > 40 ? t.slice(0, 40) + '…' : t; };
+  const inner = (el) => (el.children.length && !shortText(el) ? '…' : shortText(el) || '…');
+  const closeTag = (el, tag) => (VOID.has(el.tagName) && !tag ? '' : `${inner(el)}</${(tag || el.tagName).toLowerCase()}>`);
+  const nameNote = (g) => (g.sure ? ''
+    : g.name ? `\n<!-- “${g.name}” is a guess from the page. Check it says what the control does. -->`
+      : '\n<!-- Replace “Describe what it does” with the action, like “Search” or “Open cart”. -->');
+
+  /** A control with no name: add a label it can be found by. */
+  function fixUnnamed(el) {
+    const g = guessName(el);
+    const label = g.name || 'Describe what it does';
+    const img = el.querySelector('img:not([alt]), img[alt=""]');
+    if (img && el.querySelectorAll('img').length === 1 && !shortText(el)) {
+      return `${openTag(el)}${openTag(img, { set: { alt: label } })}</${el.tagName.toLowerCase()}>${nameNote(g)}`;
+    }
+    return `${openTag(el, { set: { 'aria-label': label } })}${closeTag(el)}${nameNote(g)}`;
+  }
+
+  /** Something clickable built from a div or span: make it a real button (or a link if it navigates). */
+  function fixFakeControl(el) {
+    const nav = el.getAttribute('data-href') || el.getAttribute('data-url') || /location|window\.open|href/.test(el.getAttribute('onclick') || '');
+    const tag = nav ? 'a' : 'button';
+    const set = nav ? { href: el.getAttribute('data-href') || el.getAttribute('data-url') || '/where-it-goes' } : { type: 'button' };
+    if (!shortText(el)) {
+      const g = guessName(el);
+      set['aria-label'] = g.name || 'Describe what it does';
+    }
+    return `${openTag(el, { tag, set, remove: ['role', 'tabindex', 'data-href', 'data-url'] })}${inner(el)}</${tag}>`;
+  }
+
+  /** A link with no destination: a real href if it navigates, otherwise a button. */
+  function fixDeadLink(el) {
+    if (el.hasAttribute('onclick') || !norm(el.textContent)) {
+      return `${openTag(el, { tag: 'button', set: { type: 'button' }, remove: ['href'] })}${inner(el)}</button>`;
+    }
+    return `${openTag(el, { set: { href: '/where-it-goes' } })}${inner(el)}</a>`;
+  }
+
+  /** A field with no label: a visible <label> tied to it by id. */
+  function fixUnlabeled(el) {
+    const kind = { email: 'Email', tel: 'Phone', number: 'Quantity', search: 'Search', url: 'Website', password: 'Password', date: 'Date' }[(el.getAttribute('type') || '').toLowerCase()];
+    const text = norm(el.getAttribute('placeholder')) || humanize(el.getAttribute('name')) || kind || guessName(el).name || 'Describe this field';
+    const id = el.id || (el.getAttribute('name') || text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'field';
+    return `<label for="${escAttr(id)}">${text}</label>\n${openTag(el, { set: { id } })}${VOID.has(el.tagName) ? '' : `${inner(el)}</${el.tagName.toLowerCase()}>`}`;
+  }
+
+  /** An image with no alt: describe it, or mark it decorative. */
+  function fixImageAlt(el) {
+    const words = humanize((el.currentSrc || el.getAttribute('src') || '').split('/').pop().split('?')[0]);
+    return `${openTag(el, { set: { alt: words || 'Describe the image' } })}\n<!-- Describe what the image shows, or use alt="" if it’s decorative. -->`;
+  }
+
 
   const HASHY_CLASS = [
     /^css-[a-z0-9]{4,}/i,
@@ -416,13 +610,18 @@
       controls: [], fields: [],
     };
 
+    ctx.roots = extraRoots();
+    const deep = (sel) => [...$$(sel), ...ctx.roots.flatMap((r) => { try { return $$(sel, r.root); } catch { return []; } })];
+    const where = new Map(ctx.roots.map((r) => [r.root, r.kind]));
+    ctx.where = (el) => where.get(el.getRootNode()) || (el.ownerDocument !== document ? 'frame' : '');
+
     const controlSet = new Set();
-    for (const el of $$(CONTROL_SEL)) {
+    for (const el of deep(CONTROL_SEL)) {
       if (ctx.controls.length >= 5000) break;
       if (el.matches(FIELD_SEL)) continue;
       if (usable(el)) { controlSet.add(el); ctx.controls.push({ el, name: accName(el) }); }
     }
-    for (const el of $$(FIELD_SEL)) {
+    for (const el of deep(FIELD_SEL)) {
       if (ctx.fields.length >= 2000) break;
       if (controlSet.has(el)) continue;
       if (el.tagName === 'INPUT' && el.closest('[role="combobox"]') && el.closest('[role="combobox"]') !== el &&
@@ -431,6 +630,8 @@
     }
     ctx.interactive = [...ctx.controls.map((c) => c.el), ...ctx.fields.map((f) => f.el)];
     ctx.interactiveSet = controlSet;
+    ctx.coverage = { shadow: 0, frame: 0 };
+    for (const el of ctx.interactive) { const w = ctx.where(el); if (w) ctx.coverage[w]++; }
 
     // Depth-first walk: depth, fixed overlays, shadow hosts, pointer-only "controls".
     const cursorOf = new Map();
@@ -486,7 +687,7 @@
 
   function explicitName(el) {
     const lb = el.getAttribute('aria-labelledby');
-    return (lb && textFromIds(lb)) || norm(el.getAttribute('aria-label'));
+    return (lb && textFromIds(lb, el.getRootNode())) || norm(el.getAttribute('aria-label'));
   }
 
   function implicitRole(el) {
@@ -691,11 +892,11 @@
           score: ratioScore(n, ctx.interactive.length + n, 0.25),
           issues: n,
           summary: n
-            ? `${pl(n, 'element')} ${vb(n, 'looks', 'look')} clickable but ${vb(n, 'isn’t', 'aren’t')} exposed as a button or link.`
+            ? sayN(n, '$1 element looks clickable but isn’t exposed as a button or link.', '$1 elements look clickable but aren’t exposed as buttons or links.')
             : 'Every clickable-looking element is a real control.',
           findings: findings(fakes, (el) => el.hasAttribute('onclick')
             ? 'Has an onclick handler but no control role'
-            : 'Pointer cursor, but no button or link role'),
+            : 'Pointer cursor, but no button or link role', fixFakeControl),
         };
       },
     },
@@ -717,11 +918,72 @@
         return {
           score: ratioScore(n, anchors.length, 0.2),
           issues: n,
-          summary: n ? `${pl(n, 'link')} ${vb(n, 'has', 'have')} no real destination.` : 'All links point to real destinations.',
+          summary: n ? sayN(n, '$1 link has no real destination.', '$1 links have no real destination.') : 'All links point to real destinations.',
           findings: findings(bad, (a) => {
             const href = a.getAttribute('href');
             return href == null ? 'No href attribute' : `href="${href.trim().slice(0, 40)}"`;
-          }),
+          }, fixDeadLink),
+        };
+      },
+    },
+    {
+      id: 'keyboard-reachable', category: 'semantics', weight: 2,
+      title: 'Controls you can’t reach with the Tab key',
+      why: 'Agents that drive the page with the keyboard, and people who can’t use a mouse, move between controls with Tab. A button or link with tabindex="-1" is skipped, so it can only be reached by clicking.',
+      fix: 'Remove tabindex="-1" from standalone controls. Keep it only for items inside a widget that manages focus itself, such as menu items, tabs or options with arrow-key navigation.',
+      run(ctx) {
+        const COMPOSITE = '[role="menu"], [role="menubar"], [role="listbox"], [role="tablist"], [role="tree"], [role="treegrid"], [role="grid"], [role="radiogroup"], [role="toolbar"], [role="combobox"], [aria-activedescendant]';
+        const bad = ctx.interactive.filter((el) => {
+          const t = el.getAttribute('tabindex');
+          if (t == null || !/^\s*-\d+\s*$/.test(t) || el.disabled) return false;
+          if (el.parentElement && el.parentElement.closest(COMPOSITE)) return false;
+          return !['menuitem', 'menuitemcheckbox', 'menuitemradio', 'tab', 'option', 'treeitem', 'gridcell', 'radio'].includes(role(el));
+        });
+        const n = bad.length;
+        return {
+          score: ratioScore(n, ctx.interactive.length, 0.2),
+          issues: n,
+          summary: n ? sayN(n, '$1 control is skipped by the Tab key.', '$1 controls are skipped by the Tab key.') : 'Every control can be reached with the Tab key.',
+          findings: findings(bad, () => 'tabindex="-1" takes it out of the Tab order', (el) => `${openTag(el, { remove: ['tabindex'] })}${closeTag(el)}`),
+        };
+      },
+    },
+    {
+      id: 'focus-visible', category: 'semantics', weight: 1,
+      title: 'No visible focus indicator',
+      why: 'When an agent or a keyboard user moves to a control, a visible outline shows where they are. Agents that work from screenshots check it to confirm the right control is focused before they press Enter.',
+      fix: 'Don’t remove the focus outline. If the design needs a custom one, style :focus-visible with an outline or a box-shadow that contrasts with the background.',
+      run(ctx) {
+        // Focus a sample of links and buttons the way the keyboard does, compare styles, then put focus back.
+        const sample = ctx.controls.map((c) => c.el)
+          .filter((el) => el.ownerDocument === document && !el.disabled && el.matches(FOCUSABLE_SEL))
+          .filter((el) => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < ctx.vh * 2; })
+          .slice(0, 25);
+        if (!sample.length) return { score: null, status: 'na', summary: 'No links or buttons to test.' };
+        const props = ['outlineStyle', 'outlineWidth', 'outlineColor', 'boxShadow', 'borderColor', 'borderWidth', 'backgroundColor', 'color', 'textDecorationLine'];
+        const snap = (el) => { const cs = getComputedStyle(el); return props.map((p) => cs[p]).join('|'); };
+        const prev = document.activeElement;
+        const bad = [];
+        let tested = 0;
+        try {
+          for (const el of sample) {
+            const before = snap(el);
+            try { el.focus({ preventScroll: true, focusVisible: true }); } catch { continue; }
+            if (document.activeElement !== el || !el.matches(':focus-visible')) { el.blur(); continue; }
+            tested++;
+            if (snap(el) === before) bad.push(el);
+            el.blur();
+          }
+        } finally {
+          if (prev && prev !== document.body && typeof prev.focus === 'function') { try { prev.focus({ preventScroll: true }); } catch { /* ignore */ } }
+        }
+        if (!tested) return { score: null, status: 'na', summary: 'Couldn’t simulate keyboard focus in this browser.' };
+        const n = bad.length;
+        return {
+          score: ratioScore(n, tested, 0.5),
+          issues: n,
+          summary: n ? sayOf(n, tested, 'The tested control shows no change when focused.', '$1 of $2 tested controls show no change when focused.') : sayN(tested, 'The tested control shows a focus indicator.', 'All $1 tested controls show a focus indicator.'),
+          findings: findings(bad, () => 'Looks the same focused and unfocused'),
         };
       },
     },
@@ -736,8 +998,9 @@
         return {
           score: countScore(n, 0.1),
           issues: n,
-          summary: n ? `${pl(n, 'element')} ${vb(n, 'uses', 'use')} a positive tabindex.` : 'No positive tabindex values.',
-          findings: findings(els, (e) => `tabindex="${e.getAttribute('tabindex')}"`),
+          summary: n ? sayN(n, '$1 element uses a positive tabindex.', '$1 elements use a positive tabindex.') : 'No positive tabindex values.',
+          findings: findings(els, (e) => `tabindex="${e.getAttribute('tabindex')}"`,
+            (e) => `${openTag(e, { set: { tabindex: '0' } })}${closeTag(e)}`),
         };
       },
     },
@@ -755,10 +1018,10 @@
           score: ratioScore(n, ctx.controls.length, 0.15),
           issues: n,
           summary: n
-            ? `${n.toLocaleString()} of ${pl(ctx.controls.length, 'button or link', 'buttons and links')} ${vb(n, 'has', 'have')} no name.`
-            : ctx.controls.length ? `All ${pl(ctx.controls.length, 'button and link', 'buttons and links')} have a name.` : 'No buttons or links on this page.',
+            ? sayOf(n, ctx.controls.length, 'The only button or link on this page has no name.', '$1 of $2 buttons and links have no name.')
+            : ctx.controls.length ? sayN(ctx.controls.length, 'The button or link on this page has a name.', 'All $1 buttons and links have a name.') : 'No buttons or links on this page.',
           findings: findings(bad, (c) => c.el.querySelector('svg, img, i, [class*="icon" i]')
-            ? 'Icon-only control with no label' : 'No text, aria-label or title'),
+            ? 'Icon-only control with no label' : 'No text, aria-label or title', (c) => fixUnnamed(c.el), true),
         };
       },
     },
@@ -790,7 +1053,7 @@
         return {
           score: ratioScore(n, ctx.controls.filter((c) => c.name).length, 0.3),
           issues: n,
-          summary: n ? `${pl(n, 'control')} ${vb(n, 'has a name', 'have names')} that don’t say what ${vb(n, 'it does', 'they do')}.` : 'Control names are specific and distinct.',
+          summary: n ? sayN(n, '$1 control has a name that doesn’t say what it does.', '$1 controls have names that don’t say what they do.') : 'Control names are specific and distinct.',
           findings: findings(flagged, (f) => {
             const label = f.name.length > 40 ? f.name.slice(0, 40) + '…' : f.name;
             return f.count > 1
@@ -817,11 +1080,11 @@
         return {
           score: ratioScore(n, imgs.length, 0.4),
           issues: n,
-          summary: n ? `${n.toLocaleString()} of ${pl(imgs.length, 'image')} ${vb(n, 'has', 'have')} no alt attribute.` : `All ${pl(imgs.length, 'image')} have alt attributes.`,
+          summary: n ? sayOf(n, imgs.length, 'The image has no alt attribute.', '$1 of $2 images have no alt attribute.') : sayN(imgs.length, 'The image has an alt attribute.', 'All $1 images have alt attributes.'),
           findings: findings(bad, (i) => {
             const src = (i.currentSrc || i.src || '').split('/').pop().split('?')[0];
             return src ? `No alt attribute (${src.slice(0, 40)})` : 'No alt attribute';
-          }),
+          }, fixImageAlt, true),
         };
       },
     },
@@ -848,7 +1111,8 @@
           if (!visible(el)) continue;
           for (const attr of ['aria-labelledby', 'aria-describedby', 'aria-errormessage']) {
             const ids = norm(el.getAttribute(attr)).split(' ').filter(Boolean);
-            const missing = ids.filter((id) => !document.getElementById(id));
+            const root = el.getRootNode();
+            const missing = ids.filter((id) => !(root.getElementById ? root.getElementById(id) : document.getElementById(id)));
             if (missing.length) { flag(el, `${attr} points at a missing id: ${missing.slice(0, 2).join(', ')}`); break; }
           }
         }
@@ -885,7 +1149,7 @@
         return {
           score: ratioScore(n, Math.max(ctx.interactive.length, 10), 0.15),
           issues: n,
-          summary: n ? `${pl(n, 'element')} ${vb(n, 'has', 'have')} ARIA that misleads agents.` : 'No misleading or broken ARIA found.',
+          summary: n ? sayN(n, '$1 element has ARIA that misleads agents.', '$1 elements have ARIA that misleads agents.') : 'No misleading or broken ARIA found.',
           findings: findings(out, (o) => o.note),
         };
       },
@@ -911,8 +1175,8 @@
         return {
           score: ratioScore(weighted, ctx.fields.length, 0.2),
           issues: n,
-          summary: n ? `${n.toLocaleString()} of ${pl(ctx.fields.length, 'field')} ${vb(n, 'has', 'have')} no label.` : `All ${pl(ctx.fields.length, 'field')} are labeled.`,
-          findings: findings(bad, (b) => b.ph ? `Only placeholder text: “${b.ph.slice(0, 40)}”` : 'No label, aria-label or title'),
+          summary: n ? sayOf(n, ctx.fields.length, 'The only field on this page has no label.', '$1 of $2 fields have no label.') : sayN(ctx.fields.length, 'The field is labeled.', 'All $1 fields are labeled.'),
+          findings: findings(bad, (b) => b.ph ? `Only placeholder text: “${b.ph.slice(0, 40)}”` : 'No label, aria-label or title', (b) => fixUnlabeled(b.el)),
         };
       },
     },
@@ -938,10 +1202,12 @@
           if (!rule) continue;
           relevant++;
           const type = (el.getAttribute('type') || 'text').toLowerCase();
+          const set = { autocomplete: el.getAttribute('autocomplete') || rule.ac };
           if (rule.type && type === 'text') {
-            bad.push({ el, note: `Asks for ${rule.what} but type is “text” (use type="${rule.type}")` });
+            set.type = rule.type;
+            bad.push({ el, set, note: `Asks for ${rule.what} but type is “text” (use type="${rule.type}")` });
           } else if (!el.hasAttribute('autocomplete')) {
-            bad.push({ el, note: `No autocomplete hint (add autocomplete="${rule.ac}")` });
+            bad.push({ el, set, note: `No autocomplete hint (add autocomplete="${rule.ac}")` });
           }
         }
         if (!relevant) return { score: null, status: 'na', summary: 'No personal-information fields that need type or autocomplete hints.' };
@@ -949,8 +1215,8 @@
         return {
           score: ratioScore(n, relevant, 0.6),
           issues: n,
-          summary: n ? `${n.toLocaleString()} of ${pl(relevant, 'personal-information field')} ${vb(n, 'is', 'are')} missing a type or autocomplete hint.` : 'Personal-information fields have the right type and autocomplete hints.',
-          findings: findings(bad, (b) => b.note),
+          summary: n ? sayOf(n, relevant, 'The personal-information field is missing a type or autocomplete hint.', '$1 of $2 personal-information fields are missing a type or autocomplete hint.') : 'Personal-information fields have the right type and autocomplete hints.',
+          findings: findings(bad, (b) => b.note, (b) => openTag(b.el, { set: b.set })),
         };
       },
     },
@@ -971,8 +1237,8 @@
         return {
           score: ratioScore(n, formFields.length, 0.3),
           issues: n,
-          summary: n ? `${pl(n, 'field')} ${vb(n, 'looks', 'look')} required but ${vb(n, 'isn’t', 'aren’t')} marked as required.` : 'Fields that look required are marked as required.',
-          findings: findings(bad, () => 'Label says required, but the field doesn’t'),
+          summary: n ? sayN(n, '$1 field looks required but isn’t marked as required.', '$1 fields look required but aren’t marked as required.') : 'Fields that look required are marked as required.',
+          findings: findings(bad, () => 'Label says required, but the field doesn’t', (f) => openTag(f.el, { set: { required: true } })),
         };
       },
     },
@@ -1005,7 +1271,7 @@
         const dialogs = $$('[role="dialog"], [role="alertdialog"], dialog[open]').filter(usable);
         const dialogIssues = [];
         for (const d of dialogs) {
-          const named = textFromIds(d.getAttribute('aria-labelledby') || '') || norm(d.getAttribute('aria-label'));
+          const named = textFromIds(d.getAttribute('aria-labelledby') || '', d.getRootNode()) || norm(d.getAttribute('aria-label'));
           if (!named) dialogIssues.push({ el: d, note: 'Dialog has no name (add aria-labelledby or aria-label)' });
           else if (d.tagName !== 'DIALOG' && d.getAttribute('aria-modal') !== 'true' &&
                    flagged.some((f) => f.el === d || f.el.contains(d) || d.contains(f.el))) {
@@ -1018,9 +1284,9 @@
           score: countScore(flagged.length, 0.35) * countScore(dialogIssues.length, 0.15),
           issues: n,
           summary: n
-            ? [flagged.length ? `${pl(flagged.length, 'overlay')} ${vb(flagged.length, 'covers', 'cover')} the page.` : '',
-               dialogIssues.length ? `${pl(dialogIssues.length, 'dialog')} ${vb(dialogIssues.length, 'is', 'are')} hard for agents to identify.` : '']
-              .filter(Boolean).join(' ')
+            ? sayAll([flagged.length ? sayN(flagged.length, '$1 overlay covers the page.', '$1 overlays cover the page.') : '',
+               dialogIssues.length ? sayN(dialogIssues.length, '$1 dialog is hard for agents to identify.', '$1 dialogs are hard for agents to identify.') : '']
+              .filter((x) => String(x)))
             : 'Nothing is covering the page right now.',
           findings: findings(all, (f) => f.note),
         };
@@ -1050,7 +1316,7 @@
           score: found.length ? 0.5 : 1,
           status: found.length ? 'warn' : 'pass',
           issues: found.length,
-          summary: found.length ? `Found ${names.join(' and ')} on this page.` : 'No CAPTCHA or bot challenge found on this page.',
+          summary: found.length ? say('Found on this page: $1.', names.join(', ')) : 'No CAPTCHA or bot challenge found on this page.',
           findings: findings(found, (f) => f.name),
         };
       },
@@ -1079,7 +1345,7 @@
         return {
           score: countScore(n, 0.25),
           issues: n,
-          summary: n ? `${pl(n, 'cross-origin frame')} ${vb(n, 'holds', 'hold')} content agents may not reach.` : 'No content is embedded in cross-origin frames.',
+          summary: n ? sayN(n, '$1 cross-origin frame holds content agents may not reach.', '$1 cross-origin frames hold content agents may not reach.') : 'No content is embedded in cross-origin frames.',
           findings: findings(bad, (b) => b.note),
         };
       },
@@ -1109,7 +1375,7 @@
         return {
           score: ratioScore(n, candidates.length, 0.3),
           issues: n,
-          summary: n ? `${pl(n, 'control')} ${vb(n, 'is', 'are')} too small to hit reliably.` : 'Click targets are a comfortable size.',
+          summary: n ? sayN(n, '$1 control is too small to hit reliably.', '$1 controls are too small to hit reliably.') : 'Click targets are a comfortable size.',
           findings: findings(bad, (b) => `${Math.round(b.w)} × ${Math.round(b.h)} px`),
         };
       },
@@ -1148,28 +1414,29 @@
         return {
           score,
           issues: bad ? Math.max(1, list.length) : 0,
-          summary: `Layout shift score ${cls.toFixed(2)} since the page loaded (0.1 or less is good).` +
-            (bad && list.length ? ` ${pl(list.length, 'control')} moved.` : ''),
+          summary: sayAll([say('Layout shift score $1 since the page loaded (0.1 or less is good).', cls.toFixed(2)),
+            ...(bad && list.length ? [sayN(list.length, '$1 control moved.', '$1 controls moved.')] : [])]),
           findings: bad ? findings(list, (m) => `Moved ${Math.round(m.dist)} px while the page loaded`) : [],
         };
       },
     },
     {
       id: 'shadow-dom', category: 'interaction', weight: 0, info: true,
-      title: 'Controls inside shadow DOM',
-      why: 'Shadow DOM hides elements from ordinary selectors. Many agents handle open shadow roots, but scripts and some tools don’t, and closed shadow roots are hidden from all of them.',
-      fix: 'Make sure web components expose their names and roles. This audit doesn’t look inside shadow roots, so test those controls separately.',
+      title: 'Controls inside shadow DOM and frames',
+      why: 'Shadow DOM and iframes hide elements from ordinary selectors. Agents built on Playwright or the DevTools protocol read open shadow roots and same-site frames, but simpler scripts don’t, and closed shadow roots are hidden from all of them.',
+      fix: 'Prefer open shadow roots, make sure web components expose their names and roles, and keep key flows out of cross-site frames.',
       run(ctx) {
-        const hosts = ctx.shadowHosts.filter((h) => h.shadowRoot);
-        if (!hosts.length) return { score: null, status: 'pass', issues: 0, summary: 'No shadow DOM components found.' };
-        let inner = 0;
-        for (const h of hosts) {
-          try { inner += h.shadowRoot.querySelectorAll(`${CONTROL_SEL}, ${FIELD_SEL}`).length; } catch { /* ignore */ }
-        }
+        const hosts = ctx.roots.filter((r) => r.kind === 'shadow').map((r) => r.host);
+        const frames = ctx.roots.filter((r) => r.root.nodeType === 9).map((r) => r.host);
+        if (!hosts.length && !frames.length) return { score: null, status: 'pass', issues: 0, summary: 'No open shadow DOM components or same-site frames found.' };
+        const parts = [];
+        if (hosts.length) parts.push(say('Components with open shadow DOM: $1, with $2 controls inside.', fmtN(hosts.length), fmtN(ctx.coverage.shadow)));
+        if (frames.length) parts.push(say('Same-site frames: $1, with $2 controls inside.', fmtN(frames.length), fmtN(ctx.coverage.frame)));
+        parts.push('They were checked along with the rest of the page.');
         return {
-          score: null, status: 'info', issues: hosts.length,
-          summary: `${pl(hosts.length, 'component')} ${vb(hosts.length, 'uses', 'use')} shadow DOM${inner ? `, containing ${pl(inner, 'control')} this audit didn’t check` : ''}.`,
-          findings: findings(hosts, (h) => `<${h.tagName.toLowerCase()}> with an open shadow root`),
+          score: null, status: 'info', issues: hosts.length + frames.length,
+          summary: sayAll(parts),
+          findings: findings([...hosts, ...frames], (h) => (h.tagName === 'IFRAME' || h.tagName === 'FRAME' ? 'Same-site frame, checked' : `<${h.tagName.toLowerCase()}> with an open shadow root, checked`)),
         };
       },
     },
@@ -1188,7 +1455,7 @@
         return {
           score: ratioScore(n, withClass.length, 0.5),
           issues: n,
-          summary: n ? `${n.toLocaleString()} of ${pl(withClass.length, 'control')} can only be targeted by generated class names.` : 'Controls don’t depend on generated class names.',
+          summary: n ? sayOf(n, withClass.length, 'The control can only be targeted by generated class names.', '$1 of $2 controls can only be targeted by generated class names.') : 'Controls don’t depend on generated class names.',
           findings: findings(bad, (el) => `class="${Array.from(el.classList).slice(0, 3).join(' ')}"`),
         };
       },
@@ -1206,7 +1473,7 @@
         return {
           score: ratioScore(n, withId.length, 0.5),
           issues: n,
-          summary: n ? `${n.toLocaleString()} of ${pl(withId.length, 'control ID')} look auto-generated.` : 'Control IDs look stable.',
+          summary: n ? sayOf(n, withId.length, 'The control ID looks auto-generated.', '$1 of $2 control IDs look auto-generated.') : 'Control IDs look stable.',
           findings: findings(bad, (el) => `id="${el.id.slice(0, 50)}"`),
         };
       },
@@ -1222,8 +1489,8 @@
         const t = norm(document.title);
         const generic = /^(home|untitled|document|index|page|react app|vite app|vite \+ react|new tab|loading\.*|welcome)$/i.test(t);
         if (!t) return { score: 0, issues: 1, summary: 'This page has no title.' };
-        if (generic || t.length < 4) return { score: 0.5, issues: 1, summary: `The title “${t}” doesn’t describe this page.` };
-        return { score: 1, issues: 0, summary: `Title: “${t.length > 90 ? t.slice(0, 90) + '…' : t}”` };
+        if (generic || t.length < 4) return { score: 0.5, issues: 1, summary: say('The title “$1” doesn’t describe this page.', t) };
+        return { score: 1, issues: 0, summary: say('Title: “$1”', t.length > 90 ? t.slice(0, 90) + '…' : t) };
       },
     },
     {
@@ -1234,8 +1501,8 @@
       run() {
         const lang = norm(document.documentElement.getAttribute('lang'));
         if (!lang) return { score: 0, issues: 1, summary: 'The <html> element has no lang attribute.' };
-        if (!/^[a-z]{2,3}(-[a-z0-9]{2,8})*$/i.test(lang)) return { score: 0.5, issues: 1, summary: `lang="${lang}" isn’t a valid language code.` };
-        return { score: 1, issues: 0, summary: `Language: ${lang}` };
+        if (!/^[a-z]{2,3}(-[a-z0-9]{2,8})*$/i.test(lang)) return { score: 0.5, issues: 1, summary: say('lang="$1" isn’t a valid language code.', lang) };
+        return { score: 1, issues: 0, summary: say('Language: $1', lang) };
       },
     },
     {
@@ -1258,8 +1525,8 @@
           score,
           issues: missing.length + (mains.length > 1 ? 1 : 0),
           summary: missing.length
-            ? `No ${missing.join(' and no ')} found.`
-            : mains.length > 1 ? `This page has ${mains.length} visible main landmarks; it should have one.` : 'Main content and navigation are marked up as landmarks.',
+            ? (missing.length > 1 ? 'No main landmark and no navigation landmark found.' : missing[0] === 'main landmark' ? 'No main landmark found.' : 'No navigation landmark found.')
+            : mains.length > 1 ? say('This page has $1 visible main landmarks; it should have one.', mains.length) : 'Main content and navigation are marked up as landmarks.',
           findings: findings(out, (o) => o.note),
         };
       },
@@ -1287,13 +1554,13 @@
         const n = issues.length + (noH1 ? 1 : 0);
         const parts = [];
         if (noH1) parts.push('There’s no h1.');
-        if (h1s.length > 1) parts.push(`There are ${h1s.length} h1 headings.`);
+        if (h1s.length > 1) parts.push(say('There are $1 h1 headings.', h1s.length));
         const skips = issues.filter((i) => i.note.startsWith('Jumps')).length;
-        if (skips) parts.push(`The outline skips a level ${pl(skips, 'time')}.`);
+        if (skips) parts.push(sayN(skips, 'The outline skips a level once.', 'The outline skips a level $1 times.'));
         return {
           score: countScore(issues.length, 0.08) * (noH1 ? 0.7 : 1),
           issues: n,
-          summary: n ? parts.join(' ') : `${pl(hs.length, 'heading')} in a clean outline.`,
+          summary: n ? sayAll(parts) : sayN(hs.length, '$1 heading in a clean outline.', '$1 headings in a clean outline.'),
           findings: findings(issues, (i) => i.note),
         };
       },
@@ -1310,7 +1577,7 @@
         return {
           score,
           issues: score < 0.95 ? 1 : 0,
-          summary: `${pl(c, 'element')}, nested up to ${ctx.maxDepth} levels deep. As an accessibility snapshot it’s about ${ctx.view.tokens.toLocaleString()} tokens.`,
+          summary: say('$1 elements, nested up to $2 levels deep. As an accessibility snapshot it’s about $3 tokens.', fmtN(c), ctx.maxDepth, fmtN(ctx.view.tokens)),
         };
       },
     },
@@ -1324,7 +1591,7 @@
         try { r = await fetchRes(pageUrl(), { accept: 'text/html', credentials: 'include', timeout: 8000, max: 4000000 }); } catch {
           return { score: null, status: 'na', summary: 'Couldn’t fetch this page’s HTML to compare.' };
         }
-        if (!r.ok || !/html/i.test(r.type)) return { score: null, status: 'na', summary: `Couldn’t compare: the page URL returned ${r.ok ? r.type || 'no content type' : `status ${r.status}`}.` };
+        if (!r.ok || !/html/i.test(r.type)) return { score: null, status: 'na', summary: say('Couldn’t compare: the page URL returned $1.', r.ok ? r.type || 'no content type' : `status ${r.status}`) };
         const raw = new DOMParser().parseFromString(r.text, 'text/html');
         const liveText = textOf(document.body, true);
         const rawText = textOf(raw.body, false);
@@ -1352,13 +1619,13 @@
         if (missing.some((m) => /^h1/.test(m.note))) score *= 0.8;
         if (missing.length) score = Math.min(score, 0.9);
         if (ldLate) score *= 0.9;
-        const parts = [`The HTML the server sends contains ${Math.round(ratio * 100)}% of the text on the rendered page.`];
-        if (missing.length) parts.push(`${pl(missing.length, 'heading or price', 'headings and prices')} only ${vb(missing.length, 'appears', 'appear')} after JavaScript runs.`);
-        if (ldLate) parts.push(`${pl(ldLive - ldRaw, 'structured data block')} ${vb(ldLive - ldRaw, 'is', 'are')} added by script.`);
+        const parts = [say('The HTML the server sends contains $1% of the text on the rendered page.', Math.round(ratio * 100))];
+        if (missing.length) parts.push(sayN(missing.length, '$1 heading or price only appears after JavaScript runs.', '$1 headings and prices only appear after JavaScript runs.'));
+        if (ldLate) parts.push(sayN(ldLive - ldRaw, '$1 structured data block is added by script.', '$1 structured data blocks are added by script.'));
         return {
           score,
           issues: (ratio < 0.85 ? 1 : 0) + missing.length + (ldLate ? 1 : 0),
-          summary: parts.join(' '),
+          summary: sayAll(parts),
           findings: findings(missing, (m) => m.note),
         };
       },
@@ -1389,7 +1656,7 @@
         return {
           score,
           issues: score < 0.95 ? 1 : 0,
-          summary: `The main content starts about ${preTok.toLocaleString()} tokens into the page (${Math.round(share * 100)}% of roughly ${v.tokens.toLocaleString()}).`,
+          summary: say('The main content starts about $1 tokens into the page ($2% of roughly $3).', fmtN(preTok), Math.round(share * 100), fmtN(v.tokens)),
           findings: score < 0.95 ? findings(big, (b) => `${b.role === 'text' ? 'Text' : b.role}${b.name ? ` “${b.name.slice(0, 30)}”` : ''}: about ${Math.round(b.w / 4).toLocaleString()} tokens before the main content`) : [],
         };
       },
@@ -1436,7 +1703,7 @@
         return {
           score: countScore(hard, 0.5) * countScore(comments, 0.2),
           issues: n,
-          summary: n ? `Found ${pl(n, 'piece', 'pieces')} of hidden text that ${vb(n, 'reads', 'read')} like instructions to an AI agent.` : 'No hidden instructions aimed at agents found.',
+          summary: n ? sayN(n, 'Found $1 piece of hidden text that reads like instructions to an AI agent.', 'Found $1 pieces of hidden text that read like instructions to an AI agent.') : 'No hidden instructions aimed at agents found.',
           findings: findings(out, (o) => o.note),
         };
       },
@@ -1469,7 +1736,7 @@
         return {
           score,
           issues: missing.length,
-          summary: missing.length ? `The Product block is missing ${listJoin(missing.map((f) => f[0]))}.` : `Product “${norm(p.name).slice(0, 60)}” has name, image, description, brand and an identifier.`,
+          summary: missing.length ? say('The Product block is missing $1.', listJoin(missing.map((f) => f[0]))) : say('Product “$1” has name, image, description, brand and an identifier.', norm(p.name).slice(0, 60)),
         };
       },
     },
@@ -1498,12 +1765,12 @@
         }
         const score = clamp01((3 - missing.length) / 3 - (mismatch ? 0.3 : 0));
         const parts = [];
-        if (missing.length) parts.push(`The offer is missing ${listJoin(missing)}.`);
-        if (mismatch) parts.push(`The structured-data price (${String(price).slice(0, 20)}) doesn’t appear on the page.`);
+        if (missing.length) parts.push(say('The offer is missing $1.', listJoin(missing)));
+        if (mismatch) parts.push(say('The structured-data price ($1) doesn’t appear on the page.', String(price).slice(0, 20)));
         return {
           score,
           issues: missing.length + (mismatch ? 1 : 0),
-          summary: parts.length ? parts.join(' ') : `Price ${price} ${o.priceCurrency || ''}, ${String(o.availability).replace(/^https?:\/\/schema\.org\//, '')}.`.replace(/\s+,/, ','),
+          summary: parts.length ? sayAll(parts) : say('Price: $1, $2.', `${price} ${o.priceCurrency || ''}`.trim(), String(o.availability).replace(/^https?:\/\/schema\.org\//, '')),
         };
       },
     },
@@ -1526,7 +1793,7 @@
         return {
           score: (3 - missing.length) / 3,
           issues: missing.length,
-          summary: missing.length ? `Structured data has no ${listJoin(missing, 'or')}.` : 'Shipping, return policy and ratings are all in structured data.',
+          summary: missing.length ? say('Structured data is missing: $1.', missing.join(', ')) : 'Shipping, return policy and ratings are all in structured data.',
         };
       },
     },
@@ -1541,8 +1808,8 @@
         if (c.fakeCart.length && !c.cart.length) {
           return {
             score: 0.2, issues: c.fakeCart.length,
-            summary: `The “add to cart” control isn’t a real button, so agents may not find it.`,
-            findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role'),
+            summary: 'The “add to cart” control isn’t a real button, so agents may not find it.',
+            findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role', fixFakeControl),
           };
         }
         if (!c.cart.length) return { score: 0.75, issues: 1, summary: 'No button named like “Add to cart” or “Buy now” found. If it only appears after choosing a size or color, make sure its name says what it does.' };
@@ -1550,8 +1817,8 @@
         return {
           score: c.fakeCart.length ? 0.8 : 1,
           issues: c.fakeCart.length,
-          summary: `Found ${pl(c.cart.length, 'cart button')}: ${names.join(', ')}.` + (c.fakeCart.length ? ` ${pl(c.fakeCart.length, 'other one isn’t', 'others aren’t')} a real button.` : ''),
-          findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role'),
+          summary: sayAll([say('Cart buttons found: $1.', names.join(', ')), ...(c.fakeCart.length ? [sayN(c.fakeCart.length, '$1 other one isn’t a real button.', '$1 others aren’t real buttons.')] : [])]),
+          findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role', fixFakeControl),
         };
       },
     },
@@ -1576,7 +1843,7 @@
         return {
           score,
           issues: missing.length,
-          summary: missing.length ? `Missing ${missing.join(', ').replace(/, ([^,]*)$/, ' and $1')}.` : 'Description, Open Graph and canonical tags are all present.',
+          summary: missing.length ? say('Missing: $1.', missing.join(', ')) : 'Description, Open Graph and canonical tags are all present.',
         };
       },
     },
@@ -1631,9 +1898,9 @@
           const r = await fetchText('/llms.txt');
           if (r.found) {
             const lines = r.text.split('\n').filter((l) => l.trim()).length;
-            return { score: 1, issues: 0, summary: `Found ${location.origin}/llms.txt (${pl(lines, 'line')}).` };
+            return { score: 1, issues: 0, summary: sayN(lines, 'Found $2/llms.txt (1 line).', 'Found $2/llms.txt ($1 lines).', location.origin) };
           }
-          return { score: 0.75, status: 'warn', issues: 1, summary: `No llms.txt at ${location.origin}/llms.txt.` };
+          return { score: 0.75, status: 'warn', issues: 1, summary: say('No llms.txt at $1/llms.txt.', location.origin) };
         } catch (e) {
           return { score: null, status: 'na', summary: 'Couldn’t check for llms.txt from this page.' };
         }
@@ -1657,13 +1924,13 @@
         const blockedUsers = userAgents.filter((a) => isBlocked(groups, a.toLowerCase(), path));
         const blockedCrawlers = crawlers.filter((a) => isBlocked(groups, a.toLowerCase(), path));
         const parts = [];
-        if (blockedUsers.length) parts.push(`Blocks agents browsing for a person: ${blockedUsers.join(', ')}.`);
-        if (blockedCrawlers.length) parts.push(`Blocks crawlers: ${blockedCrawlers.join(', ')}.`);
+        if (blockedUsers.length) parts.push(say('Blocks agents browsing for a person: $1.', blockedUsers.join(', ')));
+        if (blockedCrawlers.length) parts.push(say('Blocks crawlers: $1.', blockedCrawlers.join(', ')));
         return {
           score: blockedUsers.length ? 0.5 : 1,
           status: blockedUsers.length ? 'warn' : 'pass',
           issues: blockedUsers.length,
-          summary: parts.length ? parts.join(' ') : 'robots.txt allows AI agents on this page.',
+          summary: parts.length ? sayAll(parts) : 'robots.txt allows AI agents on this page.',
         };
       },
     },
@@ -1684,8 +1951,8 @@
         if (!negotiated && !alt) return { score: null, status: 'info', issues: 0, summary: 'The page doesn’t answer Accept: text/markdown and doesn’t link a Markdown version.' };
         const parts = [];
         if (negotiated) parts.push('Returns Markdown for Accept: text/markdown.');
-        if (alt) parts.push(`Links a Markdown version: ${alt.getAttribute('href')}.`);
-        return { score: null, status: 'pass', issues: 0, summary: parts.join(' ') };
+        if (alt) parts.push(say('Links a Markdown version: $1.', alt.getAttribute('href')));
+        return { score: null, status: 'pass', issues: 0, summary: sayAll(parts) };
       },
     },
     {
@@ -1712,9 +1979,9 @@
           rels = [...r.link.matchAll(/rel\s*=\s*"?([^";,]+)"?/gi)].flatMap((m) => m[1].trim().split(/\s+/));
           rels = [...new Set(rels.filter((x) => !/^(preload|preconnect|dns-prefetch|modulepreload|prefetch|stylesheet)$/i.test(x)))];
         } catch { /* ignore */ }
-        const parts = [sitemap ? `Sitemap: ${sitemap}.` : 'No sitemap found.'];
-        parts.push(rels.length ? `Link header relations: ${rels.slice(0, 6).join(', ')}.` : 'No Link headers for agents.');
-        return { score: null, status: sitemap ? 'pass' : 'info', issues: 0, summary: parts.join(' ') };
+        const parts = [sitemap ? say('Sitemap: $1.', sitemap) : 'No sitemap found.'];
+        parts.push(rels.length ? say('Link header relations: $1.', rels.slice(0, 6).join(', ')) : 'No Link headers for agents.');
+        return { score: null, status: sitemap ? 'pass' : 'info', issues: 0, summary: sayAll(parts) };
       },
     },
     {
@@ -1729,10 +1996,10 @@
         if (i >= 0) {
           const d = got[i].data;
           const name = (d.serverInfo && d.serverInfo.name) || d.name || d.title || '';
-          return { score: null, status: 'pass', issues: 0, summary: `Found ${paths[i]}${name ? ` for “${String(name).slice(0, 60)}”` : ''}.` };
+          return { score: null, status: 'pass', issues: 0, summary: name ? say('Found $1 for “$2”.', paths[i], String(name).slice(0, 60)) : say('Found $1.', paths[i]) };
         }
         const bad = got.findIndex((g) => g && g.invalid);
-        if (bad >= 0) return { score: null, status: 'warn', issues: 1, summary: `${paths[bad]} exists but isn’t valid JSON.` };
+        if (bad >= 0) return { score: null, status: 'warn', issues: 1, summary: say('$1 exists but isn’t valid JSON.', paths[bad]) };
         return { score: null, status: 'info', issues: 0, summary: 'No MCP server card found.' };
       },
     },
@@ -1752,9 +2019,9 @@
         const got = await Promise.all(items.map(([, p]) => fetchJson(p)));
         const found = items.filter((_, i) => got[i] && got[i].data).map(([label]) => label);
         const invalid = items.filter((_, i) => got[i] && got[i].invalid).map(([, p]) => p);
-        const parts = [found.length ? `Found: ${found.join(', ')}.` : 'No API catalog, OAuth metadata or Agent Skills index found.'];
-        if (invalid.length) parts.push(`Not valid JSON: ${invalid.join(', ')}.`);
-        return { score: null, status: invalid.length ? 'warn' : found.length ? 'pass' : 'info', issues: invalid.length, summary: parts.join(' ') };
+        const parts = [found.length ? say('Found: $1.', found.join(', ')) : 'No API catalog, OAuth metadata or Agent Skills index found.'];
+        if (invalid.length) parts.push(say('Not valid JSON: $1.', invalid.join(', ')));
+        return { score: null, status: invalid.length ? 'warn' : found.length ? 'pass' : 'info', issues: invalid.length, summary: sayAll(parts) };
       },
     },
     {
@@ -1769,7 +2036,7 @@
         }
         const lines = r.found ? [...r.text.matchAll(/^\s*content-signal\s*:\s*(.+)$/gim)].map((m) => m[1].trim()) : [];
         if (!lines.length) return { score: null, status: 'info', issues: 0, summary: r.found ? 'robots.txt has no Content-Signal lines.' : 'No robots.txt found.' };
-        return { score: null, status: 'pass', issues: 0, summary: `Content-Signal: ${lines[0].slice(0, 100)}${lines.length > 1 ? ` (and ${lines.length - 1} more)` : ''}.` };
+        return { score: null, status: 'pass', issues: 0, summary: lines.length > 1 ? say('Content-Signal: $1 (and $2 more).', lines[0].slice(0, 100), lines.length - 1) : say('Content-Signal: $1.', lines[0].slice(0, 100)) };
       },
     },
     {
@@ -1800,13 +2067,13 @@
           return { score: null, status: 'info', issues: 0, summary: probe.supported ? 'No WebMCP tools found. This browser supports WebMCP.' : 'No WebMCP tools found.' };
         }
         const parts = [];
-        if (tools.length) parts.push(`Registered tools: ${tools.slice(0, 8).map((t) => t.name).join(', ')}.`);
-        if (forms.length) parts.push(`${pl(forms.length, 'form')} declared as ${vb(forms.length, 'a tool', 'tools')}: ${forms.slice(0, 6).map((f) => f.getAttribute('toolname')).join(', ')}.`);
+        if (tools.length) parts.push(say('Registered tools: $1.', tools.slice(0, 8).map((t) => t.name).join(', ')));
+        if (forms.length) parts.push(sayN(forms.length, '$1 form declared as a tool: $2.', '$1 forms declared as tools: $2.', forms.slice(0, 6).map((f) => f.getAttribute('toolname')).join(', ')));
         if (scriptHint) parts.push('Inline scripts appear to register WebMCP tools, but this browser couldn’t list them.');
-        if (undescribed.length) parts.push(`No description: ${undescribed.slice(0, 5).join(', ')}.`);
-        if (problems.length) parts.push(`${pl(problems.length, 'problem')} with declared tools.`);
+        if (undescribed.length) parts.push(say('No description: $1.', undescribed.slice(0, 5).join(', ')));
+        if (problems.length) parts.push(sayN(problems.length, '$1 problem with declared tools.', '$1 problems with declared tools.'));
         const issues = problems.length + undescribed.length;
-        return { score: null, status: issues ? 'warn' : 'pass', issues, summary: parts.join(' '), findings: findings(problems, (p) => p.note) };
+        return { score: null, status: issues ? 'warn' : 'pass', issues, summary: sayAll(parts), findings: findings(problems, (p) => p.note) };
       },
     },
   ];
@@ -1879,12 +2146,16 @@
     ctx.view = buildAgentView();
     ctx.probe = opts.probe || null;
 
+    // In a site scan, files that are the same for every page are checked once, not per page.
+    const SITE_LEVEL = new Set(['llms-txt', 'robots-ai', 'discovery-links', 'mcp-discovery', 'api-discovery', 'content-signals', 'markdown-negotiation']);
     const checks = await Promise.all(CHECKS.map(async (c) => {
       let out;
       try {
-        out = await c.run(ctx);
+        out = opts.siteScan && SITE_LEVEL.has(c.id)
+          ? { score: null, status: 'na', summary: 'Checked once for the whole site, not per page.' }
+          : await c.run(ctx);
       } catch (e) {
-        out = { score: null, status: 'na', summary: `This check couldn’t run on this page (${(e && e.message) || e}).` };
+        out = { score: null, status: 'na', summary: say('This check couldn’t run on this page ($1).', (e && e.message) || e) };
       }
       const list = out.findings || [];
       const status = statusFor(c, out);
@@ -1893,7 +2164,8 @@
         status,
         score: out.score == null ? null : Math.round(out.score * 100),
         issues: out.issues ?? list.length,
-        summary: out.summary || '',
+        summary: String(out.summary || ''),
+        ...(out.summary && out.summary.parts ? { summaryParts: out.summary.parts } : {}),
         findings: list,
       };
     }));
@@ -1932,6 +2204,8 @@
         controls: ctx.controls.length,
         fields: ctx.fields.length,
         tokens: ctx.view.tokens,
+        inShadow: ctx.coverage.shadow,
+        inFrames: ctx.coverage.frame,
       },
       categories,
       agentView: {

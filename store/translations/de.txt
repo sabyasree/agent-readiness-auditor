@@ -1,0 +1,25 @@
+Können KI-Agenten deine Website wirklich nutzen? Agent-Readiness Auditor prüft, wie gut Agenten wie Claude, Gemini, ChatGPT agent und Perplexity Comet eine Seite lesen und Aufgaben darauf erledigen können – und zeigt dir genau, was du beheben musst, beginnend mit den Korrekturen, die die meisten Punkte bringen.
+
+Öffne eine beliebige Seite und klicke auf das Symbol. In etwa einer Sekunde bekommst du eine Punktzahl von 0 bis 100, eine Aufschlüsselung nach Kategorien und jedes Problem-Element mit Begründung und Lösung.
+
+Die meisten „Agent-ready“-Checker suchen nur nach Dateien wie robots.txt und llms.txt. Dieser prüft, ob ein Agent deine Bedienelemente am Namen findet, Formulare ausfüllt, an Overlays vorbeikommt, auf Produktseiten kaufen kann und deine Inhalte liest, ohne in die Irre geführt zu werden.
+
+NEU IN 1.5
+★ Wöchentlicher Scan mit Benachrichtigung: Nach einem Website-Scan werden dieselben Seiten jede Woche erneut geprüft, und du wirst benachrichtigt, wenn die Punktzahl sinkt.
+★ Tastatur- und Fokusprüfungen: Bedienelemente, die die Tab-Taste überspringt, und solche ohne sichtbaren Fokus.
+★ Shadow DOM und Frames: Buttons und Felder in Web Components und in iframes derselben Website werden jetzt mitgeprüft.
+★ Namensvorschläge von der KI auf deinem Gerät für unbenannte Buttons und Bilder.
+★ Kommandozeile und MCP-Server: npx agent-readiness für CI, Claude Code und Cursor.
+★ In 6 Sprachen: English, Español, Deutsch, 日本語, Português (Brasil) und বাংলা.
+
+AUSSERDEM
+★ Website-Scan: bis zu 25 Seiten und ihre gemeinsamen Probleme.
+★ Codevorschläge für jedes Problem-Element.
+★ Agenten-Test: Gib eine Aufgabe wie „Dieses Produkt in den Warenkorb legen“ ein und sieh, wo ein Agent hängen bleibt.
+★ „Zuerst beheben“, Markierungen auf der Seite, Agentensicht, Vergleich mit Mitbewerbern, teilbarer Bericht und Prompts für Claude Code, Cursor oder Copilot.
+
+42 PRÜFUNGEN IN 10 BEREICHEN
+Echte Bedienelemente, Labels und Namen, Formulare, Interaktionsfallen, stabile Selektoren, Seitenstruktur, Shopping-Agenten, Agenten-Sicherheit, maschinenlesbare Signale und Agenten-Protokolle.
+
+DATENSCHUTZ VON ANFANG AN
+Alles läuft in deinem Browser. Kein Konto, keine Server, keine Analyse. Nichts von der Seite wird irgendwohin gesendet.

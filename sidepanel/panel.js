@@ -37,23 +37,28 @@ const state = {
   report: null,
   stale: false,
   filter: 'issues',
-  tab: 'report',
+  tab: 'overview',
   viewFilter: 'all',
   viewQuery: '',
   running: false,
   marked: false,
   usage: null,
   test: { task: '', result: null, running: false, ai: null },
+  site: null,
+  compareOpen: false,
+  compareWith: null,
+  watch: null, // tab id whose audit re-runs after each reload
 };
 
 const VERSION = chrome.runtime.getManifest().version;
-const WHATS_NEW = 'Fix-these-first with projected points, markers for every issue on the page, shareable client reports, and checks for AI shopping agents on product pages.';
+const WHATS_NEW = 'Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.';
 
 const $view = document.getElementById('view');
 const $run = document.getElementById('runBtn');
 const $pageLabel = document.getElementById('pageLabel');
 const $banner = document.getElementById('banner');
 const $toast = document.getElementById('toast');
+const $tabs = document.getElementById('tabs');
 
 // ----------------------------------------------------------------- helpers
 
@@ -76,7 +81,7 @@ function h(tag, props, ...kids) {
 }
 
 function glyph(status) {
-  return h('span', { class: `glyph tone-${status}`, html: GLYPHS[status] || GLYPHS.na, role: 'img', 'aria-label': STATUS_LABEL[status] });
+  return h('span', { class: `glyph tone-${status}`, html: GLYPHS[status] || GLYPHS.na, role: 'img', 'aria-label': t(STATUS_LABEL[status] || '') });
 }
 
 function toneFor(score) {
@@ -86,6 +91,14 @@ function toneFor(score) {
 
 function hostOf(url) {
   try { return new URL(url).host || url; } catch { return url || ''; }
+}
+
+// The marker bar on the page, in the panel's language.
+function overlayText() {
+  return {
+    test: t('Agent test: $1', '$1'), step: t('1 step'), steps: t('$1 steps', '$1'), marked: t('Agent-Readiness: $1 marked', '$1'),
+    element: t('1 element'), elements: t('$1 elements', '$1'), failing: t('failing'), warning: t('warning'), hide: t('Hide'),
+  };
 }
 
 let toastTimer;
@@ -98,15 +111,16 @@ function toast(msg) {
 
 function setView(...nodes) {
   $view.replaceChildren(...nodes.filter(Boolean));
+  $tabs.hidden = true; // renderResults shows it again
 }
 
 function setRunButton() {
   $run.disabled = state.running;
-  $run.textContent = state.running ? 'Auditing…' : state.report ? 'Run again' : 'Run audit';
+  $run.textContent = state.running ? t('Auditing…') : state.report ? t('Run again') : t('Run audit');
 }
 
 function showBanner(text, actionLabel, action) {
-  $banner.replaceChildren(text, actionLabel ? h('button', { type: 'button', onclick: action }, actionLabel) : '');
+  $banner.replaceChildren(t(text), actionLabel ? h('button', { type: 'button', onclick: action }, t(actionLabel)) : '');
   $banner.hidden = false;
 }
 function hideBanner() { $banner.hidden = true; }
@@ -140,7 +154,8 @@ function summarize(r) {
   for (const cat of r.categories) {
     for (const c of cat.checks) checks[c.id] = { s: c.status, n: c.issues, t: c.title };
   }
-  return { ts: r.timestamp, score: r.score, title: r.title, checks };
+  const cats = Object.fromEntries(r.categories.filter((c) => c.scored !== false && c.score != null).map((c) => [c.name, c.score]));
+  return { ts: r.timestamp, score: r.score, title: r.title, cats, checks };
 }
 
 function diffReports(prev, r) {
@@ -179,9 +194,13 @@ async function recordHistory(r) {
 }
 
 async function clearHistory() {
-  try { await chrome.storage.local.remove(HISTORY_KEY); } catch { /* ignore */ }
+  try {
+    const all = await chrome.storage.local.get(null);
+    await chrome.storage.local.remove([HISTORY_KEY, ...Object.keys(all).filter((k) => k.startsWith('sitescan:'))]);
+  } catch { /* ignore */ }
+  state.site = null;
   if (state.report) { state.report.previous = null; saveReport(state.tabId, state.report); renderResults(); }
-  toast('Audit history cleared');
+  toast(t('Audit history cleared'));
 }
 
 // Usage counters for the review prompt and "What's new". Local only.
@@ -261,7 +280,7 @@ async function runAudit() {
       args: [{ probe }],
     });
     const report = res && res.result;
-    if (!report) throw new Error('The audit didn’t return any results.');
+    if (!report) throw new Error(t('The audit didn’t return any results.'));
     await recordHistory(report);
     await saveReport(tabId, report);
     setBadge(tabId, report.score);
@@ -286,21 +305,21 @@ function handleError(err) {
   state.report = null;
 
   if (/chrome:\/\/|chrome-extension:\/\/|edge:\/\/|about:|devtools:|extensions gallery|chrome web store|cannot be scripted|webstore/i.test(msg)) {
-    $pageLabel.textContent = 'Browser page';
+    $pageLabel.textContent = t('Browser page');
     return setView(h('section', { class: 'message' },
-      h('h1', { text: 'This page can’t be audited' }),
-      h('p', { text: 'Chrome doesn’t let extensions read its own pages, the Chrome Web Store, or other extensions. Open a regular website and run the audit there.' }),
+      h('h1', { text: t('This page can’t be audited') }),
+      h('p', { text: t('Chrome doesn’t let extensions read its own pages, the Chrome Web Store, or other extensions. Open a regular website and run the audit there.') }),
       h('div', { class: 'actions' },
-        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => chrome.tabs.create({ url: `${SITE_URL}/demo/` }) }, 'Try the demo store'),
+        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => chrome.tabs.create({ url: `${SITE_URL}/demo/` }) }, t('Try the demo store')),
       ),
     ));
   }
   if (/file:\/\//i.test(msg)) {
     return setView(h('section', { class: 'message' },
-      h('h1', { text: 'Allow access to local files' }),
-      h('p', { text: 'To audit files opened from your computer, turn on “Allow access to file URLs” for this extension, then run the audit again.' }),
+      h('h1', { text: t('Allow access to local files') }),
+      h('p', { text: t('To audit files opened from your computer, turn on “Allow access to file URLs” for this extension, then run the audit again.') }),
       h('div', { class: 'actions' },
-        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => chrome.tabs.create({ url: `chrome://extensions/?id=${chrome.runtime.id}` }) }, 'Open extension settings'),
+        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => chrome.tabs.create({ url: `chrome://extensions/?id=${chrome.runtime.id}` }) }, t('Open extension settings')),
       ),
     ));
   }
@@ -308,10 +327,10 @@ function handleError(err) {
     return renderPermission();
   }
   setView(h('section', { class: 'message' },
-    h('h1', { text: 'The audit stopped before it finished' }),
-    h('p', {}, 'Reload the page and run the audit again. If it keeps happening, the page may be blocking scripts. Details: ', h('code', { text: msg.slice(0, 240) || 'Unknown error' })),
+    h('h1', { text: t('The audit stopped before it finished') }),
+    h('p', {}, t('Reload the page and run the audit again. If it keeps happening, the page may be blocking scripts. Details: '), h('code', { text: msg.slice(0, 240) || 'Unknown error' })),
     h('div', { class: 'actions' },
-      h('button', { class: 'btn btn-primary', type: 'button', onclick: runAudit }, 'Run audit'),
+      h('button', { class: 'btn btn-primary', type: 'button', onclick: runAudit }, t('Run audit')),
     ),
   ));
 }
@@ -320,7 +339,7 @@ async function requestAllSites() {
   let granted = false;
   try { granted = await chrome.permissions.request({ origins: ['<all_urls>'] }); } catch { /* ignore */ }
   if (granted) runAudit();
-  else toast('Access wasn’t granted. Click the toolbar icon while on the page to audit it once.');
+  else toast(t('Access wasn’t granted. Click the toolbar icon while on the page to audit it once.'));
 }
 
 // --------------------------------------------------------------- locating
@@ -383,9 +402,9 @@ async function locate(f, label) {
       func: locateInPage,
       args: [f.ref, f.selector, state.report.runId, label],
     });
-    if (!res || !res.result || !res.result.ok) toast('That element is no longer on the page. Run the audit again.');
+    if (!res || !res.result || !res.result.ok) toast(t('That element is no longer on the page. Run the audit again.'));
   } catch {
-    toast('Couldn’t reach the page. Run the audit again.');
+    toast(t('Couldn’t reach the page. Run the audit again.'));
   }
 }
 
@@ -407,17 +426,17 @@ async function toggleMarks(btn) {
     for (const cat of r.categories) {
       for (const c of cat.checks) {
         if (c.status !== 'fail' && c.status !== 'warn') continue;
-        for (const f of c.findings) items.push({ ref: f.ref, selector: f.selector, tone: c.status, label: f.note ? `${c.title}: ${f.note}` : c.title });
+        for (const f of c.findings) items.push({ ref: f.ref, selector: f.selector, tone: c.status, label: f.note ? `${t(c.title)}: ${t(f.note)}` : t(c.title) });
       }
     }
-    if (!items.length) return toast('No elements to mark. The issues on this page are page-wide.');
-    const res = await pageCall(markAllInPage, [items, r.runId]);
-    if (!res || !res.ok) return toast('Couldn’t reach the page. Run the audit again.');
-    if (!res.shown) return toast('Those elements are no longer on the page. Run the audit again.');
+    if (!items.length) return toast(t('No elements to mark. The issues on this page are page-wide.'));
+    const res = await pageCall(markAllInPage, [items, r.runId, { text: overlayText() }]);
+    if (!res || !res.ok) return toast(t('Couldn’t reach the page. Run the audit again.'));
+    if (!res.shown) return toast(t('Those elements are no longer on the page. Run the audit again.'));
     state.marked = true;
-    toast(`Marked ${res.shown} ${res.shown === 1 ? 'element' : 'elements'} on the page. Hover a number for details.`);
+    toast(tn(res.shown, 'Marked $1 element on the page. Hover a number for details.', 'Marked $1 elements on the page. Hover a number for details.'));
   }
-  btn.textContent = state.marked ? 'Hide marks' : 'Mark issues on page';
+  btn.textContent = state.marked ? t('Hide marks') : t('Mark issues on page');
   btn.setAttribute('aria-pressed', String(state.marked));
 }
 
@@ -430,19 +449,70 @@ async function openShareableReport() {
   const url = reportBlobUrl();
   try { await chrome.tabs.create({ url }); } catch { window.open(url, '_blank'); }
   setTimeout(() => URL.revokeObjectURL(url), 60000);
-  toast('Report opened in a new tab. Use Print → Save as PDF to send it.');
+  toast(t('Report opened in a new tab. Use Print → Save as PDF to send it.'));
 }
 
-/** Bring the tab bar to the top of the panel, under the sticky header, so the chosen tab's content is in view. */
-function showTabs() {
-  const tabs = document.querySelector('.tabs');
-  if (!tabs) return;
-  const top = tabs.getBoundingClientRect().top + window.scrollY - document.querySelector('.topbar').offsetHeight;
-  if (window.scrollY < top) window.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+async function toggleWatch() {
+  const r = state.report;
+  if (!r) return;
+  if (state.watch === state.tabId) {
+    state.watch = null;
+  } else {
+    let origin;
+    try { origin = new URL(r.url).origin; } catch { return; }
+    // Re-running after a reload needs lasting access to this site (the one-time access ends on reload).
+    let granted = false;
+    try { granted = await chrome.permissions.request({ origins: [`${origin}/*`] }); } catch { granted = false; }
+    if (!granted) return toast(t('Re-run on reload needs access to this site.'));
+    state.watch = state.tabId;
+    toast(t('The audit will run again each time this page reloads.'));
+  }
+  renderResults();
+}
+
+function compareCard(r) {
+  if (!state.compareOpen) return null;
+  const card = h('section', { class: 'compare-card', 'aria-label': t('Compare') }, h('p', { class: 'test-progress', text: t('Loading your recent audits…') }));
+  const label = (u) => { try { const x = new URL(u); return x.host + (x.pathname === '/' ? '' : x.pathname); } catch { return u; } };
+  readHistory().then((all) => {
+    const me = pageKey(r.url);
+    const others = Object.entries(all).filter(([u]) => u !== me).sort((a, b) => b[1].ts - a[1].ts).slice(0, 30);
+    if (!others.length) {
+      card.replaceChildren(h('p', { class: 'compare-empty', text: t('Audit another page first, such as a competitor’s homepage or product page, then compare it with this one here.') }));
+      return;
+    }
+    const pick = state.compareWith && all[state.compareWith] && state.compareWith !== me ? state.compareWith : others[0][0];
+    const o = all[pick];
+    const select = h('select', {
+      id: 'compare-with', class: 'view-search',
+      onchange: (e) => { state.compareWith = e.target.value; renderResults(); },
+    }, others.map(([u, e]) => h('option', { value: u, selected: u === pick || null }, `${label(u)} (${e.score})`)));
+    const cell = (v) => h('td', { class: `num tone-${toneFor(v)}`, text: v == null ? '–' : String(v) });
+    const rows = [[t('Overall'), r.score, o.score], ...r.categories.filter((c) => c.scored !== false)
+      .map((c) => [t(c.name), c.score, o.cats ? o.cats[c.name] : undefined])
+      .filter(([, a, b]) => a != null || b != null)];
+    const isIssue = (s) => s === 'fail' || s === 'warn';
+    const mine = r.categories.flatMap((c) => c.checks.filter((k) => c.scored !== false));
+    const theyLead = mine.filter((k) => isIssue(k.status) && o.checks[k.id] && o.checks[k.id].s === 'pass').map((k) => t(k.title));
+    const youLead = mine.filter((k) => k.status === 'pass' && o.checks[k.id] && isIssue(o.checks[k.id].s)).map((k) => t(k.title));
+    const list = (title, items) => (items.length ? [h('h3', { text: t(title) }), h('ul', {}, items.slice(0, 8).map((x) => h('li', { text: x })))] : null);
+    card.replaceChildren(...[
+      h('label', { for: 'compare-with', class: 'test-label', text: t('Compare this page with') }),
+      select,
+      h('table', { class: 'compare-table' },
+        h('thead', {}, h('tr', {}, h('th', { text: '' }), h('th', { text: t('This page') }), h('th', { text: t('Other') }))),
+        h('tbody', {}, rows.map(([name, a, b], i) => h('tr', { class: i === 0 ? 'overall' : '' }, h('td', { text: name }), cell(a), cell(b == null ? null : b))))),
+      o.cats ? null : h('p', { class: 'compare-note', text: t('Category scores appear for pages audited with version 1.4 or later.') }),
+      list('Where the other page does better', theyLead),
+      list('Where this page does better', youLead),
+      h('p', { class: 'compare-note', text: t('Other page audited $1. Run it again for a fresh comparison.', timeAgo(o.ts)) }),
+    ].flat().filter(Boolean));
+  });
+  return card;
 }
 
 function jumpToCheck(id) {
-  state.tab = 'report';
+  state.tab = 'issues';
   if (state.filter === 'passed') state.filter = 'issues';
   renderResults();
   const el = document.getElementById(`check-${id}`);
@@ -459,12 +529,12 @@ function jumpToCheck(id) {
 function whatsNewCard() {
   const u = state.usage;
   if (!u || u.seenVersion === VERSION) return null;
-  const card = h('section', { class: 'note-card', 'aria-label': 'What’s new' },
-    h('div', {}, h('strong', { text: `New in ${VERSION}` }), h('p', { text: WHATS_NEW })),
+  const card = h('section', { class: 'note-card', 'aria-label': t('What’s new') },
+    h('div', {}, h('strong', { text: t('New in $1', VERSION) }), h('p', { text: t(WHATS_NEW) })),
     h('button', {
       class: 'btn btn-quiet btn-small', type: 'button',
       onclick: () => { u.seenVersion = VERSION; saveUsage(); card.remove(); },
-    }, 'Got it'),
+    }, t('Got it')),
   );
   return card;
 }
@@ -474,18 +544,18 @@ function reviewCard(r) {
   const u = state.usage;
   const up = r.previous && r.previous.delta > 0;
   const done = (value, after) => { u.review = value; if (after) u.reviewAfter = u.audits + after; saveUsage(); card.remove(); };
-  const card = h('section', { class: 'note-card review-card', 'aria-label': 'Rate the extension' },
+  const card = h('section', { class: 'note-card review-card', 'aria-label': t('Rate the extension') },
     h('div', {},
-      h('strong', { text: up ? `Up ${r.previous.delta} points. Nice work.` : 'Finding this useful?' }),
-      h('p', { text: 'A quick rating on the Chrome Web Store helps other developers find it. It takes ten seconds.' }),
+      h('strong', { text: up ? t('Up $1 points. Nice work.', r.previous.delta) : t('Finding this useful?') }),
+      h('p', { text: t('A quick rating on the Chrome Web Store helps other developers find it. It takes ten seconds.') }),
     ),
     h('div', { class: 'note-actions' },
       h('button', {
         class: 'btn btn-primary btn-small', type: 'button',
         onclick: () => { chrome.tabs.create({ url: `${STORE_URL}/reviews` }); done('done'); },
-      }, 'Rate it'),
-      h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { u.review = 'ask'; done('ask', 8); } }, 'Not now'),
-      h('button', { class: 'btn-link', type: 'button', onclick: () => done('never') }, 'Don’t ask again'),
+      }, t('Rate it')),
+      h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { u.review = 'ask'; done('ask', 8); } }, t('Not now')),
+      h('button', { class: 'btn-link', type: 'button', onclick: () => done('never') }, t('Don’t ask again')),
     ),
   );
   return card;
@@ -497,7 +567,7 @@ function topFixesCard(r) {
   const all = scoreWith(r, fixes.map((f) => f.check.id));
   return h('section', { class: 'fixes-card', 'aria-labelledby': 'fixes-h' },
     h('div', { class: 'fixes-head' },
-      h('h2', { id: 'fixes-h', text: 'Fix these first' }),
+      h('h2', { id: 'fixes-h', text: t('Fix these first') }),
       h('span', { class: 'fixes-target', text: `${r.score} → ${all}` }),
     ),
     h('ol', { class: 'fixes' },
@@ -505,8 +575,8 @@ function topFixesCard(r) {
         h('button', { type: 'button', onclick: () => jumpToCheck(f.check.id) },
           h('span', { class: 'gain', text: `+${f.gain}` }),
           h('span', { class: 'fix-text' },
-            h('strong', { text: f.check.title }),
-            h('span', { text: f.check.summary }),
+            h('strong', { text: t(f.check.title) }),
+            h('span', { text: summaryText(f.check) }),
           ),
         ),
       )),
@@ -514,20 +584,20 @@ function topFixesCard(r) {
     h('div', { class: 'fixes-actions' },
       h('button', {
         class: 'btn btn-quiet btn-small', type: 'button',
-        onclick: () => copyText(toPrompt(r, fixes.map((f) => f.check.id)), 'Prompt for the top fixes copied'),
-      }, 'Copy prompt for these'),
+        onclick: () => copyText(toPrompt(r, fixes.map((f) => f.check.id)), t('Prompt for the top fixes copied')),
+      }, t('Copy prompt for these')),
     ),
   );
 }
 
 function timeAgo(ts) {
   const m = Math.round((Date.now() - ts) / 60000);
-  if (m < 1) return 'just now';
-  if (m < 60) return `${m} min ago`;
+  if (m < 1) return t('just now');
+  if (m < 60) return t('$1 min ago', m);
   const hrs = Math.round(m / 60);
-  if (hrs < 24) return `${hrs} h ago`;
+  if (hrs < 24) return t('$1 h ago', hrs);
   const days = Math.round(hrs / 24);
-  return days === 1 ? 'yesterday' : `${days} days ago`;
+  return days === 1 ? t('yesterday') : t('$1 days ago', days);
 }
 
 async function renderRecent(list) {
@@ -539,7 +609,7 @@ async function renderRecent(list) {
     try { const u = new URL(url); label = u.host + (u.pathname === '/' ? '' : u.pathname); } catch { /* keep url */ }
     const delta = e.prev != null ? e.score - e.prev : 0;
     return h('li', {},
-      h('button', { type: 'button', title: `Open ${url}`, onclick: () => chrome.tabs.create({ url }) },
+      h('button', { type: 'button', title: t('Open $1', url), onclick: () => chrome.tabs.create({ url }) },
         h('span', { class: `recent-score tone-${toneFor(e.score)}`, text: String(e.score) }),
         h('span', { class: 'recent-text' },
           h('strong', { text: e.title || label }),
@@ -552,25 +622,37 @@ async function renderRecent(list) {
 }
 
 function renderEmpty() {
-  $pageLabel.textContent = 'Audit the page you’re on';
+  $pageLabel.textContent = t('Audit the page you’re on');
   const recentList = h('ul', { class: 'recent-list' });
   setView(
     whatsNewCard(),
     h('section', { class: 'intro' },
-      h('h1', { text: 'How well can AI agents use this page?' }),
-      h('p', { text: 'Run an audit to see how easily agents like Claude, Gemini and ChatGPT can read this page, find its controls and finish tasks on it. You’ll get a score and specific fixes.' }),
+      h('h1', { text: t('How well can AI agents use this page?') }),
+      h('p', { text: t('Run an audit to see how easily agents like Claude, Gemini and ChatGPT can read this page, find its controls and finish tasks on it. You’ll get a score and specific fixes.') }),
       h('div', { class: 'intro-actions' },
-        h('button', { class: 'btn btn-primary', type: 'button', onclick: runAudit }, 'Run audit'),
-        h('button', { class: 'btn btn-quiet', type: 'button', onclick: () => chrome.tabs.create({ url: `${SITE_URL}/demo/` }) }, 'Try the demo store'),
+        h('button', { class: 'btn btn-primary', type: 'button', onclick: runAudit }, t('Run audit')),
+        h('button', { class: 'btn btn-quiet', type: 'button', onclick: () => chrome.tabs.create({ url: `${SITE_URL}/demo/` }) }, t('Try the demo store')),
       ),
       h('section', { class: 'recent', 'aria-labelledby': 'recent-h' },
-        h('h2', { id: 'recent-h', text: 'Recent audits' }),
+        h('h2', { id: 'recent-h', text: t('Recent audits') }),
         recentList,
       ),
-      h('ul', { class: 'scope', 'aria-label': 'What the audit checks' },
-        CATEGORY_INTRO.map(([name, desc]) => h('li', {}, h('strong', { text: name }), h('span', { text: desc }))),
+      h('section', { class: 'gets', 'aria-labelledby': 'gets-h' },
+        h('h2', { id: 'gets-h', text: t('What you get') }),
+        h('ul', {}, [
+          ['overview', 'A score and what to fix first', 'Ranked by how many points each fix is worth, with code you can copy.'],
+          ['agent', 'The page as an agent sees it', 'Its accessibility tree, with every unnamed button flagged.'],
+          ['test', 'A test run of a real task', 'Type “add to cart” or “sign up” and see where an agent gets stuck.'],
+          ['site', 'A scan of the whole site', 'Up to 25 pages, and the problems they share.'],
+        ].map(([id, title, sub]) => h('li', {}, icon(TAB_ICON[id], 'tool-ico'), h('span', { class: 'tool-text' }, h('strong', { text: t(title) }), h('span', { text: t(sub) }))))),
       ),
-      h('p', { class: 'privacy', text: 'Everything runs in your browser. Nothing about the page is sent anywhere.' }),
+      h('details', { class: 'scope-details' },
+        h('summary', {}, t('What it checks'), h('span', { html: CHEVRON, style: { display: 'inline-flex' } })),
+        h('ul', { class: 'scope', 'aria-label': t('What the audit checks') },
+          CATEGORY_INTRO.map(([name, desc]) => h('li', {}, h('strong', { text: t(name) }), h('span', { text: t(desc) }))),
+        ),
+      ),
+      h('p', { class: 'privacy', text: t('Everything runs in your browser. Nothing about the page is sent anywhere.') }),
     ),
   );
   renderRecent(recentList);
@@ -579,27 +661,27 @@ function renderEmpty() {
 function renderLoading() {
   setView(h('section', { class: 'loading', 'aria-busy': 'true' },
     h('div', { class: 'scan-page', 'aria-hidden': 'true' }, h('i'), h('i'), h('i'), h('i'), h('i'), h('i'), h('div', { class: 'scan-line' })),
-    h('p', { text: 'Reading the page the way an agent would…' }),
+    h('p', { text: t('Reading the page the way an agent would…') }),
   ));
 }
 
 function renderPermission() {
   setView(h('section', { class: 'message' },
-    h('h1', { text: 'Chrome needs your OK to read this page' }),
-    h('p', { text: 'Click the extension’s toolbar icon while you’re on the page to allow a one-time audit, then press Run audit. Or allow the auditor on all sites so it works anywhere without asking.' }),
+    h('h1', { text: t('Chrome needs your OK to read this page') }),
+    h('p', { text: t('Click the extension’s toolbar icon while you’re on the page to allow a one-time audit, then press Run audit. Or allow the auditor on all sites so it works anywhere without asking.') }),
     h('div', { class: 'actions' },
-      h('button', { class: 'btn btn-primary', type: 'button', onclick: requestAllSites }, 'Allow on all sites'),
-      h('button', { class: 'btn btn-quiet', type: 'button', onclick: runAudit }, 'Try again'),
+      h('button', { class: 'btn btn-primary', type: 'button', onclick: requestAllSites }, t('Allow on all sites')),
+      h('button', { class: 'btn btn-quiet', type: 'button', onclick: runAudit }, t('Try again')),
     ),
   ));
 }
 
 function checkMeta(c) {
-  if (c.status === 'pass') return 'Passed';
-  if (c.status === 'na') return 'Not applicable';
-  if (c.status === 'info') return c.issues ? `${c.issues} found` : 'Note';
-  if (c.issues) return c.issues === 1 ? '1 issue' : `${c.issues.toLocaleString()} issues`;
-  return STATUS_LABEL[c.status];
+  if (c.status === 'pass') return t('Passed');
+  if (c.status === 'na') return t('Not applicable');
+  if (c.status === 'info') return c.issues ? t('$1 found', c.issues) : t('Note');
+  if (c.issues) return tn(c.issues, '$1 issue', '$1 issues');
+  return t(STATUS_LABEL[c.status]);
 }
 
 function visibleChecks(cat) {
@@ -613,12 +695,23 @@ function renderFinding(f, label) {
   return h('li', { class: 'finding' },
     h('code', { text: f.snippet }),
     h('div', { class: 'finding-foot' },
-      h('span', { class: 'finding-note', text: f.note }),
+      h('span', { class: 'finding-note', text: t(f.note || '') }),
       f.selector || f.ref != null
-        ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => locate(f, f.note || label), title: 'Scroll to this element and highlight it' },
-          h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), 'Show on page')
+        ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => locate(f, f.note || label), title: t('Scroll to this element and highlight it') },
+          h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), t('Show on page'))
         : null,
     ),
+    f.fix ? (() => {
+      const pre = h('pre', { text: f.fix });
+      return h('details', { class: 'fix' },
+        h('summary', {}, t('Suggested fix')),
+        pre,
+        h('div', { class: 'fix-actions' },
+          h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(f.fix, t('Fix copied')) }, t('Copy code')),
+          suggestNameButton(f, pre),
+        ),
+      );
+    })() : null,
   );
 }
 
@@ -635,30 +728,30 @@ function renderCheck(c, open) {
         c.findings.slice(FINDINGS_PREVIEW).forEach((f) => list.append(renderFinding(f, c.title)));
         moreBtn.remove();
       },
-    }, `Show all ${c.findings.length}`);
+    }, t('Show all $1', c.findings.length));
   }
   const capNote = c.issues > c.findings.length
-    ? h('p', { class: 'cap-note', text: `Listing the first ${c.findings.length} of ${c.issues.toLocaleString()}. Fix these and run the audit again to see the rest.` })
+    ? h('p', { class: 'cap-note', text: t('Listing the first $1 of $2. Fix these and run the audit again to see the rest.', c.findings.length, c.issues.toLocaleString()) })
     : null;
 
   const hasIssues = c.status === 'fail' || c.status === 'warn';
   return h('details', { class: 'check', id: `check-${c.id}`, open: open || null },
     h('summary', {},
       glyph(c.status),
-      h('span', { class: 'check-title', text: c.title }),
+      h('span', { class: 'check-title', text: t(c.title) }),
       h('span', { class: 'check-meta', text: checkMeta(c) }),
       h('span', { html: CHEVRON, style: { display: 'inline-flex' } }),
     ),
     h('div', { class: 'check-body' },
-      h('p', { class: 'check-summary', text: c.summary }),
-      h('h3', { text: 'Why it matters' }),
-      h('p', { text: c.why }),
-      hasIssues || c.status === 'info' ? [h('h3', { text: 'How to fix' }), h('p', { text: c.fix })] : null,
+      h('p', { class: 'check-summary', text: summaryText(c) }),
+      h('h3', { text: t('Why it matters') }),
+      h('p', { text: t(c.why) }),
+      hasIssues || c.status === 'info' ? [h('h3', { text: t('How to fix') }), h('p', { text: t(c.fix) })] : null,
       hasIssues ? h('div', { class: 'check-actions' },
         h('button', {
-          class: 'btn btn-quiet btn-small', type: 'button', title: 'Copy a prompt that asks a coding agent to fix and test this issue',
-          onclick: () => copyText(toPrompt(state.report, c.id), 'Fix prompt copied'),
-        }, 'Copy fix prompt'),
+          class: 'btn btn-quiet btn-small', type: 'button', title: t('Copy a prompt that asks a coding agent to fix and test this issue'),
+          onclick: () => copyText(toPrompt(state.report, c.id), t('Fix prompt copied')),
+        }, t('Copy fix prompt')),
       ) : null,
       c.findings.length ? list : null,
       moreBtn,
@@ -667,92 +760,156 @@ function renderCheck(c, open) {
   );
 }
 
-function renderResults() {
-  const r = state.report;
-  if (!r) return renderEmpty();
-  $pageLabel.textContent = hostOf(r.url);
-  $pageLabel.title = r.url;
+// The five results views, shown in a tab bar that stays under the header.
+const TABS = [
+  ['overview', 'Overview', '<path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4.5-5"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/>'],
+  ['issues', 'Issues', '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.4" fill="currentColor"/><circle cx="4.5" cy="12" r="1.4" fill="currentColor"/><circle cx="4.5" cy="18" r="1.4" fill="currentColor"/>'],
+  ['agent', 'Agent view', '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/>'],
+  ['test', 'Agent test', '<path d="M6 3.5l12.5 7.2-5.6 1.6-2.6 5.3z"/><path d="M13 13l5 5"/>'],
+  ['site', 'Site scan', '<rect x="7.5" y="3" width="12.5" height="14.5" rx="2"/><path d="M4 7v11.5A2.5 2.5 0 0 0 6.5 21H16"/>'],
+];
+const icon = (paths, cls = 'ico') => h('span', { class: cls, 'aria-hidden': 'true', html: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>` });
+const TAB_ICON = Object.fromEntries(TABS.map(([id, , paths]) => [id, paths]));
 
-  const tone = toneFor(r.score);
+function switchTab(id) {
+  state.tab = id;
+  renderResults();
+  window.scrollTo(0, 0);
+  document.getElementById(`tab-${id}`)?.focus({ preventScroll: true });
+}
+
+function renderTabs(r) {
   const issueCount = r.counts.fail + r.counts.warn;
-  const passCount = r.counts.pass + r.counts.info + r.counts.na;
-  const total = issueCount + passCount;
-  const totalWeight = r.categories.reduce((a, c) => a + (c.score == null ? 0 : c.weight), 0) || 1;
+  const unnamed = r.agentView ? r.agentView.unnamed : 0;
+  const ids = TABS.map(([id]) => id);
+  $tabs.replaceChildren(...TABS.map(([id, label, paths]) => {
+    const badge = id === 'issues' && issueCount ? String(issueCount) : id === 'agent' && unnamed ? String(unnamed) : '';
+    return h('button', {
+      type: 'button', role: 'tab', id: `tab-${id}`, 'aria-selected': String(state.tab === id), 'aria-controls': 'tabpanel',
+      tabindex: state.tab === id ? '0' : '-1',
+      title: t({ overview: 'Score and what to fix first', issues: 'Every check, with fixes', agent: 'The page as an agent reads it', test: 'Test a task the way an agent would', site: 'Audit up to 25 pages of this site' }[id]),
+      onclick: () => switchTab(id),
+      onkeydown: (e) => {
+        const i = ids.indexOf(state.tab);
+        const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: ids.length - 1 }[e.key];
+        if (next == null) return;
+        e.preventDefault();
+        switchTab(ids[(next + ids.length) % ids.length]);
+      },
+    },
+    icon(paths),
+    h('span', { class: 'tab-label', text: t(label) }),
+    badge ? h('span', { class: `tab-badge${id === 'agent' ? ' tab-badge-soft' : ''}`, text: badge, 'aria-label': id === 'issues' ? t('$1 issues', badge) : t('$1 unnamed controls', badge) }) : null);
+  }));
+  $tabs.hidden = false;
+}
 
+function scoreHeader(r) {
   const breakdown = [];
-  if (r.counts.fail) breakdown.push(`${r.counts.fail} failing`);
-  if (r.counts.warn) breakdown.push(`${r.counts.warn} ${r.counts.warn === 1 ? 'warning' : 'warnings'}`);
-  breakdown.push(`${r.counts.pass} passed`);
-
-  const score = h('section', { class: 'score', 'aria-label': 'Overall score' },
+  if (r.counts.fail) breakdown.push(t('$1 failing', r.counts.fail));
+  if (r.counts.warn) breakdown.push(tn(r.counts.warn, '$1 warning', '$1 warnings'));
+  breakdown.push(t('$1 passed', r.counts.pass));
+  return h('section', { class: 'score', 'aria-label': t('Overall score') },
     h('div', { class: 'score-head' },
-      h('div', { class: `score-num tone-${tone}` }, String(r.score), h('small', { text: '/100' })),
+      h('div', { class: `score-num tone-${toneFor(r.score)}` }, String(r.score), h('small', { text: '/100' })),
       h('div', { class: 'score-grade' },
-        h('strong', { text: r.grade }),
+        h('strong', { text: t(r.grade) }),
         h('span', { text: breakdown.join(', ') }),
       ),
     ),
-    h('p', { class: 'score-text', text: r.gradeText }),
+    h('p', { class: 'score-text', text: t(r.gradeText) }),
     renderDiff(r.previous),
-    h('div', { class: 'strip', role: 'img', 'aria-label': 'Score by category, sized by weight in the overall score' },
-      r.categories.filter((c) => c.score != null && c.scored !== false).map((c, i) => h('span', {
-        class: `tone-${toneFor(c.score)}`,
-        title: `${c.name}: ${c.score}`,
-        style: { flex: `${c.weight / totalWeight} 1 0` },
-      }, h('b', { style: { width: `${c.score}%`, animationDelay: `${i * 60}ms` } }))),
+  );
+}
+
+const TOOL_ICONS = {
+  mark: '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/>',
+  share: '<path d="M12 3v12"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>',
+  compare: '<rect x="3" y="4" width="7.5" height="16" rx="1.5"/><rect x="13.5" y="4" width="7.5" height="16" rx="1.5"/>',
+  rerun: '<path d="M20 12a8 8 0 1 1-2.4-5.7L20 8.5"/><path d="M20 3.5v5h-5"/>',
+};
+
+function toolsSection() {
+  const watching = state.watch === state.tabId;
+  const tile = (key, title, sub, onclick, pressed) => h('button', {
+    type: 'button', class: `tool${pressed ? ' is-on' : ''}`, onclick, 'aria-pressed': pressed == null ? null : String(!!pressed),
+  }, icon(TOOL_ICONS[key], 'tool-ico'), h('span', { class: 'tool-text' }, h('strong', { text: t(title) }), h('span', { text: t(sub) })));
+  return h('section', { class: 'block', 'aria-labelledby': 'tools-h' },
+    h('h2', { id: 'tools-h', class: 'block-h', text: t('Tools') }),
+    h('div', { class: 'tools' },
+      tile('mark', state.marked ? 'Hide marks' : 'Mark issues', 'Number every problem on the page', (e) => toggleMarks(e.currentTarget), state.marked),
+      tile('share', 'Share report', 'Send it, or save as PDF', openShareableReport),
+      tile('compare', 'Compare', 'Next to another page you audited', () => { state.compareOpen = !state.compareOpen; renderResults(); }, state.compareOpen),
+      tile('rerun', watching ? 'Re-run on reload: on' : 'Re-run on reload', watching ? 'Runs again after each reload' : 'For when you’re editing the site', toggleWatch, watching),
+    ),
+    compareCard(state.report),
+  );
+}
+
+function categoriesSection(r) {
+  return h('section', { class: 'block', 'aria-labelledby': 'cats-h' },
+    h('div', { class: 'block-head' },
+      h('h2', { id: 'cats-h', class: 'block-h', text: t('Scores by category') }),
+      h('button', { type: 'button', class: 'btn-link', onclick: () => switchTab('issues') }, t('See all checks')),
     ),
     h('ul', { class: 'cats' },
       r.categories.map((c) => h('li', {},
-        h('button', { type: 'button', onclick: () => jumpTo(c.id) },
-          h('span', { class: 'cat-name', text: c.name }),
+        h('button', { type: 'button', title: t('See the $1 checks', t(c.name)), onclick: () => jumpTo(c.id) },
+          h('span', { class: 'cat-name', text: t(c.name) }),
           c.scored === false
-            ? h('span', { class: 'cat-unscored', text: 'Not scored' })
+            ? h('span', { class: 'cat-unscored', text: t('Not scored') })
             : [h('span', { class: `cat-bar tone-${toneFor(c.score)}`, 'aria-hidden': 'true' }, h('b', { style: { width: `${c.score ?? 0}%` } })),
-              h('span', { class: `cat-score tone-${toneFor(c.score)}`, text: c.score == null ? '–' : String(c.score) })],
+              h('span', { class: `cat-score tone-${toneFor(c.score)}`, text: c.score == null ? 'n/a' : String(c.score) })],
+          h('span', { html: CHEVRON, class: 'cat-chev' }),
         ),
       )),
     ),
-    h('div', { class: 'score-actions' },
-      h('button', {
-        class: 'btn btn-quiet btn-small', type: 'button', 'aria-pressed': String(state.marked),
-        title: 'Put a numbered marker on every element with a problem',
-        onclick: (e) => toggleMarks(e.currentTarget),
-      }, state.marked ? 'Hide marks' : 'Mark issues on page'),
-      h('button', {
-        class: 'btn btn-quiet btn-small', type: 'button',
-        title: 'Open a report you can send to a client or teammate, or save as PDF',
-        onclick: openShareableReport,
-      }, 'Share report'),
-    ),
   );
+}
 
+function exploreSection(r) {
+  const v = r.agentView;
+  const items = [
+    ['agent', 'See it as an agent', v ? (v.unnamed ? tn(v.unnamed, 'About $2 tokens, $1 unnamed control', 'About $2 tokens, $1 unnamed controls', v.tokens.toLocaleString()) : t('About $1 tokens', v.tokens.toLocaleString())) : 'The page’s accessibility tree'],
+    ['test', 'Test a task', 'Can an agent “add to cart” or “sign up” here?'],
+    ['site', 'Scan the whole site', 'Up to 25 pages, free'],
+  ];
+  return h('section', { class: 'block', 'aria-labelledby': 'explore-h' },
+    h('h2', { id: 'explore-h', class: 'block-h', text: t('Explore more') }),
+    h('div', { class: 'explore' }, items.map(([id, title, sub]) => h('button', { type: 'button', class: 'explore-item', onclick: () => switchTab(id) },
+      icon(TAB_ICON[id], 'tool-ico'),
+      h('span', { class: 'tool-text' }, h('strong', { text: t(title) }), h('span', { text: t(sub) })),
+      h('span', { html: CHEVRON, class: 'cat-chev' }),
+    ))),
+  );
+}
+
+function issuesView(r) {
+  const issueCount = r.counts.fail + r.counts.warn;
+  const passCount = r.counts.pass + r.counts.info + r.counts.na;
   const filterBtn = (id, label, count) => h('button', {
     type: 'button', 'aria-pressed': String(state.filter === id),
     onclick: () => { state.filter = id; renderResults(); },
-  }, label, count != null ? h('span', { class: 'count', text: count }) : null);
-
-  const exportMenu = buildExportMenu();
+  }, t(label), count != null ? h('span', { class: 'count', text: count }) : null);
   const toolbar = h('div', { class: 'toolbar' },
-    h('div', { class: 'segmented', role: 'group', 'aria-label': 'Show checks' },
+    h('div', { class: 'segmented', role: 'group', 'aria-label': t('Show checks') },
       filterBtn('issues', 'Issues', issueCount),
       filterBtn('passed', 'Passed', passCount),
-      filterBtn('all', 'All', total),
+      filterBtn('all', 'All', issueCount + passCount),
     ),
-    exportMenu,
+    buildExportMenu(),
   );
-
   const sections = [];
   let firstIssueOpened = false;
   for (const cat of r.categories) {
     const checks = visibleChecks(cat);
     if (!checks.length) continue;
-    const catTone = toneFor(cat.score);
     sections.push(h('section', { class: 'category', id: `cat-${cat.id}`, 'aria-labelledby': `cat-h-${cat.id}` },
       h('div', { class: 'category-head' },
-        h('h2', { id: `cat-h-${cat.id}`, text: cat.name }),
-        h('span', { class: `cat-score-lg tone-${catTone}`, text: cat.scored === false ? 'Not scored' : cat.score == null ? '–' : String(cat.score) }),
+        h('h2', { id: `cat-h-${cat.id}`, text: t(cat.name) }),
+        h('span', { class: `cat-score-lg tone-${toneFor(cat.score)}`, text: cat.scored === false ? t('Not scored') : cat.score == null ? t('n/a') : String(cat.score) }),
       ),
-      h('p', { class: 'category-desc', text: cat.description }),
+      h('p', { class: 'category-desc', text: t(cat.description) }),
       checks.map((c) => {
         const open = !firstIssueOpened && c.status === 'fail';
         if (open) firstIssueOpened = true;
@@ -762,39 +919,40 @@ function renderResults() {
   }
   if (!sections.length) {
     sections.push(h('div', { class: 'all-clear' },
-      h('strong', { text: state.filter === 'issues' ? 'No issues found' : 'Nothing to show' }),
-      state.filter === 'issues' ? 'Every check passed or doesn’t apply to this page.' : 'Switch to All to see every check.',
+      h('strong', { text: state.filter === 'issues' ? t('No issues found') : t('Nothing to show') }),
+      state.filter === 'issues' ? t('Every check passed or doesn’t apply to this page.') : t('Switch to All to see every check.'),
     ));
   }
+  return [toolbar, ...sections, auditFoot(r)];
+}
 
+function auditFoot(r) {
   const when = new Date(r.timestamp);
-  const foot = h('p', { class: 'foot' },
-    `Audited ${when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} in ${(r.durationMs / 1000).toFixed(1)} s. `,
-    `${r.stats.elements.toLocaleString()} elements, ${r.stats.controls.toLocaleString()} controls and ${r.stats.fields.toLocaleString()} form fields checked in the top frame. Scores are heuristics: use them to find problems, then confirm with a real agent.`,
+  return h('p', { class: 'foot' },
+    `${t('Audited $1 in $2 s.', when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }), (r.durationMs / 1000).toFixed(1))} `,
+    t('$1 elements, $2 controls and $3 form fields checked', r.stats.elements.toLocaleString(), r.stats.controls.toLocaleString(), r.stats.fields.toLocaleString()),
+    r.stats.inShadow || r.stats.inFrames ? `${t(', including $1', [r.stats.inShadow ? t('$1 in shadow DOM', r.stats.inShadow) : '', r.stats.inFrames ? t('$1 in same-site frames', r.stats.inFrames) : ''].filter(Boolean).join(t(' and ')))}. ` : '. ',
+    t('Scores are heuristics: use them to find problems, then confirm with a real agent.'),
   );
+}
 
-  const tab = (id, label) => h('button', {
-    type: 'button', role: 'tab', id: `tab-${id}`, 'aria-selected': String(state.tab === id), 'aria-controls': 'tabpanel',
-    tabindex: state.tab === id ? '0' : '-1',
-    onclick: () => { state.tab = id; renderResults(); showTabs(); document.getElementById(`tab-${id}`)?.focus({ preventScroll: true }); },
-    onkeydown: (e) => {
-      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      const order = ['report', 'agent', 'test'];
-      state.tab = order[(order.indexOf(state.tab) + (e.key === 'ArrowRight' ? 1 : 2)) % 3];
-      renderResults();
-      showTabs();
-      document.getElementById(`tab-${state.tab}`)?.focus({ preventScroll: true });
-    },
-  }, label);
-  const tabs = h('div', { class: 'tabs', role: 'tablist', 'aria-label': 'Results' },
-    tab('report', 'Report'),
-    tab('agent', 'Agent view'),
-    tab('test', 'Agent test'),
-  );
-  const panel = h('div', { id: 'tabpanel', role: 'tabpanel', 'aria-labelledby': `tab-${state.tab}` },
-    state.tab === 'agent' ? renderAgentView(r) : state.tab === 'test' ? renderAgentTest(r) : [toolbar, ...sections, foot]);
+function renderResults() {
+  const r = state.report;
+  if (!r) return renderEmpty();
+  if (!TABS.some(([id]) => id === state.tab)) state.tab = 'overview';
+  $pageLabel.textContent = hostOf(r.url);
+  $pageLabel.title = r.url;
 
-  setView(score, whatsNewCard(), reviewCard(r), topFixesCard(r), tabs, panel);
+  let body;
+  if (state.tab === 'overview') {
+    body = [scoreHeader(r), whatsNewCard(), reviewCard(r), topFixesCard(r), toolsSection(), categoriesSection(r), exploreSection(r), auditFoot(r)];
+  } else if (state.tab === 'issues') body = issuesView(r);
+  else if (state.tab === 'agent') body = [renderAgentView(r)];
+  else if (state.tab === 'test') body = [renderAgentTest(r)];
+  else body = [renderSiteScan(r)];
+
+  setView(h('div', { id: 'tabpanel', role: 'tabpanel', 'aria-labelledby': `tab-${state.tab}`, class: `tabpanel tab-${state.tab}` }, body.filter(Boolean)));
+  renderTabs(r);
   if (state.stale) showBanner('This page has changed since the audit.', 'Run it again', runAudit);
   setRunButton();
 }
@@ -804,18 +962,18 @@ function renderDiff(d) {
   const when = new Date(d.ts).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
   const tone = d.delta > 0 ? 'pass' : d.delta < 0 ? 'fail' : 'na';
   const counts = [];
-  if (d.fixed.length) counts.push(`${d.fixed.length} fixed`);
-  if (d.regressed.length) counts.push(`${d.regressed.length} new`);
-  if (d.better.length) counts.push(`${d.better.length} improved`);
-  if (d.worse.length) counts.push(`${d.worse.length} worse`);
+  if (d.fixed.length) counts.push(t('$1 fixed', d.fixed.length));
+  if (d.regressed.length) counts.push(t('$1 new', d.regressed.length));
+  if (d.better.length) counts.push(t('$1 improved', d.better.length));
+  if (d.worse.length) counts.push(t('$1 worse', d.worse.length));
   const group = (label, items) => items.length
-    ? [h('h3', { text: label }), h('ul', {}, items.map((t) => h('li', { text: t })))]
+    ? [h('h3', { text: t(label) }), h('ul', {}, items.map((x) => h('li', { text: t(x) })))]
     : null;
   const any = counts.length > 0;
   return h('details', { class: 'diff' },
     h('summary', {},
       h('span', { class: `diff-delta tone-${tone}`, text: d.delta > 0 ? `+${d.delta}` : d.delta < 0 ? `−${-d.delta}` : '±0' }),
-      h('span', { class: 'diff-text', text: `since the audit on ${when} (was ${d.score}). ${any ? counts.join(', ') : 'No check changed.'}` }),
+      h('span', { class: 'diff-text', text: `${t('since the audit on $1 (was $2).', when, d.score)} ${any ? counts.join(', ') : t('No check changed.')}` }),
       any ? h('span', { html: CHEVRON, style: { display: 'inline-flex' } }) : null,
     ),
     any ? h('div', { class: 'diff-body' },
@@ -847,13 +1005,13 @@ function viewText(nodes) {
 function renderAgentView(r) {
   const v = r.agentView;
   if (!v) {
-    return h('div', { class: 'all-clear' }, h('strong', { text: 'Run the audit again' }), 'This report was made by an older version, before the agent view existed.');
+    return h('div', { class: 'all-clear' }, h('strong', { text: t('Run the audit again') }), 'This report was made by an older version, before the agent view existed.');
   }
   const stat = (num, label, tone) => h('div', { class: 'view-stat' },
-    h('strong', { class: tone ? `tone-${tone}` : null, text: num }), h('span', { text: label }));
-  const list = h('ul', { class: 'tree', 'aria-label': 'Accessibility tree' });
-  const more = h('button', { class: 'btn btn-quiet btn-small more', type: 'button' }, 'Show more');
-  const empty = h('p', { class: 'view-empty', text: 'Nothing matches.' });
+    h('strong', { class: tone ? `tone-${tone}` : null, text: num }), h('span', { text: t(label) }));
+  const list = h('ul', { class: 'tree', 'aria-label': t('Accessibility tree') });
+  const more = h('button', { class: 'btn btn-quiet btn-small more', type: 'button' }, t('Show more'));
+  const empty = h('p', { class: 'view-empty', text: t('Nothing matches.') });
 
   const matches = () => {
     const q = state.viewQuery.trim().toLowerCase();
@@ -871,11 +1029,11 @@ function renderAgentView(r) {
       h('span', { class: 'node-role', text: n.role }),
       n.name ? h('span', { class: 'node-name', text: n.role === 'text' ? n.name : `“${n.name}”` }) : null,
       n.props ? h('span', { class: 'node-props', text: n.props }) : null,
-      n.flag === 'unnamed' ? h('span', { class: 'node-flag', text: 'no name' }) : null,
+      n.flag === 'unnamed' ? h('span', { class: 'node-flag', text: t('no name') }) : null,
     ];
     return h('li', { class: `node${n.role === 'text' ? ' node-text' : ''}`, style: { paddingLeft: `${8 + (flat ? 0 : Math.min(n.d, 12) * 14)}px` } },
       n.ref != null
-        ? h('button', { type: 'button', title: 'Show on page', onclick: () => locate({ ref: n.ref, selector: '' }, n.name ? `${n.role} “${n.name.slice(0, 40)}”` : n.role) }, body)
+        ? h('button', { type: 'button', title: t('Show on page'), onclick: () => locate({ ref: n.ref, selector: '' }, n.name ? `${n.role} “${n.name.slice(0, 40)}”` : n.role) }, body)
         : h('span', {}, body));
   };
   const page = () => {
@@ -883,7 +1041,7 @@ function renderAgentView(r) {
     list.append(...next.map(row));
     count += next.length;
     more.hidden = count >= shown.length;
-    more.textContent = `Show ${Math.min(VIEW_PAGE, shown.length - count).toLocaleString()} more`;
+    more.textContent = t('Show $1 more', Math.min(VIEW_PAGE, shown.length - count).toLocaleString());
   };
   const refresh = () => {
     shown = matches();
@@ -901,39 +1059,40 @@ function renderAgentView(r) {
       for (const b of e.currentTarget.parentElement.children) b.setAttribute('aria-pressed', String(b === e.currentTarget));
       refresh();
     },
-  }, label);
+  }, t(label));
   const search = h('input', {
-    type: 'search', class: 'view-search', placeholder: 'Find a name or role', 'aria-label': 'Find in the agent view', value: state.viewQuery,
+    type: 'search', class: 'view-search', placeholder: t('Find a name or role'), 'aria-label': t('Find in the agent view'), value: state.viewQuery,
     oninput: (e) => { state.viewQuery = e.target.value; refresh(); },
   });
 
   refresh();
   return h('section', { class: 'agent-view' },
-    h('p', { class: 'view-intro', text: 'Roughly what an agent reads: the page’s accessibility tree as text. A control without a name shows up as a bare role, so the agent can’t tell it from the others. Select a line to find it on the page.' }),
+    h('p', { class: 'view-intro', text: t('Roughly what an agent reads: the page’s accessibility tree as text. A control without a name shows up as a bare role, so the agent can’t tell it from the others. Select a line to find it on the page.') }),
     h('div', { class: 'view-stats' },
       stat(`~${v.tokens.toLocaleString()}`, 'tokens'),
       stat(v.nodes.length.toLocaleString() + (v.truncated ? '+' : ''), 'lines'),
       stat(v.unnamed.toLocaleString(), v.unnamed === 1 ? 'control with no name' : 'controls with no name', v.unnamed ? 'fail' : 'pass'),
     ),
     h('div', { class: 'toolbar view-toolbar' },
-      h('div', { class: 'segmented', role: 'group', 'aria-label': 'Show lines' },
+      h('div', { class: 'segmented', role: 'group', 'aria-label': t('Show lines') },
         filterBtn('all', 'Everything'),
         filterBtn('controls', 'Controls'),
         filterBtn('unnamed', 'No name'),
       ),
       h('button', {
         class: 'btn btn-quiet btn-small', type: 'button',
-        onclick: () => copyText(viewText(v.nodes), 'Agent view copied'),
-      }, 'Copy as text'),
+        onclick: () => copyText(viewText(v.nodes), t('Agent view copied')),
+      }, t('Copy as text')),
     ),
     h('div', { class: 'view-searchbar' }, search),
-    v.truncated ? h('p', { class: 'cap-note view-cap', text: `Showing the first ${v.nodes.length.toLocaleString()} lines. The token estimate covers the whole page.` }) : null,
+    v.truncated ? h('p', { class: 'cap-note view-cap', text: t('Showing the first $1 lines. The token estimate covers the whole page.', v.nodes.length.toLocaleString()) }) : null,
     list, empty, more,
   );
 }
 
 // ------------------------------------------------------------- agent test
 
+// Translated where shown.
 const VERDICT = {
   pass: ['An agent could likely do this', 'Every step uses a control an agent can find by name.'],
   warn: ['An agent might manage, with problems', 'Some steps rely on guesswork, or part of the task is hidden from agents.'],
@@ -941,53 +1100,53 @@ const VERDICT = {
 };
 
 function renderAgentTest(r) {
-  const t = state.test;
-  const status = h('p', { class: 'ai-status', text: 'Checking for Chrome’s built-in AI…' });
+  const ts = state.test;
+  const status = h('p', { class: 'ai-status', text: t('Checking for Chrome’s built-in AI…') });
   const input = h('input', {
-    type: 'text', id: 'task', class: 'view-search', value: t.task, autocomplete: 'off',
-    placeholder: 'For example: Add this product to the cart',
-    oninput: (e) => { t.task = e.target.value; },
+    type: 'text', id: 'task', class: 'view-search', value: ts.task, autocomplete: 'off',
+    placeholder: t('Type a task'),
+    oninput: (e) => { ts.task = e.target.value; },
     onkeydown: (e) => { if (e.key === 'Enter') { e.preventDefault(); runTest(); } },
   });
-  const runBtn = h('button', { class: 'btn btn-primary', type: 'button', onclick: () => (t.running ? t.abort && t.abort.abort() : runTest()) }, t.running ? 'Cancel' : 'Run test');
+  const runBtn = h('button', { class: 'btn btn-primary', type: 'button', onclick: () => (ts.running ? ts.abort && ts.abort.abort() : runTest()) }, ts.running ? t('Cancel') : t('Run test'));
   const result = h('div', { class: 'test-result', 'aria-live': 'polite' });
 
-  const chips = h('div', { class: 'chips', role: 'group', 'aria-label': 'Suggested tasks' },
+  const chips = h('div', { class: 'chips', role: 'group', 'aria-label': t('Suggested tasks') },
     testSuggestions(r).map((s) => h('button', {
       type: 'button', class: 'chip',
-      onclick: () => { t.task = s; input.value = s; runTest(); },
+      onclick: () => { ts.task = s; input.value = s; runTest(); },
     }, s)));
 
   aiAvailability().then((a) => {
-    t.ai = a;
-    status.textContent = {
+    ts.ai = a;
+    status.textContent = t({
       available: 'Uses Chrome’s built-in AI (Gemini Nano), running on your computer. Nothing leaves your browser.',
       downloadable: 'Uses Chrome’s built-in AI (Gemini Nano). The first test asks Chrome to download the model once; until then, tests use name matching.',
       downloading: 'Chrome is downloading its built-in AI model. Until it’s ready, tests use name matching.',
       unavailable: 'Using name matching. On computers with Chrome’s built-in AI (Gemini Nano), the test plans every step instead.',
-    }[a] || '';
+    }[a] || '');
   });
 
   function show(node) { result.replaceChildren(node); }
 
   async function runTest() {
-    const task = t.task.trim();
-    if (!task) { input.focus(); return toast('Describe a task first.'); }
-    if (t.running) return;
+    const task = ts.task.trim();
+    if (!task) { input.focus(); return toast(t('Describe a task first.')); }
+    if (ts.running) return;
     const targets = testTargets(r);
     const hidden = hiddenControls(r);
-    t.running = true;
-    t.abort = new AbortController();
-    runBtn.textContent = 'Cancel';
-    show(h('p', { class: 'test-progress', text: 'Reading the page like an agent…' }));
+    ts.running = true;
+    ts.abort = new AbortController();
+    runBtn.textContent = t('Cancel');
+    show(h('p', { class: 'test-progress', text: t('Reading the page like an agent…') }));
     let plan;
     let mode = 'match';
     try {
-      if (t.ai === 'available' || t.ai === 'downloadable' || t.ai === 'downloading') {
+      if (ts.ai === 'available' || ts.ai === 'downloadable' || ts.ai === 'downloading') {
         try {
           plan = await aiPlan(task, r, targets, {
-            signal: t.abort.signal,
-            onProgress: (p) => show(h('p', { class: 'test-progress', text: `Downloading Chrome’s AI model… ${Math.round(p * 100)}%` })),
+            signal: ts.abort.signal,
+            onProgress: (p) => show(h('p', { class: 'test-progress', text: t('Downloading Chrome’s AI model… $1%', Math.round(p * 100)) })),
           });
           mode = 'ai';
         } catch (e) {
@@ -996,37 +1155,39 @@ function renderAgentTest(r) {
         }
       }
       if (!plan) plan = matchPlan(task, targets);
-      t.result = { task, mode, ...evaluatePlan(task, plan, targets, hidden) };
-      show(renderTestResult(r, t.result));
+      ts.result = { task, mode, ...evaluatePlan(task, plan, targets, hidden) };
+      show(renderTestResult(r, ts.result));
     } catch (e) {
-      show(h('p', { class: 'test-progress', text: e && e.name === 'AbortError' ? 'Test cancelled.' : `The test didn’t finish: ${(e && e.message) || e}` }));
+      show(h('p', { class: 'test-progress', text: e && e.name === 'AbortError' ? t('Test cancelled.') : t('The test didn’t finish: $1', (e && e.message) || e) }));
     } finally {
-      t.running = false;
-      runBtn.textContent = 'Run test';
+      ts.running = false;
+      runBtn.textContent = t('Run test');
     }
   }
 
-  if (t.result) result.append(renderTestResult(r, t.result));
+  if (ts.result) result.append(renderTestResult(r, ts.result));
   return h('section', { class: 'agent-test' },
-    h('p', { class: 'view-intro', text: 'Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked.' }),
-    status,
+    h('p', { class: 'view-intro', text: t('Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked.') }),
     h('div', { class: 'test-form' },
-      h('label', { for: 'task', class: 'test-label', text: 'Task' }),
+      h('label', { for: 'task', class: 'test-label', text: t('Task') }),
       h('div', { class: 'test-row' }, input, runBtn),
       chips,
     ),
     result,
+    status,
   );
 }
 
 function renderTestResult(r, res) {
-  const [title, sub] = VERDICT[res.verdict];
-  const stepLabel = (s, i) => `${i + 1}. ${s.action === 'type' ? 'Type' : s.action === 'select' ? 'Choose' : 'Click'}${s.text && s.action !== 'click' ? ` “${s.text.slice(0, 40)}” into` : ''} ${describeTarget(s.target)}`;
+  const [title, sub] = VERDICT[res.verdict].map((x) => t(x));
+  const stepLabel = (s, i) => `${i + 1}. ${s.action === 'click' || !s.text
+    ? t(s.action === 'type' ? 'Type into $1' : s.action === 'select' ? 'Choose in $1' : 'Click $1', describeTarget(s.target))
+    : t(s.action === 'select' ? 'Choose “$1” in $2' : 'Type “$1” into $2', s.text.slice(0, 40), describeTarget(s.target))}`;
   const steps = res.steps.map((s, i) => h('li', { class: s.problem ? 'step-problem' : '' },
     h('span', { class: 'step-text', text: stepLabel(s, i) }),
     s.problem ? h('span', { class: 'step-note', text: s.problem }) : null,
     s.target ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => locate({ ref: s.target.ref, selector: '' }, stepLabel(s, i)) },
-      h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), 'Show') : null,
+      h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), t('Show')) : null,
   ));
   const checkIds = [...new Set([...res.hidden.map((x) => x.checkId), ...(res.steps.some((s) => s.target && s.target.unnamed) ? ['unnamed-controls'] : [])])]
     .filter((id) => r.categories.some((c) => c.checks.some((k) => k.id === id && (k.status === 'fail' || k.status === 'warn'))));
@@ -1036,41 +1197,41 @@ function renderTestResult(r, res) {
       glyph(res.verdict),
       h('div', {}, h('strong', { text: title }), h('span', { text: sub })),
     ),
-    res.steps.length ? [h('h3', { text: 'The agent’s plan' }), h('ol', { class: 'test-steps' }, steps)] : null,
-    res.missing ? h('p', { class: 'test-note' }, h('b', { text: 'What it couldn’t find: ' }), res.missing) : null,
+    res.steps.length ? [h('h3', { text: t('The agent’s plan') }), h('ol', { class: 'test-steps' }, steps)] : null,
+    res.missing ? h('p', { class: 'test-note' }, h('b', { text: t('What it couldn’t find: ') }), res.missing) : null,
     res.hidden.length ? [
-      h('h3', { text: 'Visible to people, invisible to agents' }),
+      h('h3', { text: t('Visible to people, invisible to agents') }),
       h('ul', { class: 'test-hidden' }, res.hidden.slice(0, 4).map((x) => h('li', {},
-        h('span', { text: `“${x.text.slice(0, 50)}” looks clickable, but it isn’t a button or link, so agents can’t use it.` }),
+        h('span', { text: t('“$1” looks clickable, but it isn’t a button or link, so agents can’t use it.', x.text.slice(0, 50)) }),
         h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => locate({ ref: x.ref, selector: x.selector }, x.text.slice(0, 40)) },
-          h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), 'Show'),
+          h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), t('Show')),
       ))),
     ] : null,
-    res.alternatives.length ? h('p', { class: 'test-note', text: `Other close matches: ${res.alternatives.map(describeTarget).join(', ')}.` }) : null,
+    res.alternatives.length ? h('p', { class: 'test-note', text: t('Other close matches: $1.', res.alternatives.map(describeTarget).join(', ')) }) : null,
     h('div', { class: 'test-actions' },
       res.steps.some((s) => s.target) ? h('button', {
         class: 'btn btn-quiet btn-small', type: 'button',
         onclick: async () => {
           const items = res.steps.filter((s) => s.target).map((s) => ({ ref: s.target.ref, selector: '', tone: 'step', label: stepLabel(s, res.steps.indexOf(s)) }));
-          const out = await pageCall(markAllInPage, [items, r.runId, { steps: true }]);
-          if (!out || !out.shown) toast('Couldn’t reach those elements. Run the audit again.');
+          const out = await pageCall(markAllInPage, [items, r.runId, { steps: true, text: overlayText() }]);
+          if (!out || !out.shown) toast(t('Couldn’t reach those elements. Run the audit again.'));
           else state.marked = true;
         },
-      }, 'Show steps on page') : null,
+      }, t('Show steps on page')) : null,
       checkIds.length ? h('button', {
         class: 'btn btn-quiet btn-small', type: 'button',
-        onclick: () => copyText(toPrompt(r, checkIds), 'Fix prompt copied'),
-      }, 'Copy fix prompt') : null,
+        onclick: () => copyText(toPrompt(r, checkIds), t('Fix prompt copied')),
+      }, t('Copy fix prompt')) : null,
     ),
-    h('p', { class: 'test-method', text: res.mode === 'ai' ? 'Planned by Gemini Nano on your device. Small models make mistakes; treat this as a quick check, not proof.' : 'Matched by control names. With Chrome’s built-in AI the test plans multi-step tasks.' }),
+    h('p', { class: 'test-method', text: res.mode === 'ai' ? t('Planned by Gemini Nano on your device. Small models make mistakes; treat this as a quick check, not proof.') : t('Matched by control names. With Chrome’s built-in AI the test plans multi-step tasks.') }),
   );
 }
 
 function jumpTo(catId) {
+  if (state.tab !== 'issues') { state.tab = 'issues'; renderResults(); }
   let el = document.getElementById(`cat-${catId}`);
-  if (!el && (state.filter !== 'all' || state.tab !== 'report')) {
+  if (!el && state.filter !== 'all') {
     state.filter = 'all';
-    state.tab = 'report';
     renderResults();
     el = document.getElementById(`cat-${catId}`);
   }
@@ -1089,15 +1250,15 @@ function buildExportMenu() {
   const trigger = h('button', {
     class: 'btn btn-quiet btn-small', type: 'button', 'aria-haspopup': 'menu', 'aria-expanded': 'false',
     onclick: (e) => { e.stopPropagation(); toggle(list.hidden); },
-  }, 'Export');
+  }, t('Export'));
   const item = (label, fn) => h('button', { type: 'button', role: 'menuitem', onclick: () => { toggle(false); fn(); } }, label);
   list.append(
-    item('Copy report as Markdown', () => copyText(toMarkdown(state.report), 'Report copied')),
-    item('Copy report as prompt', () => copyText(toPrompt(state.report), 'Prompt copied')),
-    item('Download Markdown', () => download('md')),
-    item('Download shareable report (HTML)', () => download('html')),
-    item('Download JSON', () => download('json')),
-    item('Clear audit history', clearHistory),
+    item(t('Copy report as Markdown'), () => copyText(toMarkdown(state.report), t('Report copied'))),
+    item(t('Copy report as prompt'), () => copyText(toPrompt(state.report), t('Prompt copied'))),
+    item(t('Download Markdown'), () => download('md')),
+    item(t('Download shareable report (HTML)'), () => download('html')),
+    item(t('Download JSON'), () => download('json')),
+    item(t('Clear audit history'), clearHistory),
   );
   function toggle(open) {
     list.hidden = !open;
@@ -1134,7 +1295,7 @@ function toMarkdown(r) {
         L.push(`**Why it matters:** ${c.why}`, '');
         L.push(`**How to fix:** ${c.fix}`, '');
         for (const f of c.findings.slice(0, 20)) {
-          L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}`);
+          L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}${f.fix ? `  \n  Suggested fix: \`${tick(f.fix.replace(/\n/g, ' '))}\`` : ''}`);
         }
         if (c.issues > Math.min(20, c.findings.length)) L.push(`- …and ${(c.issues - Math.min(20, c.findings.length)).toLocaleString()} more`);
         if (c.findings.length) L.push('');
@@ -1213,7 +1374,7 @@ function toPrompt(r, ids) {
     L.push(`**How to fix:** ${c.fix}`, '');
     if (c.findings.length) L.push('**Affected elements:**', '');
     for (const f of c.findings.slice(0, 20)) {
-      L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}`);
+      L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}${f.fix ? `  \n  Suggested fix (check names marked as guesses): \`${tick(f.fix.replace(/\n/g, ' '))}\`` : ''}`);
     }
     if (c.issues > Math.min(20, c.findings.length)) L.push(`- …and ${(c.issues - Math.min(20, c.findings.length)).toLocaleString()} more of the same kind; your fix must cover them too`);
     if (c.findings.length) L.push('');
@@ -1231,7 +1392,7 @@ async function copyText(text, done) {
     await navigator.clipboard.writeText(text);
     toast(done);
   } catch {
-    toast('Couldn’t copy. Use Download Markdown instead.');
+    toast(t('Couldn’t copy. Use Download Markdown instead.'));
   }
 }
 
@@ -1248,7 +1409,7 @@ function download(kind) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  toast({ md: 'Markdown downloaded', html: 'Report downloaded', json: 'JSON downloaded' }[kind]);
+  toast(t({ md: 'Markdown downloaded', html: 'Report downloaded', json: 'JSON downloaded' }[kind]));
 }
 
 // -------------------------------------------------------------- tab events
@@ -1264,6 +1425,7 @@ async function showTab(tabId) {
 }
 
 async function init() {
+  localizePage();
   $run.addEventListener('click', runAudit);
   document.addEventListener('click', () => {
     for (const m of document.querySelectorAll('.menu-list')) {
@@ -1288,8 +1450,14 @@ async function init() {
   chrome.tabs.onActivated.addListener(({ tabId, windowId }) => {
     if (windowId === state.windowId) showTab(tabId);
   });
-  chrome.tabs.onUpdated.addListener((tabId, info) => {
-    if (tabId !== state.tabId || info.status !== 'loading') return;
+  chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+    if (tabId !== state.tabId) return;
+    if (state.watch === tabId && info.status === 'complete') {
+      let same = false;
+      try { same = !!(tab.url && state.report && new URL(tab.url).origin === new URL(state.report.url).origin); } catch { /* ignore */ }
+      if (same) { hideBanner(); setTimeout(runAudit, 600); return; }
+    }
+    if (info.status !== 'loading' || state.watch === tabId) return;
     if (state.report && !state.stale) {
       state.stale = true;
       showBanner('This page has changed since the audit.', 'Run it again', runAudit);
