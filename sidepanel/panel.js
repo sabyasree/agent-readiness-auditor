@@ -37,7 +37,7 @@ const state = {
   report: null,
   stale: false,
   filter: 'issues',
-  tab: 'report',
+  tab: 'overview',
   viewFilter: 'all',
   viewQuery: '',
   running: false,
@@ -51,13 +51,14 @@ const state = {
 };
 
 const VERSION = chrome.runtime.getManifest().version;
-const WHATS_NEW = 'Scan up to 25 pages of a site and find the problems they share, get suggested code for each fix, compare any two pages, and re-run the audit every time you reload.';
+const WHATS_NEW = 'A new tab bar puts everything one click away. Plus: scan up to 25 pages of a site and find the problems they share, suggested code for each fix, compare any two pages, and re-run on every reload.';
 
 const $view = document.getElementById('view');
 const $run = document.getElementById('runBtn');
 const $pageLabel = document.getElementById('pageLabel');
 const $banner = document.getElementById('banner');
 const $toast = document.getElementById('toast');
+const $tabs = document.getElementById('tabs');
 
 // ----------------------------------------------------------------- helpers
 
@@ -102,6 +103,7 @@ function toast(msg) {
 
 function setView(...nodes) {
   $view.replaceChildren(...nodes.filter(Boolean));
+  $tabs.hidden = true; // renderResults shows it again
 }
 
 function setRunButton() {
@@ -442,14 +444,6 @@ async function openShareableReport() {
   toast('Report opened in a new tab. Use Print → Save as PDF to send it.');
 }
 
-/** Bring the tab bar to the top of the panel, under the sticky header, so the chosen tab's content is in view. */
-function showTabs() {
-  const tabs = document.querySelector('.tabs');
-  if (!tabs) return;
-  const top = tabs.getBoundingClientRect().top + window.scrollY - document.querySelector('.topbar').offsetHeight;
-  if (window.scrollY < top) window.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-}
-
 async function toggleWatch() {
   const r = state.report;
   if (!r) return;
@@ -510,7 +504,7 @@ function compareCard(r) {
 }
 
 function jumpToCheck(id) {
-  state.tab = 'report';
+  state.tab = 'issues';
   if (state.filter === 'passed') state.filter = 'issues';
   renderResults();
   const el = document.getElementById(`check-${id}`);
@@ -635,8 +629,20 @@ function renderEmpty() {
         h('h2', { id: 'recent-h', text: 'Recent audits' }),
         recentList,
       ),
-      h('ul', { class: 'scope', 'aria-label': 'What the audit checks' },
-        CATEGORY_INTRO.map(([name, desc]) => h('li', {}, h('strong', { text: name }), h('span', { text: desc }))),
+      h('section', { class: 'gets', 'aria-labelledby': 'gets-h' },
+        h('h2', { id: 'gets-h', text: 'What you get' }),
+        h('ul', {}, [
+          ['overview', 'A score and what to fix first', 'Ranked by how many points each fix is worth, with code you can copy.'],
+          ['agent', 'The page as an agent sees it', 'Its accessibility tree, with every unnamed button flagged.'],
+          ['test', 'A test run of a real task', 'Type “add to cart” or “sign up” and see where an agent gets stuck.'],
+          ['site', 'A scan of the whole site', 'Up to 25 pages, and the problems they share.'],
+        ].map(([id, title, sub]) => h('li', {}, icon(TAB_ICON[id], 'tool-ico'), h('span', { class: 'tool-text' }, h('strong', { text: title }), h('span', { text: sub }))))),
+      ),
+      h('details', { class: 'scope-details' },
+        h('summary', {}, 'What it checks', h('span', { html: CHEVRON, style: { display: 'inline-flex' } })),
+        h('ul', { class: 'scope', 'aria-label': 'What the audit checks' },
+          CATEGORY_INTRO.map(([name, desc]) => h('li', {}, h('strong', { text: name }), h('span', { text: desc }))),
+        ),
       ),
       h('p', { class: 'privacy', text: 'Everything runs in your browser. Nothing about the page is sent anywhere.' }),
     ),
@@ -740,26 +746,58 @@ function renderCheck(c, open) {
   );
 }
 
-function renderResults() {
-  const r = state.report;
-  if (!r) return renderEmpty();
-  $pageLabel.textContent = hostOf(r.url);
-  $pageLabel.title = r.url;
+// The five results views, shown in a tab bar that stays under the header.
+const TABS = [
+  ['overview', 'Overview', '<path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4.5-5"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/>'],
+  ['issues', 'Issues', '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.4" fill="currentColor"/><circle cx="4.5" cy="12" r="1.4" fill="currentColor"/><circle cx="4.5" cy="18" r="1.4" fill="currentColor"/>'],
+  ['agent', 'Agent view', '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/>'],
+  ['test', 'Agent test', '<path d="M6 3.5l12.5 7.2-5.6 1.6-2.6 5.3z"/><path d="M13 13l5 5"/>'],
+  ['site', 'Site scan', '<rect x="7.5" y="3" width="12.5" height="14.5" rx="2"/><path d="M4 7v11.5A2.5 2.5 0 0 0 6.5 21H16"/>'],
+];
+const icon = (paths, cls = 'ico') => h('span', { class: cls, 'aria-hidden': 'true', html: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>` });
+const TAB_ICON = Object.fromEntries(TABS.map(([id, , paths]) => [id, paths]));
 
-  const tone = toneFor(r.score);
+function switchTab(id) {
+  state.tab = id;
+  renderResults();
+  window.scrollTo(0, 0);
+  document.getElementById(`tab-${id}`)?.focus({ preventScroll: true });
+}
+
+function renderTabs(r) {
   const issueCount = r.counts.fail + r.counts.warn;
-  const passCount = r.counts.pass + r.counts.info + r.counts.na;
-  const total = issueCount + passCount;
-  const totalWeight = r.categories.reduce((a, c) => a + (c.score == null ? 0 : c.weight), 0) || 1;
+  const unnamed = r.agentView ? r.agentView.unnamed : 0;
+  const ids = TABS.map(([id]) => id);
+  $tabs.replaceChildren(...TABS.map(([id, label, paths]) => {
+    const badge = id === 'issues' && issueCount ? String(issueCount) : id === 'agent' && unnamed ? String(unnamed) : '';
+    return h('button', {
+      type: 'button', role: 'tab', id: `tab-${id}`, 'aria-selected': String(state.tab === id), 'aria-controls': 'tabpanel',
+      tabindex: state.tab === id ? '0' : '-1',
+      title: { overview: 'Score and what to fix first', issues: 'Every check, with fixes', agent: 'The page as an agent reads it', test: 'Test a task the way an agent would', site: 'Audit up to 25 pages of this site' }[id],
+      onclick: () => switchTab(id),
+      onkeydown: (e) => {
+        const i = ids.indexOf(state.tab);
+        const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: ids.length - 1 }[e.key];
+        if (next == null) return;
+        e.preventDefault();
+        switchTab(ids[(next + ids.length) % ids.length]);
+      },
+    },
+    icon(paths),
+    h('span', { class: 'tab-label', text: label }),
+    badge ? h('span', { class: `tab-badge${id === 'agent' ? ' tab-badge-soft' : ''}`, text: badge, 'aria-label': id === 'issues' ? `${badge} issues` : `${badge} unnamed controls` }) : null);
+  }));
+  $tabs.hidden = false;
+}
 
+function scoreHeader(r) {
   const breakdown = [];
   if (r.counts.fail) breakdown.push(`${r.counts.fail} failing`);
   if (r.counts.warn) breakdown.push(`${r.counts.warn} ${r.counts.warn === 1 ? 'warning' : 'warnings'}`);
   breakdown.push(`${r.counts.pass} passed`);
-
-  const score = h('section', { class: 'score', 'aria-label': 'Overall score' },
+  return h('section', { class: 'score', 'aria-label': 'Overall score' },
     h('div', { class: 'score-head' },
-      h('div', { class: `score-num tone-${tone}` }, String(r.score), h('small', { text: '/100' })),
+      h('div', { class: `score-num tone-${toneFor(r.score)}` }, String(r.score), h('small', { text: '/100' })),
       h('div', { class: 'score-grade' },
         h('strong', { text: r.grade }),
         h('span', { text: breakdown.join(', ') }),
@@ -767,74 +805,95 @@ function renderResults() {
     ),
     h('p', { class: 'score-text', text: r.gradeText }),
     renderDiff(r.previous),
-    h('div', { class: 'strip', role: 'img', 'aria-label': 'Score by category, sized by weight in the overall score' },
-      r.categories.filter((c) => c.score != null && c.scored !== false).map((c, i) => h('span', {
-        class: `tone-${toneFor(c.score)}`,
-        title: `${c.name}: ${c.score}`,
-        style: { flex: `${c.weight / totalWeight} 1 0` },
-      }, h('b', { style: { width: `${c.score}%`, animationDelay: `${i * 60}ms` } }))),
+  );
+}
+
+const TOOL_ICONS = {
+  mark: '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/>',
+  share: '<path d="M12 3v12"/><path d="M7.5 7.5L12 3l4.5 4.5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>',
+  compare: '<rect x="3" y="4" width="7.5" height="16" rx="1.5"/><rect x="13.5" y="4" width="7.5" height="16" rx="1.5"/>',
+  rerun: '<path d="M20 12a8 8 0 1 1-2.4-5.7L20 8.5"/><path d="M20 3.5v5h-5"/>',
+};
+
+function toolsSection() {
+  const watching = state.watch === state.tabId;
+  const tile = (key, title, sub, onclick, pressed) => h('button', {
+    type: 'button', class: `tool${pressed ? ' is-on' : ''}`, onclick, 'aria-pressed': pressed == null ? null : String(!!pressed),
+  }, icon(TOOL_ICONS[key], 'tool-ico'), h('span', { class: 'tool-text' }, h('strong', { text: title }), h('span', { text: sub })));
+  return h('section', { class: 'block', 'aria-labelledby': 'tools-h' },
+    h('h2', { id: 'tools-h', class: 'block-h', text: 'Tools' }),
+    h('div', { class: 'tools' },
+      tile('mark', state.marked ? 'Hide marks' : 'Mark issues', 'Number every problem on the page', (e) => toggleMarks(e.currentTarget), state.marked),
+      tile('share', 'Share report', 'Send it, or save as PDF', openShareableReport),
+      tile('compare', 'Compare', 'Next to another page you audited', () => { state.compareOpen = !state.compareOpen; renderResults(); }, state.compareOpen),
+      tile('rerun', watching ? 'Re-run on reload: on' : 'Re-run on reload', watching ? 'Runs again after each reload' : 'For when you’re editing the site', toggleWatch, watching),
+    ),
+    compareCard(state.report),
+  );
+}
+
+function categoriesSection(r) {
+  return h('section', { class: 'block', 'aria-labelledby': 'cats-h' },
+    h('div', { class: 'block-head' },
+      h('h2', { id: 'cats-h', class: 'block-h', text: 'Scores by category' }),
+      h('button', { type: 'button', class: 'btn-link', onclick: () => switchTab('issues') }, 'See all checks'),
     ),
     h('ul', { class: 'cats' },
       r.categories.map((c) => h('li', {},
-        h('button', { type: 'button', onclick: () => jumpTo(c.id) },
+        h('button', { type: 'button', title: `See the ${c.name} checks`, onclick: () => jumpTo(c.id) },
           h('span', { class: 'cat-name', text: c.name }),
           c.scored === false
             ? h('span', { class: 'cat-unscored', text: 'Not scored' })
             : [h('span', { class: `cat-bar tone-${toneFor(c.score)}`, 'aria-hidden': 'true' }, h('b', { style: { width: `${c.score ?? 0}%` } })),
-              h('span', { class: `cat-score tone-${toneFor(c.score)}`, text: c.score == null ? '–' : String(c.score) })],
+              h('span', { class: `cat-score tone-${toneFor(c.score)}`, text: c.score == null ? 'n/a' : String(c.score) })],
+          h('span', { html: CHEVRON, class: 'cat-chev' }),
         ),
       )),
     ),
-    h('div', { class: 'score-actions' },
-      h('button', {
-        class: 'btn btn-quiet btn-small', type: 'button', 'aria-pressed': String(state.marked),
-        title: 'Put a numbered marker on every element with a problem',
-        onclick: (e) => toggleMarks(e.currentTarget),
-      }, state.marked ? 'Hide marks' : 'Mark issues on page'),
-      h('button', {
-        class: 'btn btn-quiet btn-small', type: 'button',
-        title: 'Open a report you can send to a client or teammate, or save as PDF',
-        onclick: openShareableReport,
-      }, 'Share report'),
-      h('button', {
-        class: 'btn btn-quiet btn-small', type: 'button', 'aria-pressed': String(state.compareOpen),
-        title: 'Compare this page with another page you audited, such as a competitor’s',
-        onclick: () => { state.compareOpen = !state.compareOpen; renderResults(); },
-      }, 'Compare'),
-      h('button', {
-        class: 'btn btn-quiet btn-small', type: 'button', 'aria-pressed': String(state.watch === state.tabId),
-        title: 'Run the audit again every time this page reloads, for example while you edit your site',
-        onclick: toggleWatch,
-      }, state.watch === state.tabId ? 'Re-run on reload: on' : 'Re-run on reload'),
-    ),
-    compareCard(r),
   );
+}
 
+function exploreSection(r) {
+  const v = r.agentView;
+  const items = [
+    ['agent', 'See it as an agent', v ? `About ${v.tokens.toLocaleString()} tokens${v.unnamed ? `, ${v.unnamed} unnamed ${v.unnamed === 1 ? 'control' : 'controls'}` : ''}` : 'The page’s accessibility tree'],
+    ['test', 'Test a task', 'Can an agent “add to cart” or “sign up” here?'],
+    ['site', 'Scan the whole site', 'Up to 25 pages, free'],
+  ];
+  return h('section', { class: 'block', 'aria-labelledby': 'explore-h' },
+    h('h2', { id: 'explore-h', class: 'block-h', text: 'Explore more' }),
+    h('div', { class: 'explore' }, items.map(([id, title, sub]) => h('button', { type: 'button', class: 'explore-item', onclick: () => switchTab(id) },
+      icon(TAB_ICON[id], 'tool-ico'),
+      h('span', { class: 'tool-text' }, h('strong', { text: title }), h('span', { text: sub })),
+      h('span', { html: CHEVRON, class: 'cat-chev' }),
+    ))),
+  );
+}
+
+function issuesView(r) {
+  const issueCount = r.counts.fail + r.counts.warn;
+  const passCount = r.counts.pass + r.counts.info + r.counts.na;
   const filterBtn = (id, label, count) => h('button', {
     type: 'button', 'aria-pressed': String(state.filter === id),
     onclick: () => { state.filter = id; renderResults(); },
   }, label, count != null ? h('span', { class: 'count', text: count }) : null);
-
-  const exportMenu = buildExportMenu();
   const toolbar = h('div', { class: 'toolbar' },
     h('div', { class: 'segmented', role: 'group', 'aria-label': 'Show checks' },
       filterBtn('issues', 'Issues', issueCount),
       filterBtn('passed', 'Passed', passCount),
-      filterBtn('all', 'All', total),
+      filterBtn('all', 'All', issueCount + passCount),
     ),
-    exportMenu,
+    buildExportMenu(),
   );
-
   const sections = [];
   let firstIssueOpened = false;
   for (const cat of r.categories) {
     const checks = visibleChecks(cat);
     if (!checks.length) continue;
-    const catTone = toneFor(cat.score);
     sections.push(h('section', { class: 'category', id: `cat-${cat.id}`, 'aria-labelledby': `cat-h-${cat.id}` },
       h('div', { class: 'category-head' },
         h('h2', { id: `cat-h-${cat.id}`, text: cat.name }),
-        h('span', { class: `cat-score-lg tone-${catTone}`, text: cat.scored === false ? 'Not scored' : cat.score == null ? '–' : String(cat.score) }),
+        h('span', { class: `cat-score-lg tone-${toneFor(cat.score)}`, text: cat.scored === false ? 'Not scored' : cat.score == null ? 'n/a' : String(cat.score) }),
       ),
       h('p', { class: 'category-desc', text: cat.description }),
       checks.map((c) => {
@@ -850,36 +909,34 @@ function renderResults() {
       state.filter === 'issues' ? 'Every check passed or doesn’t apply to this page.' : 'Switch to All to see every check.',
     ));
   }
+  return [toolbar, ...sections, auditFoot(r)];
+}
 
+function auditFoot(r) {
   const when = new Date(r.timestamp);
-  const foot = h('p', { class: 'foot' },
+  return h('p', { class: 'foot' },
     `Audited ${when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })} in ${(r.durationMs / 1000).toFixed(1)} s. `,
     `${r.stats.elements.toLocaleString()} elements, ${r.stats.controls.toLocaleString()} controls and ${r.stats.fields.toLocaleString()} form fields checked in the top frame. Scores are heuristics: use them to find problems, then confirm with a real agent.`,
   );
+}
 
-  const tab = (id, label) => h('button', {
-    type: 'button', role: 'tab', id: `tab-${id}`, 'aria-selected': String(state.tab === id), 'aria-controls': 'tabpanel',
-    tabindex: state.tab === id ? '0' : '-1',
-    onclick: () => { state.tab = id; renderResults(); showTabs(); document.getElementById(`tab-${id}`)?.focus({ preventScroll: true }); },
-    onkeydown: (e) => {
-      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      const order = ['report', 'agent', 'test', 'site'];
-      state.tab = order[(order.indexOf(state.tab) + (e.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
-      renderResults();
-      showTabs();
-      document.getElementById(`tab-${state.tab}`)?.focus({ preventScroll: true });
-    },
-  }, label);
-  const tabs = h('div', { class: 'tabs', role: 'tablist', 'aria-label': 'Results' },
-    tab('report', 'Report'),
-    tab('agent', 'Agent view'),
-    tab('test', 'Agent test'),
-    tab('site', 'Site scan'),
-  );
-  const panel = h('div', { id: 'tabpanel', role: 'tabpanel', 'aria-labelledby': `tab-${state.tab}` },
-    state.tab === 'agent' ? renderAgentView(r) : state.tab === 'test' ? renderAgentTest(r) : state.tab === 'site' ? renderSiteScan(r) : [toolbar, ...sections, foot]);
+function renderResults() {
+  const r = state.report;
+  if (!r) return renderEmpty();
+  if (!TABS.some(([id]) => id === state.tab)) state.tab = 'overview';
+  $pageLabel.textContent = hostOf(r.url);
+  $pageLabel.title = r.url;
 
-  setView(score, whatsNewCard(), reviewCard(r), topFixesCard(r), tabs, panel);
+  let body;
+  if (state.tab === 'overview') {
+    body = [scoreHeader(r), whatsNewCard(), reviewCard(r), topFixesCard(r), toolsSection(), categoriesSection(r), exploreSection(r), auditFoot(r)];
+  } else if (state.tab === 'issues') body = issuesView(r);
+  else if (state.tab === 'agent') body = [renderAgentView(r)];
+  else if (state.tab === 'test') body = [renderAgentTest(r)];
+  else body = [renderSiteScan(r)];
+
+  setView(h('div', { id: 'tabpanel', role: 'tabpanel', 'aria-labelledby': `tab-${state.tab}`, class: `tabpanel tab-${state.tab}` }, body.filter(Boolean)));
+  renderTabs(r);
   if (state.stale) showBanner('This page has changed since the audit.', 'Run it again', runAudit);
   setRunButton();
 }
@@ -1152,10 +1209,10 @@ function renderTestResult(r, res) {
 }
 
 function jumpTo(catId) {
+  if (state.tab !== 'issues') { state.tab = 'issues'; renderResults(); }
   let el = document.getElementById(`cat-${catId}`);
-  if (!el && (state.filter !== 'all' || state.tab !== 'report')) {
+  if (!el && state.filter !== 'all') {
     state.filter = 'all';
-    state.tab = 'report';
     renderResults();
     el = document.getElementById(`cat-${catId}`);
   }

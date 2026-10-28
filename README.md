@@ -22,6 +22,16 @@ Features:
 
 Everything runs locally in the browser. No accounts, no servers, no analytics.
 
+### Panel layout
+
+A tab bar under the header stays in view and holds everything after an audit:
+
+- **Overview:** the score, Fix these first, tools (Mark issues, Share report, Compare, Re-run on reload), scores by category, and links to the other tabs.
+- **Issues:** every check with why it matters, how to fix it, the affected elements and suggested code. The badge shows the number of failing and warning checks.
+- **Agent view**, **Agent test** and **Site scan**, described below. The Agent view badge counts controls with no name.
+
+Before the first audit, the start screen lists what you'll get, recent audits and a link to the demo store.
+
 ## Install for development
 
 1. Open `chrome://extensions`.
