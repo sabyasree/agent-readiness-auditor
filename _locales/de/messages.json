@@ -1463,6 +1463,15 @@
   "message": "Heruntergeladen",
   "description": "Downloaded"
  },
+ "m1jiwawk": {
+  "message": "Chromes KI-Modell wird heruntergeladen… $P1$ %",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Downloading Chrome’s AI model… $1%"
+ },
  "m12sg01l": {
   "message": "Alle Prüfungen bestanden oder für diese Seite nicht zutreffend.",
   "description": "Every check passed or doesn’t apply to this page."
@@ -1566,10 +1575,6 @@
  "m1fzolxr": {
   "message": "Fokussierbar, aber mit aria-hidden=\"true\" vor Agenten versteckt",
   "description": "Focusable, but hidden from agents with aria-hidden=\"true\""
- },
- "mfyc6ti": {
-  "message": "Zum Beispiel: Dieses Produkt in den Warenkorb legen",
-  "description": "For example: Add this product to the cart"
  },
  "mgoz6jt": {
   "message": "Für die Arbeit an der Website",
@@ -2997,6 +3002,14 @@
   "message": "Der Button bzw. Link auf dieser Seite hat einen Namen.",
   "description": "The button or link on this page has a name."
  },
+ "mdhne8x": {
+  "message": "Die ID des Bedienelements wirkt automatisch generiert.",
+  "description": "The control ID looks auto-generated."
+ },
+ "mvvvqyc": {
+  "message": "Das Bedienelement ist nur über generierte Klassennamen ansprechbar.",
+  "description": "The control can only be targeted by generated class names."
+ },
  "mmwhqel": {
   "message": "Das Feld hat ein Label.",
   "description": "The field is labeled."
@@ -3004,6 +3017,10 @@
  "m1txdx2d": {
   "message": "Das Bild hat ein alt-Attribut.",
   "description": "The image has an alt attribute."
+ },
+ "mgqgk0b": {
+  "message": "Das Bild hat kein alt-Attribut.",
+  "description": "The image has no alt attribute."
  },
  "m2ocqbg": {
   "message": "Das lang-Attribut sagt Agenten, in welcher Sprache sie lesen und schreiben sollen – wichtig für Formulareingaben, Übersetzungen und Datumsangaben.",
@@ -3037,6 +3054,14 @@
   },
   "description": "The offer is missing $1."
  },
+ "m1c2u0th": {
+  "message": "Der einzige Button bzw. Link auf dieser Seite hat keinen Namen.",
+  "description": "The only button or link on this page has no name."
+ },
+ "mbo1lzh": {
+  "message": "Das einzige Feld auf dieser Seite hat kein Label.",
+  "description": "The only field on this page has no label."
+ },
  "m1fvpxj8": {
   "message": "Die Gliederung überspringt $P1$-mal eine Ebene.",
   "placeholders": {
@@ -3065,6 +3090,10 @@
  "mqaz8z1": {
   "message": "Der Barrierefreiheitsbaum der Seite",
   "description": "The page’s accessibility tree"
+ },
+ "m1ivtj72": {
+  "message": "Dem Feld für persönliche Daten fehlt ein Typ oder Autocomplete-Hinweis.",
+  "description": "The personal-information field is missing a type or autocomplete hint."
  },
  "m16te35r": {
   "message": "Der Scan braucht Zugriff auf $P1$, um dessen Seiten zu öffnen.",
@@ -3100,6 +3129,10 @@
  "mb99cvy": {
   "message": "Das getestete Bedienelement zeigt einen Fokusindikator.",
   "description": "The tested control shows a focus indicator."
+ },
+ "m652t0s": {
+  "message": "Das getestete Bedienelement zeigt beim Fokussieren keine Änderung.",
+  "description": "The tested control shows no change when focused."
  },
  "ma55xmb": {
   "message": "Der Titel ist oft das Erste, was ein Agent liest, um zu prüfen, ob er auf der richtigen Seite ist, und daran unterscheidet er Tabs.",
@@ -3267,6 +3300,10 @@
   "message": "Demo-Shop ausprobieren",
   "description": "Try the demo store"
  },
+ "mi2d0x": {
+  "message": "Aufgabe eingeben",
+  "description": "Type a task"
+ },
  "mxa6mac": {
   "message": "In $P1$ eingeben",
   "placeholders": {
@@ -3392,10 +3429,6 @@
  "m1pkpjlc": {
   "message": "Wöchentlicher Scan · öffne die Website und den Tab Website-Scan für Details",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m2263g2": {
-  "message": "Wöchentlicher Scan: an",
-  "description": "Weekly re-scan: on"
  },
  "m57qeo5": {
   "message": "Wöchentliche Scans mit Benachrichtigung, wenn eine Website schlechter wird, Tastatur- und Fokusprüfungen, Buttons in Shadow DOM und Frames, KI-Namensvorschläge für unbenannte Buttons und die Oberfläche in 6 Sprachen.",

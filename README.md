@@ -6,6 +6,12 @@ Most "agent-ready" tools only check whether crawler files like robots.txt and ll
 
 Features:
 
+- **Weekly re-scan with alerts.** After a site scan, turn on **Re-scan every week**: the background worker audits the same pages again each week and, if notifications are allowed, alerts you when the average drops by 3 points or more, or a new problem shows up on most pages.
+- **Keyboard and focus.** Controls the Tab key skips (`tabindex="-1"` outside widgets that manage focus) and controls with no visible focus indicator.
+- **Shadow DOM and frames.** Controls and fields inside open shadow roots and same-site iframes are audited along with the rest of the page.
+- **Name suggestions from on-device AI.** For an unnamed button, link or image, **Suggest a name** asks Chrome's built-in model for a name based on the text, headings, classes and file names around it. Shown only where the model is available.
+- **Command line and MCP server.** The same engine as an npm package (`cli/`): audit pages from the terminal, gate CI on a minimum score, or let coding agents audit pages through MCP.
+- **Six languages.** English, Spanish, German, Japanese, Portuguese (Brazil) and Bengali, following Chrome's language.
 - **Site scan.** Audit up to 25 pages of a site (from its sitemap or the links on the page) in a background tab and see which problems repeat across pages, so you can fix the shared template once. Export a site report or CSV, or copy one fix prompt for the shared problems.
 - **Suggested code fixes.** Each problem element comes with corrected code to copy: a real `<button>` instead of a clickable div, a `<label>` for a field, an `aria-label` with a name guessed from the page (icon class names, titles, image file names, link paths), and so on. Guessed names are marked for checking.
 - **Compare.** Put this page side by side with any other page you've audited, such as a competitor's: overall and category scores, and the checks where each one does better.
@@ -47,10 +53,10 @@ Requires Chrome 116 or later (side panel API).
 
 | Category | Weight | Checks |
 | --- | --- | --- |
-| Real controls | 20 | Clickable divs and spans with no control role, links with no real destination, positive tabindex |
+| Real controls | 20 | Clickable divs and spans with no control role, links with no real destination, controls the Tab key skips, no visible focus indicator, positive tabindex |
 | Labels and names | 20 | Controls with no accessible name, vague or duplicated names, images without alt, misleading ARIA (focusable elements under `aria-hidden`, references to missing ids, invalid roles and values, keyboard-unreachable ARIA controls, `aria-label` that doesn't contain the visible text) |
 | Forms | 15 | Unlabeled or placeholder-only fields, missing input types and autocomplete tokens, required fields not marked required |
-| Interaction traps | 15 | Overlays and cookie banners covering the page, unnamed dialogs, CAPTCHAs and bot challenges, cross-origin iframes, tiny click targets, layout shifts that move controls while loading, shadow DOM (informational) |
+| Interaction traps | 15 | Overlays and cookie banners covering the page, unnamed dialogs, CAPTCHAs and bot challenges, cross-origin iframes, tiny click targets, layout shifts that move controls while loading, open shadow DOM and same-site frames (informational; their controls are checked by the other checks) |
 | Stable targeting | 12 | Controls reachable only through generated class names, auto-generated IDs |
 | Page structure | 12 | Page title, `lang`, main and nav landmarks, heading outline, DOM size and depth, text, headings and prices that only appear after JavaScript runs, how far into the page the main content starts |
 | Shopping agents | 10, product pages only | Product structured data (name, image, description, brand, identifier), offer price, currency and availability (and whether the price matches the page), shipping details, return policy and ratings, a real, clearly named "Add to cart" button |
@@ -78,6 +84,12 @@ The model runs on the device and needs Chrome's hardware requirements (about 22 
 
 The **Agent view** tab lists the page the way agents built on Playwright or the Chrome DevTools Protocol read it: landmarks, lists and tables as containers; links, buttons, fields and headings as named items with their state (`level=1`, `checked`, `expanded=false`, `disabled`); and the text in between. Filter to controls or to controls with no name, search by name or role, select a line to highlight it on the page, or **Copy as text** for an indented snapshot in the style of a Playwright ARIA snapshot. The token count is an estimate (characters ÷ 4).
 
+## Translations
+
+The interface follows Chrome's language. `t('Run audit')` looks up the English text (by a short hash) in `_locales/<lang>/messages.json` and falls back to English. Check titles, descriptions and summaries are translated in the panel; the Markdown, JSON and prompt exports, the shareable report and the CLI stay in English, since they're usually pasted into coding agents or sent to others.
+
+To add or change a translation, edit `scripts/locales/<lang>.json` (English → translation) and run `python3 scripts/build-locales.py`. `--check` lists strings that have no translation yet. A new language needs a new file there, with `extName` and `extDescription` under `_meta` for the store.
+
 ## Export
 
 **Share report** opens a standalone HTML report in a new tab (Print → Save as PDF makes a PDF), and **Export → Download shareable report** saves it. The **Export** menu also copies or downloads the report as Markdown or JSON. **Copy report as prompt** copies the failing and warning checks as a task for a coding agent (Claude Code, Cursor, Copilot and others): a goal, a checklist, and a locate → fix → test → verify loop the agent repeats until every issue is fixed and covered by a test. Paste it into the agent running in the site's repository. Each failing check also has its own **Copy fix prompt** button.
@@ -94,6 +106,8 @@ The checks are heuristics. They find likely problems quickly; confirming with a 
 | `scripting` | Injects the audit engine into the page, draws highlights and issue markers, and lists WebMCP tools the page has registered. |
 | `sidePanel` | Shows the results in Chrome's side panel. |
 | `storage` | Keeps the latest report for each tab in session storage so it survives closing and reopening the panel (cleared when the tab navigates or closes); in local storage, a short score summary per URL to show changes between audits, and usage counters for the review prompt and "What's new". |
+| `alarms` | Wakes the background worker every few hours to run any weekly re-scans that are due. Does nothing unless a re-scan is turned on. |
+| `notifications` (optional) | Requested when the person turns on a weekly re-scan, to alert them when the site gets worse. |
 | `<all_urls>` (optional) | Never granted at install. Requested for one site at a time when the person starts a **Site scan** or turns on **Re-run on reload** (both need to reach the site again after the one-time access ends), or for all sites if they click **Allow on all sites**. |
 
 No host permissions are requested at install, which keeps the Chrome Web Store warning to a minimum and speeds up review.
@@ -102,7 +116,7 @@ No host permissions are requested at install, which keeps the Chrome Web Store w
 
 ```
 manifest.json          MV3 manifest
-background.js          Opens the side panel on icon click; welcome tab on install; uninstall survey URL; clears stale reports and badges
+background.js          Opens the side panel on icon click; welcome tab on install; uninstall survey URL; clears stale reports and badges; weekly re-scans and alerts
 content/auditor.js     Audit engine. Injected on demand; returns a JSON report
 sidepanel/panel.html   Side panel markup
 sidepanel/panel.css    Styles, light and dark themes
@@ -111,7 +125,11 @@ sidepanel/scoring.js   Projected score gains for "Fix these first"
 sidepanel/overlay.js   Issue and step markers drawn on the page
 sidepanel/report-html.js  Standalone shareable HTML report
 sidepanel/agent-test.js   Agent test: on-device AI plan, name-matching fallback, evaluation
-sidepanel/site-scan.js    Site scan: page discovery, background-tab audits, shared problems, site report and CSV
+sidepanel/site-scan.js    Site scan UI: options, progress, shared problems, site report, CSV and the weekly re-scan tile
+sidepanel/ai-name.js      "Suggest a name": on-device AI names for unnamed controls in suggested fixes
+sidepanel/i18n.js         t(): translations keyed by the English text
+lib/scan-core.js          Site scan engine shared by the panel, the background worker and the CLI
+_locales/              Generated translations; edit scripts/locales/<lang>.json and run scripts/build-locales.py
 welcome/               Welcome tab shown on first install
 icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
@@ -138,19 +156,21 @@ Add an object to the `CHECKS` array in `content/auditor.js`:
     return {
       score: ratioScore(bad.length, ctx.controls.length, 0.3), // 0..1, or null if not applicable
       issues: bad.length,
-      summary: `${bad.length} things are wrong.`,
+      summary: bad.length ? sayN(bad.length, '$1 thing is wrong.', '$1 things are wrong.') : 'Nothing is wrong.',
       findings: findings(bad, () => 'Note shown under the element'),
     };
   },
 },
 ```
 
+Write summaries with `say('… $1 …', value)` or `sayN(count, singular, plural)` so the panel can translate them, then add the new strings to `scripts/locales/*.json` (`python3 scripts/build-locales.py --check` lists what's missing).
+
 `ctx` holds the visible controls and fields (each with its computed accessible name), fixed-position elements, shadow hosts, element count and DOM depth. `run` may be `async`.
 
 ## Publishing to the Chrome Web Store
 
 1. Bump `version` in `manifest.json`.
-2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x 'site/*' -x netlify.toml -x 'store/*' -x 'cli/*'`.
+2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x 'site/*' -x netlify.toml -x 'store/*' -x 'cli/*' -x 'scripts/*'`.
 3. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), create a new item and upload the zip.
 4. Listing assets you'll need: at least one 1280×800 screenshot of the side panel next to a page, a 440×280 small promo tile, and the 128 px icon from `icons/`.
 5. Netlify: under **Forms**, turn on form detection so the uninstall survey (`site/goodbye.html`) collects responses.
@@ -158,7 +178,7 @@ Add an object to the `CHECKS` array in `content/auditor.js`:
 
 ## Known limits
 
-- Audits the top frame only. Content inside iframes and shadow roots is reported but not checked.
+- Cross-origin iframes and closed shadow roots can't be read; they're reported but not checked. Open shadow roots and same-site frames are checked.
 - Hover-only menus, infinite scroll and drag-and-drop can't be detected reliably from a static scan, so they aren't scored.
 - `llms.txt`, `robots.txt`, `sitemap.xml` and the `/.well-known/` files are fetched from the page's own origin. If the site blocks those requests, the checks are marked not applicable or not found.
 - The JavaScript check fetches the page URL again with your cookies and compares it to the rendered page, so it compares like with like on signed-in pages. Pages that answer differently on a second request (for example, one-time links) can give odd results.
@@ -169,4 +189,4 @@ Add an object to the `CHECKS` array in `content/auditor.js`:
 
 ## Ideas for the paid tier
 
-Scans beyond 25 pages and scheduled re-scans, flow audits across several pages (a checkout, a sign-up), white-label reports for agencies, an agent test that actually performs the task in a sandboxed tab, and a CI action that fails builds when readiness drops.
+Scans beyond 25 pages, flow audits across several pages (a checkout, a sign-up), white-label reports for agencies, an agent test that actually performs the task in a sandboxed tab, and a hosted dashboard for re-scan history across many sites.

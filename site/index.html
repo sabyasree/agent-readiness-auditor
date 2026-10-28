@@ -162,6 +162,7 @@
     footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
     footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
     footer a { color: var(--muted); }
+    p code { font: .88em/1.4 var(--mono); background: var(--code-bg); border: 1px solid var(--line); border-radius: 5px; padding: 1px 5px; overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
@@ -187,7 +188,7 @@
   <main>
     <section class="hero">
       <div class="wrap">
-        <span class="eyebrow">Free Chrome extension · New in 1.4: Site scan</span>
+        <span class="eyebrow">Free Chrome extension · New in 1.5: weekly re-scans, CLI and 6 languages</span>
         <h1>Can AI agents actually use your website?</h1>
         <p class="lead">Agent-Readiness Auditor scores how well agents like Claude, Gemini and ChatGPT can read your page, find its buttons and finish tasks on it. Then it shows you exactly what to fix.</p>
         <div class="cta">
@@ -329,7 +330,22 @@
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg></div>
             <h3>Suggested code</h3>
-            <p>Corrected markup for each problem element, native HTML first, ready to copy into your editor.</p>
+            <p>Corrected markup for each problem element, native HTML first, ready to copy. On-device AI can suggest names for unnamed buttons.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
+            <h3>Weekly re-scan alerts</h3>
+            <p>Turn it on after a site scan. The same pages are checked every week, and you get an alert if the score drops.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6-6-6"/><path d="M12 19h8"/></svg></div>
+            <h3>Command line and MCP</h3>
+            <p>Fail a CI build below a score with <code>npx agent-readiness</code>, or let Claude Code and Cursor audit pages through MCP.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+            <h3>In your language</h3>
+            <p>English, Español, Deutsch, 日本語, Português and বাংলা, following your Chrome language.</p>
           </div>
         </div>
       </div>
@@ -338,13 +354,13 @@
     <section class="block" id="checks" style="padding-top:40px">
       <div class="wrap">
         <p class="kicker">What it checks</p>
-        <h2>40 checks in ten areas</h2>
+        <h2>42 checks in ten areas</h2>
         <p class="intro">Each area gets a score, weighted into one overall score from 0 to 100. Checks that don’t apply to the page are left out rather than counted against you.</p>
         <div class="cards">
-          <div class="card"><span class="w">20%</span><h3>Real controls</h3><p>Clickable divs that aren’t real buttons, links that go nowhere, positive tabindex.</p></div>
+          <div class="card"><span class="w">20%</span><h3>Real controls</h3><p>Clickable divs that aren’t real buttons, links that go nowhere, controls the Tab key skips, no visible focus.</p></div>
           <div class="card"><span class="w">20%</span><h3>Labels and names</h3><p>Icon-only buttons, vague names like “Click here”, missing alt text, misleading ARIA.</p></div>
           <div class="card"><span class="w">15%</span><h3>Forms</h3><p>Unlabeled fields, missing input types and autocomplete hints, unmarked required fields.</p></div>
-          <div class="card"><span class="w">15%</span><h3>Interaction traps</h3><p>Cookie banners and overlays, CAPTCHAs, cross-origin frames, tiny targets, layout shifts.</p></div>
+          <div class="card"><span class="w">15%</span><h3>Interaction traps</h3><p>Cookie banners and overlays, CAPTCHAs, cross-origin frames, tiny targets, layout shifts. Shadow DOM and same-site frames are checked too.</p></div>
           <div class="card"><span class="w">12%</span><h3>Stable targeting</h3><p>Controls only reachable by generated class names or auto-generated IDs.</p></div>
           <div class="card"><span class="w">12%</span><h3>Page structure</h3><p>Title, language, landmarks, headings, page size, content that needs JavaScript.</p></div>
           <div class="card"><span class="w">10%</span><h3>Shopping agents</h3><p>Only on product pages: Product data, price and stock, shipping, returns, ratings, a clear Add to cart.</p></div>
@@ -407,6 +423,14 @@
         <details>
           <summary>Can it check my whole site?</summary>
           <p>Yes, up to 25 pages at a time, for free. Open the Site scan tab, choose pages from your sitemap or your navigation, and the extension audits them one by one in a background tab. It asks for access to that one site only.</p>
+        </details>
+        <details>
+          <summary>Can I run it in CI or from a coding agent?</summary>
+          <p>Yes. The same checks are available as a command line tool: <code>npx agent-readiness http://localhost:3000 --min-score 80</code> fails the build when the score drops below 80. Run <code>npx agent-readiness mcp</code> as an MCP server and coding agents like Claude Code or Cursor can audit a page, fix it and audit again on their own.</p>
+        </details>
+        <details>
+          <summary>Which languages does it support?</summary>
+          <p>The extension follows your Chrome language: English, Spanish, German, Japanese, Portuguese (Brazil) and Bengali. Exported reports and prompts for coding agents stay in English.</p>
         </details>
         <details>
           <summary>Does it cost anything?</summary>

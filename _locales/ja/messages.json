@@ -1463,6 +1463,15 @@
   "message": "ダウンロードしました",
   "description": "Downloaded"
  },
+ "m1jiwawk": {
+  "message": "Chrome の AI モデルをダウンロード中… $P1$%",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Downloading Chrome’s AI model… $1%"
+ },
  "m12sg01l": {
   "message": "すべての項目が合格、またはこのページには該当しません。",
   "description": "Every check passed or doesn’t apply to this page."
@@ -1566,10 +1575,6 @@
  "m1fzolxr": {
   "message": "フォーカス可能なのに aria-hidden=\"true\" でエージェントから隠されています",
   "description": "Focusable, but hidden from agents with aria-hidden=\"true\""
- },
- "mfyc6ti": {
-  "message": "例: この商品をカートに追加する",
-  "description": "For example: Add this product to the cart"
  },
  "mgoz6jt": {
   "message": "サイトを編集しているときに",
@@ -2997,6 +3002,14 @@
   "message": "このページのボタンまたはリンクには名前があります。",
   "description": "The button or link on this page has a name."
  },
+ "mdhne8x": {
+  "message": "コントロールの ID は自動生成されたもののようです。",
+  "description": "The control ID looks auto-generated."
+ },
+ "mvvvqyc": {
+  "message": "このコントロールは自動生成されたクラス名でしか指定できません。",
+  "description": "The control can only be targeted by generated class names."
+ },
  "mmwhqel": {
   "message": "項目にラベルがあります。",
   "description": "The field is labeled."
@@ -3004,6 +3017,10 @@
  "m1txdx2d": {
   "message": "画像に alt 属性があります。",
   "description": "The image has an alt attribute."
+ },
+ "mgqgk0b": {
+  "message": "画像に alt 属性がありません。",
+  "description": "The image has no alt attribute."
  },
  "m2ocqbg": {
   "message": "lang 属性はエージェントに読み書きする言語を伝えます。フォーム入力、翻訳、日付の扱いに影響します。",
@@ -3037,6 +3054,14 @@
   },
   "description": "The offer is missing $1."
  },
+ "m1c2u0th": {
+  "message": "このページの唯一のボタンまたはリンクに名前がありません。",
+  "description": "The only button or link on this page has no name."
+ },
+ "mbo1lzh": {
+  "message": "このページの唯一の項目にラベルがありません。",
+  "description": "The only field on this page has no label."
+ },
  "m1fvpxj8": {
   "message": "見出し構造で階層の飛ばしが $P1$ 回あります。",
   "placeholders": {
@@ -3065,6 +3090,10 @@
  "mqaz8z1": {
   "message": "ページのアクセシビリティツリー",
   "description": "The page’s accessibility tree"
+ },
+ "m1ivtj72": {
+  "message": "個人情報の項目に型または autocomplete の指定がありません。",
+  "description": "The personal-information field is missing a type or autocomplete hint."
  },
  "m16te35r": {
   "message": "ページを開くには $P1$ へのアクセス許可が必要です。",
@@ -3100,6 +3129,10 @@
  "mb99cvy": {
   "message": "テストしたコントロールにはフォーカス表示があります。",
   "description": "The tested control shows a focus indicator."
+ },
+ "m652t0s": {
+  "message": "テストしたコントロールは、フォーカス時に見た目が変わりません。",
+  "description": "The tested control shows no change when focused."
  },
  "ma55xmb": {
   "message": "タイトルは、エージェントが正しいページにいるかを確かめるために最初に読むことが多く、タブを見分ける手がかりにもなります。",
@@ -3267,6 +3300,10 @@
   "message": "デモストアを試す",
   "description": "Try the demo store"
  },
+ "mi2d0x": {
+  "message": "タスクを入力",
+  "description": "Type a task"
+ },
  "mxa6mac": {
   "message": "$P1$ に入力",
   "placeholders": {
@@ -3392,10 +3429,6 @@
  "m1pkpjlc": {
   "message": "週次再スキャン · 詳細はサイトを開いて「サイトスキャン」タブで確認",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m2263g2": {
-  "message": "週次再スキャン: オン",
-  "description": "Weekly re-scan: on"
  },
  "m57qeo5": {
   "message": "サイトが悪化したら通知する週次再スキャン、キーボードとフォーカスのチェック、シャドウ DOM やフレーム内のボタンの診断、名前のないボタンへの AI による名前の提案、そして 6 言語対応のインターフェース。",

@@ -59,6 +59,8 @@
   }
   /** say() with the singular or plural template; the count is $1. */
   const sayN = (n, one, many, ...rest) => say(n === 1 ? one : many, fmtN(n), ...rest);
+  /** "n of total" summaries, with a sentence of its own when there's only one. */
+  const sayOf = (n, total, only, tpl) => (total === 1 ? say(only) : say(tpl, fmtN(n), fmtN(total)));
   /** Several sentences as one summary, each still translatable on its own. */
   function sayAll(parts) {
     const s = new String(parts.map(String).join(' '));
@@ -980,7 +982,7 @@
         return {
           score: ratioScore(n, tested, 0.5),
           issues: n,
-          summary: n ? say('$1 of $2 tested controls show no change when focused.', fmtN(n), fmtN(tested)) : sayN(tested, 'The tested control shows a focus indicator.', 'All $1 tested controls show a focus indicator.'),
+          summary: n ? sayOf(n, tested, 'The tested control shows no change when focused.', '$1 of $2 tested controls show no change when focused.') : sayN(tested, 'The tested control shows a focus indicator.', 'All $1 tested controls show a focus indicator.'),
           findings: findings(bad, () => 'Looks the same focused and unfocused'),
         };
       },
@@ -1016,7 +1018,7 @@
           score: ratioScore(n, ctx.controls.length, 0.15),
           issues: n,
           summary: n
-            ? say('$1 of $2 buttons and links have no name.', fmtN(n), fmtN(ctx.controls.length))
+            ? sayOf(n, ctx.controls.length, 'The only button or link on this page has no name.', '$1 of $2 buttons and links have no name.')
             : ctx.controls.length ? sayN(ctx.controls.length, 'The button or link on this page has a name.', 'All $1 buttons and links have a name.') : 'No buttons or links on this page.',
           findings: findings(bad, (c) => c.el.querySelector('svg, img, i, [class*="icon" i]')
             ? 'Icon-only control with no label' : 'No text, aria-label or title', (c) => fixUnnamed(c.el), true),
@@ -1078,7 +1080,7 @@
         return {
           score: ratioScore(n, imgs.length, 0.4),
           issues: n,
-          summary: n ? say('$1 of $2 images have no alt attribute.', fmtN(n), fmtN(imgs.length)) : sayN(imgs.length, 'The image has an alt attribute.', 'All $1 images have alt attributes.'),
+          summary: n ? sayOf(n, imgs.length, 'The image has no alt attribute.', '$1 of $2 images have no alt attribute.') : sayN(imgs.length, 'The image has an alt attribute.', 'All $1 images have alt attributes.'),
           findings: findings(bad, (i) => {
             const src = (i.currentSrc || i.src || '').split('/').pop().split('?')[0];
             return src ? `No alt attribute (${src.slice(0, 40)})` : 'No alt attribute';
@@ -1173,7 +1175,7 @@
         return {
           score: ratioScore(weighted, ctx.fields.length, 0.2),
           issues: n,
-          summary: n ? say('$1 of $2 fields have no label.', fmtN(n), fmtN(ctx.fields.length)) : sayN(ctx.fields.length, 'The field is labeled.', 'All $1 fields are labeled.'),
+          summary: n ? sayOf(n, ctx.fields.length, 'The only field on this page has no label.', '$1 of $2 fields have no label.') : sayN(ctx.fields.length, 'The field is labeled.', 'All $1 fields are labeled.'),
           findings: findings(bad, (b) => b.ph ? `Only placeholder text: “${b.ph.slice(0, 40)}”` : 'No label, aria-label or title', (b) => fixUnlabeled(b.el)),
         };
       },
@@ -1213,7 +1215,7 @@
         return {
           score: ratioScore(n, relevant, 0.6),
           issues: n,
-          summary: n ? say('$1 of $2 personal-information fields are missing a type or autocomplete hint.', fmtN(n), fmtN(relevant)) : 'Personal-information fields have the right type and autocomplete hints.',
+          summary: n ? sayOf(n, relevant, 'The personal-information field is missing a type or autocomplete hint.', '$1 of $2 personal-information fields are missing a type or autocomplete hint.') : 'Personal-information fields have the right type and autocomplete hints.',
           findings: findings(bad, (b) => b.note, (b) => openTag(b.el, { set: b.set })),
         };
       },
@@ -1453,7 +1455,7 @@
         return {
           score: ratioScore(n, withClass.length, 0.5),
           issues: n,
-          summary: n ? say('$1 of $2 controls can only be targeted by generated class names.', fmtN(n), fmtN(withClass.length)) : 'Controls don’t depend on generated class names.',
+          summary: n ? sayOf(n, withClass.length, 'The control can only be targeted by generated class names.', '$1 of $2 controls can only be targeted by generated class names.') : 'Controls don’t depend on generated class names.',
           findings: findings(bad, (el) => `class="${Array.from(el.classList).slice(0, 3).join(' ')}"`),
         };
       },
@@ -1471,7 +1473,7 @@
         return {
           score: ratioScore(n, withId.length, 0.5),
           issues: n,
-          summary: n ? say('$1 of $2 control IDs look auto-generated.', fmtN(n), fmtN(withId.length)) : 'Control IDs look stable.',
+          summary: n ? sayOf(n, withId.length, 'The control ID looks auto-generated.', '$1 of $2 control IDs look auto-generated.') : 'Control IDs look stable.',
           findings: findings(bad, (el) => `id="${el.id.slice(0, 50)}"`),
         };
       },

@@ -187,7 +187,6 @@
 "Fix prompt copied": "修正プロンプトをコピーしました",
 "Fix these first": "まずこれを修正",
 "Fixed": "修正済み",
-"For example: Add this product to the cart": "例: この商品をカートに追加する",
 "For when you’re editing the site": "サイトを編集しているときに",
 "Form fields without labels": "ラベルのないフォーム項目",
 "Forms": "フォーム",
@@ -466,7 +465,6 @@
 "WebMCP tools": "WebMCP ツール",
 "Weekly re-scan is on. Allow notifications to get alerts.": "週次再スキャンはオンです。通知を受け取るには通知を許可してください。",
 "Weekly re-scan turned off.": "週次再スキャンをオフにしました。",
-"Weekly re-scan: on": "週次再スキャン: オン",
 "What it checks": "チェック内容",
 "What it couldn’t find: ": "見つからなかったもの: ",
 "What the audit checks": "診断でチェックする内容",
@@ -672,5 +670,14 @@
 "This looks like a product listing, not a single product page.": "単一の商品ページではなく、商品一覧のようです。",
 "This page has $1 visible main landmarks; it should have one.": "このページには表示中の main ランドマークが $1 個あります。1 個にすべきです。",
 "Title: “$1”": "タイトル:「$1」",
-"Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.": "サイトが悪化したら通知する週次再スキャン、キーボードとフォーカスのチェック、シャドウ DOM やフレーム内のボタンの診断、名前のないボタンへの AI による名前の提案、そして 6 言語対応のインターフェース。"
+"Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.": "サイトが悪化したら通知する週次再スキャン、キーボードとフォーカスのチェック、シャドウ DOM やフレーム内のボタンの診断、名前のないボタンへの AI による名前の提案、そして 6 言語対応のインターフェース。",
+"The tested control shows no change when focused.": "テストしたコントロールは、フォーカス時に見た目が変わりません。",
+"The only button or link on this page has no name.": "このページの唯一のボタンまたはリンクに名前がありません。",
+"The image has no alt attribute.": "画像に alt 属性がありません。",
+"The only field on this page has no label.": "このページの唯一の項目にラベルがありません。",
+"The personal-information field is missing a type or autocomplete hint.": "個人情報の項目に型または autocomplete の指定がありません。",
+"The control can only be targeted by generated class names.": "このコントロールは自動生成されたクラス名でしか指定できません。",
+"The control ID looks auto-generated.": "コントロールの ID は自動生成されたもののようです。",
+"Downloading Chrome’s AI model… $1%": "Chrome の AI モデルをダウンロード中… $1%",
+"Type a task": "タスクを入力"
 }

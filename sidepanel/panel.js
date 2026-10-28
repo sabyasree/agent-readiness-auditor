@@ -1104,7 +1104,7 @@ function renderAgentTest(r) {
   const status = h('p', { class: 'ai-status', text: t('Checking for Chrome’s built-in AI…') });
   const input = h('input', {
     type: 'text', id: 'task', class: 'view-search', value: ts.task, autocomplete: 'off',
-    placeholder: t('For example: Add this product to the cart'),
+    placeholder: t('Type a task'),
     oninput: (e) => { ts.task = e.target.value; },
     onkeydown: (e) => { if (e.key === 'Enter') { e.preventDefault(); runTest(); } },
   });
@@ -1146,7 +1146,7 @@ function renderAgentTest(r) {
         try {
           plan = await aiPlan(task, r, targets, {
             signal: ts.abort.signal,
-            onProgress: (p) => show(h('p', { class: 'test-progress', text: `Downloading Chrome’s AI model… ${Math.round(p * 100)}%` })),
+            onProgress: (p) => show(h('p', { class: 'test-progress', text: t('Downloading Chrome’s AI model… $1%', Math.round(p * 100)) })),
           });
           mode = 'ai';
         } catch (e) {
@@ -1168,13 +1168,13 @@ function renderAgentTest(r) {
   if (ts.result) result.append(renderTestResult(r, ts.result));
   return h('section', { class: 'agent-test' },
     h('p', { class: 'view-intro', text: t('Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked.') }),
-    status,
     h('div', { class: 'test-form' },
       h('label', { for: 'task', class: 'test-label', text: t('Task') }),
       h('div', { class: 'test-row' }, input, runBtn),
       chips,
     ),
     result,
+    status,
   );
 }
 

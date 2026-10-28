@@ -1,0 +1,25 @@
+Um agente de IA consegue usar de verdade o seu site? O Agent-Readiness Auditor verifica quão bem agentes como Claude, Gemini, ChatGPT agent e Perplexity Comet conseguem ler uma página e concluir tarefas nela, e mostra exatamente o que corrigir, começando pelo que vale mais pontos.
+
+Abra qualquer página e clique no ícone. Em cerca de um segundo você recebe uma nota de 0 a 100, a divisão por categoria e cada elemento com problema, com o motivo e como corrigir.
+
+A maioria dos verificadores de "agent-ready" só procura arquivos como robots.txt e llms.txt. Este verifica se um agente encontra seus controles pelo nome, preenche seus formulários, passa pelas sobreposições, compra nas suas páginas de produto e lê seu conteúdo sem ser enganado.
+
+NOVIDADES DA 1.5
+★ Reanálise semanal com alertas: depois de analisar um site, as mesmas páginas são verificadas toda semana e você recebe um alerta se a nota cair.
+★ Verificações de teclado e foco: controles que a tecla Tab pula e controles sem indicador de foco visível.
+★ Shadow DOM e frames: botões e campos dentro de web components e de iframes do mesmo site agora também são auditados.
+★ Sugestões de nome por IA no seu dispositivo para botões e imagens sem nome.
+★ Linha de comando e servidor MCP: npx agent-readiness para CI, Claude Code e Cursor.
+★ Em 6 idiomas: English, Español, Deutsch, 日本語, Português (Brasil) e বাংলা.
+
+TAMBÉM INCLUI
+★ Análise do site: até 25 páginas e os problemas em comum.
+★ Código sugerido para cada elemento com problema.
+★ Teste de agente: digite uma tarefa como "Adicionar este produto ao carrinho" e veja onde um agente trava.
+★ Corrija isto primeiro, marcações na página, visão do agente, comparação com concorrentes, relatório para compartilhar e prompts para Claude Code, Cursor ou Copilot.
+
+42 VERIFICAÇÕES EM 10 ÁREAS
+Controles reais, rótulos e nomes, formulários, armadilhas de interação, seleção estável, estrutura da página, agentes de compra, segurança para agentes, sinais legíveis por máquina e protocolos para agentes.
+
+PRIVACIDADE EM PRIMEIRO LUGAR
+Tudo roda no seu navegador. Sem conta, sem servidores, sem analytics. Nada da página é enviado para lugar nenhum.

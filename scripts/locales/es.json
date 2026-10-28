@@ -187,7 +187,6 @@
 "Fix prompt copied": "Prompt de corrección copiado",
 "Fix these first": "Corrige esto primero",
 "Fixed": "Corregidas",
-"For example: Add this product to the cart": "Por ejemplo: Añadir este producto al carrito",
 "For when you’re editing the site": "Para cuando estás editando el sitio",
 "Form fields without labels": "Campos de formulario sin etiqueta",
 "Forms": "Formularios",
@@ -466,7 +465,6 @@
 "WebMCP tools": "Herramientas WebMCP",
 "Weekly re-scan is on. Allow notifications to get alerts.": "El reanálisis semanal está activado. Permite las notificaciones para recibir alertas.",
 "Weekly re-scan turned off.": "Reanálisis semanal desactivado.",
-"Weekly re-scan: on": "Reanálisis semanal: activado",
 "What it checks": "Qué comprueba",
 "What it couldn’t find: ": "Lo que no encontró: ",
 "What the audit checks": "Qué comprueba la auditoría",
@@ -672,5 +670,14 @@
 "This looks like a product listing, not a single product page.": "Parece un listado de productos, no la página de un solo producto.",
 "This page has $1 visible main landmarks; it should have one.": "Esta página tiene $1 landmarks main visibles; debería tener uno.",
 "Title: “$1”": "Título: «$1»",
-"Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.": "Reanálisis semanales que te avisan si un sitio empeora, comprobaciones de teclado y foco, botones dentro de shadow DOM y marcos, nombres sugeridos por IA para botones sin nombre y la interfaz en 6 idiomas."
+"Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.": "Reanálisis semanales que te avisan si un sitio empeora, comprobaciones de teclado y foco, botones dentro de shadow DOM y marcos, nombres sugeridos por IA para botones sin nombre y la interfaz en 6 idiomas.",
+"The tested control shows no change when focused.": "El control probado no cambia al recibir el foco.",
+"The only button or link on this page has no name.": "El único botón o enlace de esta página no tiene nombre.",
+"The image has no alt attribute.": "La imagen no tiene atributo alt.",
+"The only field on this page has no label.": "El único campo de esta página no tiene etiqueta.",
+"The personal-information field is missing a type or autocomplete hint.": "Al campo de información personal le falta el tipo o la pista de autocompletado.",
+"The control can only be targeted by generated class names.": "El control solo se puede seleccionar por clases generadas.",
+"The control ID looks auto-generated.": "El ID del control parece generado automáticamente.",
+"Downloading Chrome’s AI model… $1%": "Descargando el modelo de IA de Chrome… $1 %",
+"Type a task": "Escribe una tarea"
 }

@@ -187,7 +187,6 @@
 "Fix prompt copied": "সমাধানের প্রম্পট কপি হয়েছে",
 "Fix these first": "আগে এগুলো ঠিক করুন",
 "Fixed": "ঠিক হয়েছে",
-"For example: Add this product to the cart": "যেমন: এই পণ্যটি কার্টে যোগ করুন",
 "For when you’re editing the site": "সাইট এডিট করার সময়ের জন্য",
 "Form fields without labels": "লেবেল ছাড়া ফর্ম ফিল্ড",
 "Forms": "ফর্ম",
@@ -466,7 +465,6 @@
 "WebMCP tools": "WebMCP টুল",
 "Weekly re-scan is on. Allow notifications to get alerts.": "সাপ্তাহিক রি-স্ক্যান চালু। অ্যালার্ট পেতে নোটিফিকেশনের অনুমতি দিন।",
 "Weekly re-scan turned off.": "সাপ্তাহিক রি-স্ক্যান বন্ধ করা হয়েছে।",
-"Weekly re-scan: on": "সাপ্তাহিক রি-স্ক্যান: চালু",
 "What it checks": "যা পরীক্ষা করে",
 "What it couldn’t find: ": "যা খুঁজে পায়নি: ",
 "What the audit checks": "অডিট যা পরীক্ষা করে",
@@ -672,5 +670,14 @@
 "This looks like a product listing, not a single product page.": "এটি একটি পণ্যের তালিকা মনে হচ্ছে, একক পণ্যের পেজ নয়।",
 "This page has $1 visible main landmarks; it should have one.": "এই পেজে $1টি দৃশ্যমান main ল্যান্ডমার্ক আছে; একটি থাকা উচিত।",
 "Title: “$1”": "শিরোনাম: “$1”",
-"Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.": "সাইটের অবনতি হলে অ্যালার্ট দেওয়া সাপ্তাহিক রি-স্ক্যান, কিবোর্ড ও ফোকাস চেক, শ্যাডো DOM ও ফ্রেমের ভেতরের বোতাম পরীক্ষা, নামহীন বোতামের জন্য AI-র প্রস্তাবিত নাম, আর ৬টি ভাষায় ইন্টারফেস।"
+"Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.": "সাইটের অবনতি হলে অ্যালার্ট দেওয়া সাপ্তাহিক রি-স্ক্যান, কিবোর্ড ও ফোকাস চেক, শ্যাডো DOM ও ফ্রেমের ভেতরের বোতাম পরীক্ষা, নামহীন বোতামের জন্য AI-র প্রস্তাবিত নাম, আর ৬টি ভাষায় ইন্টারফেস।",
+"The tested control shows no change when focused.": "পরীক্ষিত কন্ট্রোলে ফোকাস পেলে কোনো পরিবর্তন দেখা যায় না।",
+"The only button or link on this page has no name.": "এই পেজের একমাত্র বোতাম বা লিংকের নাম নেই।",
+"The image has no alt attribute.": "ছবিটিতে alt অ্যাট্রিবিউট নেই।",
+"The only field on this page has no label.": "এই পেজের একমাত্র ফিল্ডটির লেবেল নেই।",
+"The personal-information field is missing a type or autocomplete hint.": "ব্যক্তিগত তথ্যের ফিল্ডটিতে টাইপ বা autocomplete ইঙ্গিত নেই।",
+"The control can only be targeted by generated class names.": "কন্ট্রোলটিকে কেবল স্বয়ংক্রিয় ক্লাস নাম দিয়ে টার্গেট করা যায়।",
+"The control ID looks auto-generated.": "কন্ট্রোলের ID স্বয়ংক্রিয়ভাবে তৈরি মনে হয়।",
+"Downloading Chrome’s AI model… $1%": "Chrome-এর AI মডেল ডাউনলোড হচ্ছে… $1%",
+"Type a task": "একটি কাজ লিখুন"
 }

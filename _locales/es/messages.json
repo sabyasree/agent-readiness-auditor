@@ -1463,6 +1463,15 @@
   "message": "Descargado",
   "description": "Downloaded"
  },
+ "m1jiwawk": {
+  "message": "Descargando el modelo de IA de Chrome… $P1$ %",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Downloading Chrome’s AI model… $1%"
+ },
  "m12sg01l": {
   "message": "Todas las comprobaciones se han superado o no se aplican a esta página.",
   "description": "Every check passed or doesn’t apply to this page."
@@ -1566,10 +1575,6 @@
  "m1fzolxr": {
   "message": "Enfocable, pero oculto a los agentes con aria-hidden=\"true\"",
   "description": "Focusable, but hidden from agents with aria-hidden=\"true\""
- },
- "mfyc6ti": {
-  "message": "Por ejemplo: Añadir este producto al carrito",
-  "description": "For example: Add this product to the cart"
  },
  "mgoz6jt": {
   "message": "Para cuando estás editando el sitio",
@@ -2997,6 +3002,14 @@
   "message": "El botón o enlace de esta página tiene nombre.",
   "description": "The button or link on this page has a name."
  },
+ "mdhne8x": {
+  "message": "El ID del control parece generado automáticamente.",
+  "description": "The control ID looks auto-generated."
+ },
+ "mvvvqyc": {
+  "message": "El control solo se puede seleccionar por clases generadas.",
+  "description": "The control can only be targeted by generated class names."
+ },
  "mmwhqel": {
   "message": "El campo tiene etiqueta.",
   "description": "The field is labeled."
@@ -3004,6 +3017,10 @@
  "m1txdx2d": {
   "message": "La imagen tiene atributo alt.",
   "description": "The image has an alt attribute."
+ },
+ "mgqgk0b": {
+  "message": "La imagen no tiene atributo alt.",
+  "description": "The image has no alt attribute."
  },
  "m2ocqbg": {
   "message": "El atributo lang indica a los agentes en qué idioma leer y escribir, lo que importa para formularios, traducciones y fechas.",
@@ -3037,6 +3054,14 @@
   },
   "description": "The offer is missing $1."
  },
+ "m1c2u0th": {
+  "message": "El único botón o enlace de esta página no tiene nombre.",
+  "description": "The only button or link on this page has no name."
+ },
+ "mbo1lzh": {
+  "message": "El único campo de esta página no tiene etiqueta.",
+  "description": "The only field on this page has no label."
+ },
  "m1fvpxj8": {
   "message": "La estructura se salta un nivel $P1$ veces.",
   "placeholders": {
@@ -3065,6 +3090,10 @@
  "mqaz8z1": {
   "message": "El árbol de accesibilidad de la página",
   "description": "The page’s accessibility tree"
+ },
+ "m1ivtj72": {
+  "message": "Al campo de información personal le falta el tipo o la pista de autocompletado.",
+  "description": "The personal-information field is missing a type or autocomplete hint."
  },
  "m16te35r": {
   "message": "El análisis necesita acceso a $P1$ para abrir sus páginas.",
@@ -3100,6 +3129,10 @@
  "mb99cvy": {
   "message": "El control probado muestra un indicador de foco.",
   "description": "The tested control shows a focus indicator."
+ },
+ "m652t0s": {
+  "message": "El control probado no cambia al recibir el foco.",
+  "description": "The tested control shows no change when focused."
  },
  "ma55xmb": {
   "message": "El título suele ser lo primero que lee un agente para confirmar que está en la página correcta, y es como distingue las pestañas.",
@@ -3267,6 +3300,10 @@
   "message": "Prueba la tienda de demostración",
   "description": "Try the demo store"
  },
+ "mi2d0x": {
+  "message": "Escribe una tarea",
+  "description": "Type a task"
+ },
  "mxa6mac": {
   "message": "Escribir en $P1$",
   "placeholders": {
@@ -3392,10 +3429,6 @@
  "m1pkpjlc": {
   "message": "Reanálisis semanal · abre el sitio y la pestaña Análisis del sitio para ver detalles",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m2263g2": {
-  "message": "Reanálisis semanal: activado",
-  "description": "Weekly re-scan: on"
  },
  "m57qeo5": {
   "message": "Reanálisis semanales que te avisan si un sitio empeora, comprobaciones de teclado y foco, botones dentro de shadow DOM y marcos, nombres sugeridos por IA para botones sin nombre y la interfaz en 6 idiomas.",

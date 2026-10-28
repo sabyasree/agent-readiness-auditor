@@ -14,6 +14,10 @@ To show what changed between audits, the extension also keeps, in Chrome's local
 
 **Site scan and Re-run on reload.** These features ask for access to the site you're auditing, and only that site. A site scan reads the site's robots.txt and sitemap to find pages, then opens them one at a time in a background tab that closes when the scan ends. The scan's results (page addresses, scores and problems found) are kept in local storage on your computer so you can view the last scan again; **Export → Clear audit history** deletes them too. Re-run on reload runs the audit again when that page reloads. You can remove a site's access at any time from `chrome://extensions`.
 
+**Weekly re-scan.** If you turn on **Re-scan every week** after a site scan, the extension remembers that site's address and the pages it scanned, and the background part of the extension audits those same pages again about once a week, the same way a site scan does. It compares the new results with the last ones on your computer. If you allowed notifications, Chrome shows an alert when the average score drops or a new problem appears on most pages. Nothing is sent anywhere. Turn it off from the same tile in the Site scan tab; removing the site's access from `chrome://extensions` also stops it.
+
+**Name suggestions.** If you press **Suggest a name** on a suggested fix, the element's code and the text around it on the page are given to Chrome's built-in AI model on your computer, the same model the Agent test uses. Nothing leaves your browser.
+
 **Toolbar badge.** After an audit, the page's score is shown on the extension's icon for that tab. It's cleared when the tab navigates.
 
 **What it sends.** Nothing. The extension has no servers, no analytics, no tracking and no third-party code. Reports leave your browser only if you copy, download or share them yourself.

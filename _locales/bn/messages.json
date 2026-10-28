@@ -1463,6 +1463,15 @@
   "message": "ডাউনলোড হয়েছে",
   "description": "Downloaded"
  },
+ "m1jiwawk": {
+  "message": "Chrome-এর AI মডেল ডাউনলোড হচ্ছে… $P1$%",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Downloading Chrome’s AI model… $1%"
+ },
  "m12sg01l": {
   "message": "সব চেক পাস করেছে বা এই পেজে প্রযোজ্য নয়।",
   "description": "Every check passed or doesn’t apply to this page."
@@ -1566,10 +1575,6 @@
  "m1fzolxr": {
   "message": "ফোকাসযোগ্য, কিন্তু aria-hidden=\"true\" দিয়ে এজেন্টের কাছ থেকে লুকানো",
   "description": "Focusable, but hidden from agents with aria-hidden=\"true\""
- },
- "mfyc6ti": {
-  "message": "যেমন: এই পণ্যটি কার্টে যোগ করুন",
-  "description": "For example: Add this product to the cart"
  },
  "mgoz6jt": {
   "message": "সাইট এডিট করার সময়ের জন্য",
@@ -2997,6 +3002,14 @@
   "message": "এই পেজের বোতাম বা লিংকের নাম আছে।",
   "description": "The button or link on this page has a name."
  },
+ "mdhne8x": {
+  "message": "কন্ট্রোলের ID স্বয়ংক্রিয়ভাবে তৈরি মনে হয়।",
+  "description": "The control ID looks auto-generated."
+ },
+ "mvvvqyc": {
+  "message": "কন্ট্রোলটিকে কেবল স্বয়ংক্রিয় ক্লাস নাম দিয়ে টার্গেট করা যায়।",
+  "description": "The control can only be targeted by generated class names."
+ },
  "mmwhqel": {
   "message": "ফিল্ডটিতে লেবেল আছে।",
   "description": "The field is labeled."
@@ -3004,6 +3017,10 @@
  "m1txdx2d": {
   "message": "ছবিটিতে alt অ্যাট্রিবিউট আছে।",
   "description": "The image has an alt attribute."
+ },
+ "mgqgk0b": {
+  "message": "ছবিটিতে alt অ্যাট্রিবিউট নেই।",
+  "description": "The image has no alt attribute."
  },
  "m2ocqbg": {
   "message": "lang অ্যাট্রিবিউট এজেন্টকে জানায় কোন ভাষায় পড়তে ও লিখতে হবে, যা ফর্ম পূরণ, অনুবাদ ও তারিখের জন্য গুরুত্বপূর্ণ।",
@@ -3037,6 +3054,14 @@
   },
   "description": "The offer is missing $1."
  },
+ "m1c2u0th": {
+  "message": "এই পেজের একমাত্র বোতাম বা লিংকের নাম নেই।",
+  "description": "The only button or link on this page has no name."
+ },
+ "mbo1lzh": {
+  "message": "এই পেজের একমাত্র ফিল্ডটির লেবেল নেই।",
+  "description": "The only field on this page has no label."
+ },
  "m1fvpxj8": {
   "message": "কাঠামোয় $P1$ বার একটি স্তর বাদ পড়েছে।",
   "placeholders": {
@@ -3065,6 +3090,10 @@
  "mqaz8z1": {
   "message": "পেজের অ্যাক্সেসিবিলিটি ট্রি",
   "description": "The page’s accessibility tree"
+ },
+ "m1ivtj72": {
+  "message": "ব্যক্তিগত তথ্যের ফিল্ডটিতে টাইপ বা autocomplete ইঙ্গিত নেই।",
+  "description": "The personal-information field is missing a type or autocomplete hint."
  },
  "m16te35r": {
   "message": "পেজগুলো খুলতে স্ক্যানের $P1$-এ অ্যাক্সেস দরকার।",
@@ -3100,6 +3129,10 @@
  "mb99cvy": {
   "message": "পরীক্ষিত কন্ট্রোলে ফোকাস চিহ্ন দেখা যায়।",
   "description": "The tested control shows a focus indicator."
+ },
+ "m652t0s": {
+  "message": "পরীক্ষিত কন্ট্রোলে ফোকাস পেলে কোনো পরিবর্তন দেখা যায় না।",
+  "description": "The tested control shows no change when focused."
  },
  "ma55xmb": {
   "message": "সঠিক পেজে আছে কি না নিশ্চিত হতে এজেন্ট প্রায়ই প্রথমে শিরোনামই পড়ে, আর এটা দিয়েই সে ট্যাবগুলো আলাদা করে চেনে।",
@@ -3267,6 +3300,10 @@
   "message": "ডেমো স্টোর চেষ্টা করুন",
   "description": "Try the demo store"
  },
+ "mi2d0x": {
+  "message": "একটি কাজ লিখুন",
+  "description": "Type a task"
+ },
  "mxa6mac": {
   "message": "$P1$-এ টাইপ করুন",
   "placeholders": {
@@ -3392,10 +3429,6 @@
  "m1pkpjlc": {
   "message": "সাপ্তাহিক রি-স্ক্যান · বিস্তারিত দেখতে সাইটটি খুলে সাইট স্ক্যান ট্যাবে যান",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m2263g2": {
-  "message": "সাপ্তাহিক রি-স্ক্যান: চালু",
-  "description": "Weekly re-scan: on"
  },
  "m57qeo5": {
   "message": "সাইটের অবনতি হলে অ্যালার্ট দেওয়া সাপ্তাহিক রি-স্ক্যান, কিবোর্ড ও ফোকাস চেক, শ্যাডো DOM ও ফ্রেমের ভেতরের বোতাম পরীক্ষা, নামহীন বোতামের জন্য AI-র প্রস্তাবিত নাম, আর ৬টি ভাষায় ইন্টারফেস।",

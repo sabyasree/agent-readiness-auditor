@@ -135,8 +135,8 @@ function renderSiteScan(r) {
           ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { site.cancel = true; } }, t('Stop'))
           : h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => { site.phase = 'idle'; draw(); } }, t('New scan')),
       ),
-      h('div', { class: 'scan-bar', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': String(site.pages.length), 'aria-valuenow': String(done) },
-        h('b', { style: { width: `${site.pages.length ? (done / site.pages.length) * 100 : 0}%` } })),
+      running ? h('div', { class: 'scan-bar', role: 'progressbar', 'aria-valuemin': '0', 'aria-valuemax': String(site.pages.length), 'aria-valuenow': String(done) },
+        h('b', { style: { width: `${site.pages.length ? (done / site.pages.length) * 100 : 0}%` } })) : null,
       running ? h('ul', { class: 'scan-pages' }, site.pages.map((p) => h('li', {}, icon(p), h('span', { class: 'scan-path', text: pathOf(p.url) })))) : null,
     ];
   }
@@ -166,6 +166,13 @@ function renderSiteScan(r) {
         h('div', { class: `score-num tone-${toneFor(s.avg)}` }, String(s.avg), h('small', { text: t(' average') })),
         h('p', { class: 'muted', text: t('Across $1 pages. Lowest: $2 ($3).', s.done, pathOf(s.worst[0].result.url), s.worst[0].result.score) }),
       ),
+      // What to do next comes first; the details follow.
+      h('div', { class: 'test-actions scan-actions' },
+        s.shared.length ? h('button', { class: 'btn btn-primary btn-small', type: 'button', onclick: () => copyText(scanPrompt(scan), t('Prompt for the shared problems copied')) }, t('Copy fix prompt')) : null,
+        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => openBlob(scanHtml(scan), 'text/html') }, t('Open site report')),
+        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => saveBlob(scanCsv(scan), 'text/csv', `agent-readiness-${host}.csv`) }, t('Download CSV')),
+      ),
+      monitorTile(),
       h('h3', { class: 'scan-h', text: t('Problems shared across pages') }),
       s.shared.length ? h('ul', { class: 'scan-shared' }, s.shared.slice(0, 12).map(sharedRow)) : h('p', { class: 'view-empty', text: t('No problems on any page. Nice.') }),
       h('h3', { class: 'scan-h', text: t('Pages, lowest score first') }),
@@ -173,12 +180,6 @@ function renderSiteScan(r) {
         h('span', { class: `scan-score tone-${toneFor(p.result.score)}`, text: String(p.result.score) }),
         h('button', { type: 'button', class: 'btn-link scan-path', title: t('Open this page in the current tab'), onclick: () => openInTab(p.result.url) }, pathOf(p.result.url)),
       ))),
-      monitorTile(),
-      h('div', { class: 'test-actions' },
-        s.shared.length ? h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(scanPrompt(scan), t('Prompt for the shared problems copied')) }, t('Copy fix prompt')) : null,
-        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => openBlob(scanHtml(scan), 'text/html') }, t('Open site report')),
-        h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => saveBlob(scanCsv(scan), 'text/csv', `agent-readiness-${host}.csv`) }, t('Download CSV')),
-      ),
     ];
   }
 
@@ -189,13 +190,14 @@ function renderSiteScan(r) {
     const next = on ? Math.max(0, Math.ceil(((m.lastRun || Date.now()) + MONITOR_EVERY_DAYS * 864e5 - Date.now()) / 864e5)) : 0;
     return h('div', { class: 'scan-monitor' },
       h('button', {
-        type: 'button', class: `tool${on ? ' is-on' : ''}`, 'aria-pressed': String(on), onclick: toggleMonitor,
+        type: 'button', class: `tool${on ? ' is-on' : ''}`, role: 'switch', 'aria-checked': String(on), onclick: toggleMonitor,
       },
       icon(TOOL_ICONS.rerun, 'tool-ico'),
       h('span', { class: 'tool-text' },
-        h('strong', { text: on ? t('Weekly re-scan: on') : t('Re-scan every week') }),
+        h('strong', { text: t('Re-scan every week') }),
         h('span', { text: on ? `${tn(next, 'Next in $1 day.', 'Next in $1 days.')} ${m.alerts ? t('You’ll get an alert if the score drops.') : t('Alerts are off.')}` : t('Get an alert if the score drops or a new problem spreads') }),
-      )),
+      ),
+      h('span', { class: 'switch', 'aria-hidden': 'true' })),
     );
   }
 

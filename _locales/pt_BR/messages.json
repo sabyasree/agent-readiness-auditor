@@ -1463,6 +1463,15 @@
   "message": "Baixado",
   "description": "Downloaded"
  },
+ "m1jiwawk": {
+  "message": "Baixando o modelo de IA do Chrome… $P1$%",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Downloading Chrome’s AI model… $1%"
+ },
  "m12sg01l": {
   "message": "Todas as verificações foram aprovadas ou não se aplicam a esta página.",
   "description": "Every check passed or doesn’t apply to this page."
@@ -1566,10 +1575,6 @@
  "m1fzolxr": {
   "message": "Focável, mas oculto dos agentes com aria-hidden=\"true\"",
   "description": "Focusable, but hidden from agents with aria-hidden=\"true\""
- },
- "mfyc6ti": {
-  "message": "Por exemplo: Adicionar este produto ao carrinho",
-  "description": "For example: Add this product to the cart"
  },
  "mgoz6jt": {
   "message": "Para quando você está editando o site",
@@ -2997,6 +3002,14 @@
   "message": "O botão ou link desta página tem nome.",
   "description": "The button or link on this page has a name."
  },
+ "mdhne8x": {
+  "message": "O ID do controle parece gerado automaticamente.",
+  "description": "The control ID looks auto-generated."
+ },
+ "mvvvqyc": {
+  "message": "O controle só pode ser selecionado por classes geradas.",
+  "description": "The control can only be targeted by generated class names."
+ },
  "mmwhqel": {
   "message": "O campo tem rótulo.",
   "description": "The field is labeled."
@@ -3004,6 +3017,10 @@
  "m1txdx2d": {
   "message": "A imagem tem atributo alt.",
   "description": "The image has an alt attribute."
+ },
+ "mgqgk0b": {
+  "message": "A imagem não tem atributo alt.",
+  "description": "The image has no alt attribute."
  },
  "m2ocqbg": {
   "message": "O atributo lang diz aos agentes em que idioma ler e escrever, o que importa para formulários, tradução e datas.",
@@ -3037,6 +3054,14 @@
   },
   "description": "The offer is missing $1."
  },
+ "m1c2u0th": {
+  "message": "O único botão ou link desta página não tem nome.",
+  "description": "The only button or link on this page has no name."
+ },
+ "mbo1lzh": {
+  "message": "O único campo desta página não tem rótulo.",
+  "description": "The only field on this page has no label."
+ },
  "m1fvpxj8": {
   "message": "A estrutura pula um nível $P1$ vezes.",
   "placeholders": {
@@ -3065,6 +3090,10 @@
  "mqaz8z1": {
   "message": "A árvore de acessibilidade da página",
   "description": "The page’s accessibility tree"
+ },
+ "m1ivtj72": {
+  "message": "O campo de informação pessoal está sem tipo ou dica de autocomplete.",
+  "description": "The personal-information field is missing a type or autocomplete hint."
  },
  "m16te35r": {
   "message": "A análise precisa de acesso a $P1$ para abrir as páginas.",
@@ -3100,6 +3129,10 @@
  "mb99cvy": {
   "message": "O controle testado mostra um indicador de foco.",
   "description": "The tested control shows a focus indicator."
+ },
+ "m652t0s": {
+  "message": "O controle testado não muda ao receber foco.",
+  "description": "The tested control shows no change when focused."
  },
  "ma55xmb": {
   "message": "O título costuma ser a primeira coisa que o agente lê para confirmar que está na página certa, e é como ele diferencia as abas.",
@@ -3267,6 +3300,10 @@
   "message": "Experimente a loja de demonstração",
   "description": "Try the demo store"
  },
+ "mi2d0x": {
+  "message": "Digite uma tarefa",
+  "description": "Type a task"
+ },
  "mxa6mac": {
   "message": "Digitar em $P1$",
   "placeholders": {
@@ -3392,10 +3429,6 @@
  "m1pkpjlc": {
   "message": "Reanálise semanal · abra o site e a aba Análise do site para ver detalhes",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m2263g2": {
-  "message": "Reanálise semanal: ativada",
-  "description": "Weekly re-scan: on"
  },
  "m57qeo5": {
   "message": "Reanálises semanais que avisam quando um site piora, verificações de teclado e foco, botões dentro de shadow DOM e frames, sugestões de nome por IA para botões sem nome e a interface em 6 idiomas.",

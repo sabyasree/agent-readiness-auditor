@@ -1,0 +1,25 @@
+¿Puede un agente de IA usar de verdad tu sitio web? Agent-Readiness Auditor comprueba lo bien que agentes como Claude, Gemini, ChatGPT agent y Perplexity Comet pueden leer una página y completar tareas en ella, y te muestra exactamente qué corregir, empezando por lo que más puntos suma.
+
+Abre cualquier página y haz clic en el icono. En un segundo tienes una puntuación de 0 a 100, el desglose por categoría y cada elemento con problemas, con el porqué y cómo corregirlo.
+
+La mayoría de los comprobadores solo buscan archivos como robots.txt y llms.txt. Este comprueba si un agente puede encontrar tus controles por su nombre, rellenar tus formularios, superar las superposiciones, comprar en tus páginas de producto y leer tu contenido sin ser engañado.
+
+NOVEDADES DE LA 1.5
+★ Reanálisis semanal con alertas: tras analizar un sitio, las mismas páginas se revisan cada semana y recibes una alerta si la puntuación baja.
+★ Comprobaciones de teclado y foco: controles que la tecla Tab se salta y controles sin indicador de foco visible.
+★ Shadow DOM y marcos: ahora se auditan también los botones y campos dentro de web components y de iframes del mismo sitio.
+★ Nombres sugeridos por IA en tu dispositivo para botones e imágenes sin nombre.
+★ Línea de comandos y servidor MCP: npx agent-readiness para CI, Claude Code y Cursor.
+★ En 6 idiomas: English, Español, Deutsch, 日本語, Português (Brasil) y বাংলা.
+
+TAMBIÉN INCLUYE
+★ Análisis del sitio: hasta 25 páginas y los problemas que comparten.
+★ Código sugerido para cada elemento con problemas.
+★ Prueba de agente: escribe una tarea como «Añadir este producto al carrito» y mira dónde se atasca un agente.
+★ Corrige esto primero, marcas en la página, vista del agente, comparación con la competencia, informe para compartir y prompts para Claude Code, Cursor o Copilot.
+
+42 COMPROBACIONES EN 10 ÁREAS
+Controles reales, etiquetas y nombres, formularios, trampas de interacción, selección estable, estructura de la página, agentes de compra, seguridad para agentes, señales legibles por máquinas y protocolos para agentes.
+
+PRIVADO POR DISEÑO
+Todo se ejecuta en tu navegador. Sin cuenta, sin servidores, sin analítica. No se envía nada de la página a ningún sitio.
