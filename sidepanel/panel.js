@@ -44,10 +44,14 @@ const state = {
   marked: false,
   usage: null,
   test: { task: '', result: null, running: false, ai: null },
+  site: null,
+  compareOpen: false,
+  compareWith: null,
+  watch: null, // tab id whose audit re-runs after each reload
 };
 
 const VERSION = chrome.runtime.getManifest().version;
-const WHATS_NEW = 'Fix-these-first with projected points, markers for every issue on the page, shareable client reports, and checks for AI shopping agents on product pages.';
+const WHATS_NEW = 'Scan up to 25 pages of a site and find the problems they share, get suggested code for each fix, compare any two pages, and re-run the audit every time you reload.';
 
 const $view = document.getElementById('view');
 const $run = document.getElementById('runBtn');
@@ -140,7 +144,8 @@ function summarize(r) {
   for (const cat of r.categories) {
     for (const c of cat.checks) checks[c.id] = { s: c.status, n: c.issues, t: c.title };
   }
-  return { ts: r.timestamp, score: r.score, title: r.title, checks };
+  const cats = Object.fromEntries(r.categories.filter((c) => c.scored !== false && c.score != null).map((c) => [c.name, c.score]));
+  return { ts: r.timestamp, score: r.score, title: r.title, cats, checks };
 }
 
 function diffReports(prev, r) {
@@ -179,7 +184,11 @@ async function recordHistory(r) {
 }
 
 async function clearHistory() {
-  try { await chrome.storage.local.remove(HISTORY_KEY); } catch { /* ignore */ }
+  try {
+    const all = await chrome.storage.local.get(null);
+    await chrome.storage.local.remove([HISTORY_KEY, ...Object.keys(all).filter((k) => k.startsWith('sitescan:'))]);
+  } catch { /* ignore */ }
+  state.site = null;
   if (state.report) { state.report.previous = null; saveReport(state.tabId, state.report); renderResults(); }
   toast('Audit history cleared');
 }
@@ -441,6 +450,65 @@ function showTabs() {
   if (window.scrollY < top) window.scrollTo({ top, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }
 
+async function toggleWatch() {
+  const r = state.report;
+  if (!r) return;
+  if (state.watch === state.tabId) {
+    state.watch = null;
+  } else {
+    let origin;
+    try { origin = new URL(r.url).origin; } catch { return; }
+    // Re-running after a reload needs lasting access to this site (the one-time access ends on reload).
+    let granted = false;
+    try { granted = await chrome.permissions.request({ origins: [`${origin}/*`] }); } catch { granted = false; }
+    if (!granted) return toast('Re-run on reload needs access to this site.');
+    state.watch = state.tabId;
+    toast('The audit will run again each time this page reloads.');
+  }
+  renderResults();
+}
+
+function compareCard(r) {
+  if (!state.compareOpen) return null;
+  const card = h('section', { class: 'compare-card', 'aria-label': 'Compare' }, h('p', { class: 'test-progress', text: 'Loading your recent audits…' }));
+  const label = (u) => { try { const x = new URL(u); return x.host + (x.pathname === '/' ? '' : x.pathname); } catch { return u; } };
+  readHistory().then((all) => {
+    const me = pageKey(r.url);
+    const others = Object.entries(all).filter(([u]) => u !== me).sort((a, b) => b[1].ts - a[1].ts).slice(0, 30);
+    if (!others.length) {
+      card.replaceChildren(h('p', { class: 'compare-empty', text: 'Audit another page first, such as a competitor’s homepage or product page, then compare it with this one here.' }));
+      return;
+    }
+    const pick = state.compareWith && all[state.compareWith] && state.compareWith !== me ? state.compareWith : others[0][0];
+    const o = all[pick];
+    const select = h('select', {
+      id: 'compare-with', class: 'view-search',
+      onchange: (e) => { state.compareWith = e.target.value; renderResults(); },
+    }, others.map(([u, e]) => h('option', { value: u, selected: u === pick || null }, `${label(u)} (${e.score})`)));
+    const cell = (v) => h('td', { class: `num tone-${toneFor(v)}`, text: v == null ? '–' : String(v) });
+    const rows = [['Overall', r.score, o.score], ...r.categories.filter((c) => c.scored !== false)
+      .map((c) => [c.name, c.score, o.cats ? o.cats[c.name] : undefined])
+      .filter(([, a, b]) => a != null || b != null)];
+    const isIssue = (s) => s === 'fail' || s === 'warn';
+    const mine = r.categories.flatMap((c) => c.checks.filter((k) => c.scored !== false));
+    const theyLead = mine.filter((k) => isIssue(k.status) && o.checks[k.id] && o.checks[k.id].s === 'pass').map((k) => k.title);
+    const youLead = mine.filter((k) => k.status === 'pass' && o.checks[k.id] && isIssue(o.checks[k.id].s)).map((k) => k.title);
+    const list = (title, items) => (items.length ? [h('h3', { text: title }), h('ul', {}, items.slice(0, 8).map((t) => h('li', { text: t })))] : null);
+    card.replaceChildren(...[
+      h('label', { for: 'compare-with', class: 'test-label', text: 'Compare this page with' }),
+      select,
+      h('table', { class: 'compare-table' },
+        h('thead', {}, h('tr', {}, h('th', { text: '' }), h('th', { text: 'This page' }), h('th', { text: 'Other' }))),
+        h('tbody', {}, rows.map(([name, a, b]) => h('tr', { class: name === 'Overall' ? 'overall' : '' }, h('td', { text: name }), cell(a), cell(b == null ? null : b))))),
+      o.cats ? null : h('p', { class: 'compare-note', text: 'Category scores appear for pages audited with version 1.4 or later.' }),
+      list('Where the other page does better', theyLead),
+      list('Where this page does better', youLead),
+      h('p', { class: 'compare-note', text: `Other page audited ${timeAgo(o.ts)}. Run it again for a fresh comparison.` }),
+    ].flat().filter(Boolean));
+  });
+  return card;
+}
+
 function jumpToCheck(id) {
   state.tab = 'report';
   if (state.filter === 'passed') state.filter = 'issues';
@@ -619,6 +687,11 @@ function renderFinding(f, label) {
           h('span', { html: LOCATE_ICON, style: { display: 'inline-flex' } }), 'Show on page')
         : null,
     ),
+    f.fix ? h('details', { class: 'fix' },
+      h('summary', {}, 'Suggested fix'),
+      h('pre', { text: f.fix }),
+      h('button', { class: 'btn btn-quiet btn-small', type: 'button', onclick: () => copyText(f.fix, 'Fix copied') }, 'Copy code'),
+    ) : null,
   );
 }
 
@@ -723,7 +796,18 @@ function renderResults() {
         title: 'Open a report you can send to a client or teammate, or save as PDF',
         onclick: openShareableReport,
       }, 'Share report'),
+      h('button', {
+        class: 'btn btn-quiet btn-small', type: 'button', 'aria-pressed': String(state.compareOpen),
+        title: 'Compare this page with another page you audited, such as a competitor’s',
+        onclick: () => { state.compareOpen = !state.compareOpen; renderResults(); },
+      }, 'Compare'),
+      h('button', {
+        class: 'btn btn-quiet btn-small', type: 'button', 'aria-pressed': String(state.watch === state.tabId),
+        title: 'Run the audit again every time this page reloads, for example while you edit your site',
+        onclick: toggleWatch,
+      }, state.watch === state.tabId ? 'Re-run on reload: on' : 'Re-run on reload'),
     ),
+    compareCard(r),
   );
 
   const filterBtn = (id, label, count) => h('button', {
@@ -779,8 +863,8 @@ function renderResults() {
     onclick: () => { state.tab = id; renderResults(); showTabs(); document.getElementById(`tab-${id}`)?.focus({ preventScroll: true }); },
     onkeydown: (e) => {
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      const order = ['report', 'agent', 'test'];
-      state.tab = order[(order.indexOf(state.tab) + (e.key === 'ArrowRight' ? 1 : 2)) % 3];
+      const order = ['report', 'agent', 'test', 'site'];
+      state.tab = order[(order.indexOf(state.tab) + (e.key === 'ArrowRight' ? 1 : order.length - 1)) % order.length];
       renderResults();
       showTabs();
       document.getElementById(`tab-${state.tab}`)?.focus({ preventScroll: true });
@@ -790,9 +874,10 @@ function renderResults() {
     tab('report', 'Report'),
     tab('agent', 'Agent view'),
     tab('test', 'Agent test'),
+    tab('site', 'Site scan'),
   );
   const panel = h('div', { id: 'tabpanel', role: 'tabpanel', 'aria-labelledby': `tab-${state.tab}` },
-    state.tab === 'agent' ? renderAgentView(r) : state.tab === 'test' ? renderAgentTest(r) : [toolbar, ...sections, foot]);
+    state.tab === 'agent' ? renderAgentView(r) : state.tab === 'test' ? renderAgentTest(r) : state.tab === 'site' ? renderSiteScan(r) : [toolbar, ...sections, foot]);
 
   setView(score, whatsNewCard(), reviewCard(r), topFixesCard(r), tabs, panel);
   if (state.stale) showBanner('This page has changed since the audit.', 'Run it again', runAudit);
@@ -1134,7 +1219,7 @@ function toMarkdown(r) {
         L.push(`**Why it matters:** ${c.why}`, '');
         L.push(`**How to fix:** ${c.fix}`, '');
         for (const f of c.findings.slice(0, 20)) {
-          L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}`);
+          L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}${f.fix ? `  \n  Suggested fix: \`${tick(f.fix.replace(/\n/g, ' '))}\`` : ''}`);
         }
         if (c.issues > Math.min(20, c.findings.length)) L.push(`- …and ${(c.issues - Math.min(20, c.findings.length)).toLocaleString()} more`);
         if (c.findings.length) L.push('');
@@ -1213,7 +1298,7 @@ function toPrompt(r, ids) {
     L.push(`**How to fix:** ${c.fix}`, '');
     if (c.findings.length) L.push('**Affected elements:**', '');
     for (const f of c.findings.slice(0, 20)) {
-      L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}`);
+      L.push(`- \`${tick(f.snippet)}\`${f.note ? `: ${f.note}` : ''}${f.selector ? `  \n  Selector: \`${tick(f.selector)}\`` : ''}${f.fix ? `  \n  Suggested fix (check names marked as guesses): \`${tick(f.fix.replace(/\n/g, ' '))}\`` : ''}`);
     }
     if (c.issues > Math.min(20, c.findings.length)) L.push(`- …and ${(c.issues - Math.min(20, c.findings.length)).toLocaleString()} more of the same kind; your fix must cover them too`);
     if (c.findings.length) L.push('');
@@ -1288,8 +1373,14 @@ async function init() {
   chrome.tabs.onActivated.addListener(({ tabId, windowId }) => {
     if (windowId === state.windowId) showTab(tabId);
   });
-  chrome.tabs.onUpdated.addListener((tabId, info) => {
-    if (tabId !== state.tabId || info.status !== 'loading') return;
+  chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
+    if (tabId !== state.tabId) return;
+    if (state.watch === tabId && info.status === 'complete') {
+      let same = false;
+      try { same = !!(tab.url && state.report && new URL(tab.url).origin === new URL(state.report.url).origin); } catch { /* ignore */ }
+      if (same) { hideBanner(); setTimeout(runAudit, 600); return; }
+    }
+    if (info.status !== 'loading' || state.watch === tabId) return;
     if (state.report && !state.stale) {
       state.stale = true;
       showBanner('This page has changed since the audit.', 'Run it again', runAudit);

@@ -8,7 +8,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.3.0';
+  const VERSION = '1.4.0';
   if (window.__ARA && window.__ARA.version === VERSION) return;
 
   const FINDING_CAP = 50;
@@ -178,19 +178,146 @@
     return open.length > 200 ? open.slice(0, 199) + '…' : open;
   }
 
-  function finding(el, note) {
+  function finding(el, note, fix) {
     const ref = refs.push(el) - 1;
     let selector = '';
     try { selector = cssPath(el); } catch { /* ignore */ }
-    return { ref, selector, snippet: snippet(el), note: note || '' };
+    const out = { ref, selector, snippet: snippet(el), note: note || '' };
+    if (fix) out.fix = fix;
+    return out;
   }
 
-  function findings(items, noteFn) {
+  /** Findings for up to FINDING_CAP items. `fixFn(item)` returns suggested code, or '' for none. */
+  function findings(items, noteFn, fixFn) {
     return items.slice(0, FINDING_CAP).map((it) => {
       const el = it.el || it;
-      return finding(el, noteFn ? noteFn(it) : '');
+      let fix = '';
+      if (fixFn) { try { fix = fixFn(it) || ''; } catch { fix = ''; } }
+      return finding(el, noteFn ? noteFn(it) : '', fix);
     });
   }
+
+  // ------------------------------------------------------- suggested fixes
+  // Each finding can carry `fix`: the element's opening tag rewritten the way
+  // the check recommends, with a name guessed from the page where one is needed.
+
+  const ICON_WORDS = [
+    [/search|magnif|loupe/, 'Search'], [/cart|basket|trolley|\bbag\b|shopping/, 'Cart'], [/close|dismiss|\bx\b|times/, 'Close'],
+    [/menu|hamburger|burger|nav-?toggle|drawer/, 'Menu'], [/account|profile|\buser\b|avatar|login|sign-?in/, 'Account'],
+    [/heart|wish|favou?rite|\bfav\b|save/, 'Save to wishlist'], [/share/, 'Share'], [/next|arrow-?right|chevron-?right|forward/, 'Next'],
+    [/prev|previous|arrow-?left|chevron-?left|back/, 'Previous'], [/play/, 'Play'], [/pause/, 'Pause'], [/mute|volume|sound/, 'Mute'],
+    [/setting|gear|\bcog\b/, 'Settings'], [/filter/, 'Filter'], [/sort/, 'Sort'], [/edit|pencil/, 'Edit'],
+    [/delete|trash|\bbin\b|remove/, 'Remove'], [/minus|decrement|decrease/, 'Decrease'], [/plus|increment|increase/, 'Increase'],
+    [/download/, 'Download'], [/upload/, 'Upload'], [/copy|clipboard/, 'Copy'], [/print/, 'Print'], [/help|question/, 'Help'],
+    [/\binfo\b|information/, 'More information'], [/bell|notif/, 'Notifications'], [/\bhome\b|house/, 'Home'],
+    [/facebook/, 'Facebook'], [/twitter|\bx-logo/, 'X (Twitter)'], [/instagram/, 'Instagram'], [/linkedin/, 'LinkedIn'],
+    [/youtube/, 'YouTube'], [/github/, 'GitHub'], [/tiktok/, 'TikTok'], [/pinterest/, 'Pinterest'],
+    [/mail|envelope|newsletter/, 'Email'], [/phone|call/, 'Call'], [/location|map-?pin|\bpin\b|marker/, 'Location'],
+    [/calendar|date/, 'Choose a date'], [/globe|language|\blang\b/, 'Language'], [/expand|more|ellipsis|dots|kebab/, 'More options'],
+  ];
+
+  const humanize = (s) => {
+    const t = String(s || '').replace(/\.[a-z0-9]{2,5}$/i, '').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/[-_.+/]+/g, ' ')
+      .replace(/\b[0-9a-f]{6,}\b|\b\d+x\d+\b|\b\d{2,}\b/gi, '').replace(/\s+/g, ' ').trim();
+    return t ? t[0].toUpperCase() + t.slice(1).toLowerCase() : '';
+  };
+
+  /** A likely name for an unnamed control, from what the page already says about it. */
+  function guessName(el) {
+    const direct = norm(el.getAttribute('title') || el.getAttribute('data-tooltip') || el.getAttribute('data-title') ||
+      el.getAttribute('data-label') || el.getAttribute('data-tip') || el.getAttribute('placeholder'));
+    if (direct) return { name: direct.slice(0, 60), sure: true };
+    const hints = [el.id, typeof el.className === 'string' ? el.className : '', el.getAttribute('name'), el.getAttribute('data-testid'),
+      el.getAttribute('data-action'), el.getAttribute('aria-controls')];
+    for (const d of el.querySelectorAll('svg, i, span, img, use')) {
+      hints.push(d.getAttribute('class'), d.getAttribute('data-icon'), d.getAttribute('href') || d.getAttribute('xlink:href'),
+        d.tagName === 'IMG' ? (d.getAttribute('src') || '').split('/').pop() : '');
+    }
+    const hay = hints.filter(Boolean).join(' ').toLowerCase();
+    const icon = ICON_WORDS.find(([re]) => re.test(hay));
+    if (icon) return { name: icon[1], sure: false };
+    const href = el.getAttribute('href');
+    if (href && !/^(#|javascript:)/i.test(href)) {
+      try {
+        const u = new URL(href, location.href);
+        const seg = u.pathname.split('/').filter(Boolean).pop();
+        if (seg) return { name: humanize(decodeURIComponent(seg)), sure: false };
+        if (u.origin === location.origin) return { name: 'Home', sure: false };
+        return { name: humanize(u.hostname.replace(/^www\./, '').split('.')[0]), sure: false };
+      } catch { /* ignore */ }
+    }
+    return { name: '', sure: false };
+  }
+
+  const escAttr = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+  /** The opening tag of `el`, renamed to `tag`, with attributes set or removed. Long values are shortened. */
+  function openTag(el, { tag, set = {}, remove = [] } = {}) {
+    const name = (tag || el.tagName).toLowerCase();
+    const attrs = [];
+    for (const a of Array.from(el.attributes)) {
+      if (remove.includes(a.name) || a.name in set) continue;
+      let v = a.name === 'style' ? '…' : a.value;
+      if (v.length > 50) v = v.slice(0, 47) + '…';
+      attrs.push(v === '' ? a.name : `${a.name}="${escAttr(v)}"`);
+    }
+    for (const [k, v] of Object.entries(set)) attrs.push(v === true ? k : `${k}="${escAttr(v)}"`);
+    return `<${name}${attrs.length ? ' ' + attrs.join(' ') : ''}>`;
+  }
+
+  const VOID = new Set(['INPUT', 'IMG', 'BR', 'HR', 'AREA', 'SOURCE']);
+  const shortText = (el) => { const t = norm(el.innerText || el.textContent); return t.length > 40 ? t.slice(0, 40) + '…' : t; };
+  const inner = (el) => (el.children.length && !shortText(el) ? '…' : shortText(el) || '…');
+  const closeTag = (el, tag) => (VOID.has(el.tagName) && !tag ? '' : `${inner(el)}</${(tag || el.tagName).toLowerCase()}>`);
+  const nameNote = (g) => (g.sure ? ''
+    : g.name ? `\n<!-- “${g.name}” is a guess from the page. Check it says what the control does. -->`
+      : '\n<!-- Replace “Describe what it does” with the action, like “Search” or “Open cart”. -->');
+
+  /** A control with no name: add a label it can be found by. */
+  function fixUnnamed(el) {
+    const g = guessName(el);
+    const label = g.name || 'Describe what it does';
+    const img = el.querySelector('img:not([alt]), img[alt=""]');
+    if (img && el.querySelectorAll('img').length === 1 && !shortText(el)) {
+      return `${openTag(el)}${openTag(img, { set: { alt: label } })}</${el.tagName.toLowerCase()}>${nameNote(g)}`;
+    }
+    return `${openTag(el, { set: { 'aria-label': label } })}${closeTag(el)}${nameNote(g)}`;
+  }
+
+  /** Something clickable built from a div or span: make it a real button (or a link if it navigates). */
+  function fixFakeControl(el) {
+    const nav = el.getAttribute('data-href') || el.getAttribute('data-url') || /location|window\.open|href/.test(el.getAttribute('onclick') || '');
+    const tag = nav ? 'a' : 'button';
+    const set = nav ? { href: el.getAttribute('data-href') || el.getAttribute('data-url') || '/where-it-goes' } : { type: 'button' };
+    if (!shortText(el)) {
+      const g = guessName(el);
+      set['aria-label'] = g.name || 'Describe what it does';
+    }
+    return `${openTag(el, { tag, set, remove: ['role', 'tabindex', 'data-href', 'data-url'] })}${inner(el)}</${tag}>`;
+  }
+
+  /** A link with no destination: a real href if it navigates, otherwise a button. */
+  function fixDeadLink(el) {
+    if (el.hasAttribute('onclick') || !norm(el.textContent)) {
+      return `${openTag(el, { tag: 'button', set: { type: 'button' }, remove: ['href'] })}${inner(el)}</button>`;
+    }
+    return `${openTag(el, { set: { href: '/where-it-goes' } })}${inner(el)}</a>`;
+  }
+
+  /** A field with no label: a visible <label> tied to it by id. */
+  function fixUnlabeled(el) {
+    const kind = { email: 'Email', tel: 'Phone', number: 'Quantity', search: 'Search', url: 'Website', password: 'Password', date: 'Date' }[(el.getAttribute('type') || '').toLowerCase()];
+    const text = norm(el.getAttribute('placeholder')) || humanize(el.getAttribute('name')) || kind || guessName(el).name || 'Describe this field';
+    const id = el.id || (el.getAttribute('name') || text).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'field';
+    return `<label for="${escAttr(id)}">${text}</label>\n${openTag(el, { set: { id } })}${VOID.has(el.tagName) ? '' : `${inner(el)}</${el.tagName.toLowerCase()}>`}`;
+  }
+
+  /** An image with no alt: describe it, or mark it decorative. */
+  function fixImageAlt(el) {
+    const words = humanize((el.currentSrc || el.getAttribute('src') || '').split('/').pop().split('?')[0]);
+    return `${openTag(el, { set: { alt: words || 'Describe the image' } })}\n<!-- Describe what the image shows, or use alt="" if it’s decorative. -->`;
+  }
+
 
   const HASHY_CLASS = [
     /^css-[a-z0-9]{4,}/i,
@@ -695,7 +822,7 @@
             : 'Every clickable-looking element is a real control.',
           findings: findings(fakes, (el) => el.hasAttribute('onclick')
             ? 'Has an onclick handler but no control role'
-            : 'Pointer cursor, but no button or link role'),
+            : 'Pointer cursor, but no button or link role', fixFakeControl),
         };
       },
     },
@@ -721,7 +848,7 @@
           findings: findings(bad, (a) => {
             const href = a.getAttribute('href');
             return href == null ? 'No href attribute' : `href="${href.trim().slice(0, 40)}"`;
-          }),
+          }, fixDeadLink),
         };
       },
     },
@@ -737,7 +864,8 @@
           score: countScore(n, 0.1),
           issues: n,
           summary: n ? `${pl(n, 'element')} ${vb(n, 'uses', 'use')} a positive tabindex.` : 'No positive tabindex values.',
-          findings: findings(els, (e) => `tabindex="${e.getAttribute('tabindex')}"`),
+          findings: findings(els, (e) => `tabindex="${e.getAttribute('tabindex')}"`,
+            (e) => `${openTag(e, { set: { tabindex: '0' } })}${closeTag(e)}`),
         };
       },
     },
@@ -758,7 +886,7 @@
             ? `${n.toLocaleString()} of ${pl(ctx.controls.length, 'button or link', 'buttons and links')} ${vb(n, 'has', 'have')} no name.`
             : ctx.controls.length ? `All ${pl(ctx.controls.length, 'button and link', 'buttons and links')} have a name.` : 'No buttons or links on this page.',
           findings: findings(bad, (c) => c.el.querySelector('svg, img, i, [class*="icon" i]')
-            ? 'Icon-only control with no label' : 'No text, aria-label or title'),
+            ? 'Icon-only control with no label' : 'No text, aria-label or title', (c) => fixUnnamed(c.el)),
         };
       },
     },
@@ -821,7 +949,7 @@
           findings: findings(bad, (i) => {
             const src = (i.currentSrc || i.src || '').split('/').pop().split('?')[0];
             return src ? `No alt attribute (${src.slice(0, 40)})` : 'No alt attribute';
-          }),
+          }, fixImageAlt),
         };
       },
     },
@@ -912,7 +1040,7 @@
           score: ratioScore(weighted, ctx.fields.length, 0.2),
           issues: n,
           summary: n ? `${n.toLocaleString()} of ${pl(ctx.fields.length, 'field')} ${vb(n, 'has', 'have')} no label.` : `All ${pl(ctx.fields.length, 'field')} are labeled.`,
-          findings: findings(bad, (b) => b.ph ? `Only placeholder text: “${b.ph.slice(0, 40)}”` : 'No label, aria-label or title'),
+          findings: findings(bad, (b) => b.ph ? `Only placeholder text: “${b.ph.slice(0, 40)}”` : 'No label, aria-label or title', (b) => fixUnlabeled(b.el)),
         };
       },
     },
@@ -938,10 +1066,12 @@
           if (!rule) continue;
           relevant++;
           const type = (el.getAttribute('type') || 'text').toLowerCase();
+          const set = { autocomplete: el.getAttribute('autocomplete') || rule.ac };
           if (rule.type && type === 'text') {
-            bad.push({ el, note: `Asks for ${rule.what} but type is “text” (use type="${rule.type}")` });
+            set.type = rule.type;
+            bad.push({ el, set, note: `Asks for ${rule.what} but type is “text” (use type="${rule.type}")` });
           } else if (!el.hasAttribute('autocomplete')) {
-            bad.push({ el, note: `No autocomplete hint (add autocomplete="${rule.ac}")` });
+            bad.push({ el, set, note: `No autocomplete hint (add autocomplete="${rule.ac}")` });
           }
         }
         if (!relevant) return { score: null, status: 'na', summary: 'No personal-information fields that need type or autocomplete hints.' };
@@ -950,7 +1080,7 @@
           score: ratioScore(n, relevant, 0.6),
           issues: n,
           summary: n ? `${n.toLocaleString()} of ${pl(relevant, 'personal-information field')} ${vb(n, 'is', 'are')} missing a type or autocomplete hint.` : 'Personal-information fields have the right type and autocomplete hints.',
-          findings: findings(bad, (b) => b.note),
+          findings: findings(bad, (b) => b.note, (b) => openTag(b.el, { set: b.set })),
         };
       },
     },
@@ -972,7 +1102,7 @@
           score: ratioScore(n, formFields.length, 0.3),
           issues: n,
           summary: n ? `${pl(n, 'field')} ${vb(n, 'looks', 'look')} required but ${vb(n, 'isn’t', 'aren’t')} marked as required.` : 'Fields that look required are marked as required.',
-          findings: findings(bad, () => 'Label says required, but the field doesn’t'),
+          findings: findings(bad, () => 'Label says required, but the field doesn’t', (f) => openTag(f.el, { set: { required: true } })),
         };
       },
     },
@@ -1542,7 +1672,7 @@
           return {
             score: 0.2, issues: c.fakeCart.length,
             summary: `The “add to cart” control isn’t a real button, so agents may not find it.`,
-            findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role'),
+            findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role', fixFakeControl),
           };
         }
         if (!c.cart.length) return { score: 0.75, issues: 1, summary: 'No button named like “Add to cart” or “Buy now” found. If it only appears after choosing a size or color, make sure its name says what it does.' };
@@ -1551,7 +1681,7 @@
           score: c.fakeCart.length ? 0.8 : 1,
           issues: c.fakeCart.length,
           summary: `Found ${pl(c.cart.length, 'cart button')}: ${names.join(', ')}.` + (c.fakeCart.length ? ` ${pl(c.fakeCart.length, 'other one isn’t', 'others aren’t')} a real button.` : ''),
-          findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role'),
+          findings: findings(c.fakeCart, () => 'Looks like an add-to-cart button, but has no button role', fixFakeControl),
         };
       },
     },
@@ -1879,10 +2009,14 @@
     ctx.view = buildAgentView();
     ctx.probe = opts.probe || null;
 
+    // In a site scan, files that are the same for every page are checked once, not per page.
+    const SITE_LEVEL = new Set(['llms-txt', 'robots-ai', 'discovery-links', 'mcp-discovery', 'api-discovery', 'content-signals', 'markdown-negotiation']);
     const checks = await Promise.all(CHECKS.map(async (c) => {
       let out;
       try {
-        out = await c.run(ctx);
+        out = opts.siteScan && SITE_LEVEL.has(c.id)
+          ? { score: null, status: 'na', summary: 'Checked once for the whole site, not per page.' }
+          : await c.run(ctx);
       } catch (e) {
         out = { score: null, status: 'na', summary: `This check couldn’t run on this page (${(e && e.message) || e}).` };
       }

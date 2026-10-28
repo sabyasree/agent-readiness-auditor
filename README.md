@@ -6,6 +6,10 @@ Most "agent-ready" tools only check whether crawler files like robots.txt and ll
 
 Features:
 
+- **Site scan.** Audit up to 25 pages of a site (from its sitemap or the links on the page) in a background tab and see which problems repeat across pages, so you can fix the shared template once. Export a site report or CSV, or copy one fix prompt for the shared problems.
+- **Suggested code fixes.** Each problem element comes with corrected code to copy: a real `<button>` instead of a clickable div, a `<label>` for a field, an `aria-label` with a name guessed from the page (icon class names, titles, image file names, link paths), and so on. Guessed names are marked for checking.
+- **Compare.** Put this page side by side with any other page you've audited, such as a competitor's: overall and category scores, and the checks where each one does better.
+- **Re-run on reload.** While you edit your site, the audit runs again every time the page reloads.
 - **Agent test.** Type a task such as "Add this product to the cart". Chrome's built-in AI (Gemini Nano, running on your device) reads the page the way agents do and plans the clicks; the panel shows the plan on the page and where an agent would get stuck, including controls people can see but agents can't. Without the on-device model, it matches the task to control names.
 - **Fix these first.** The three fixes worth the most points, with the score you'd reach, and one prompt that covers them.
 - **Mark issues on page.** Numbered markers on every problem element at once; hover a number for details.
@@ -80,7 +84,7 @@ The checks are heuristics. They find likely problems quickly; confirming with a 
 | `scripting` | Injects the audit engine into the page, draws highlights and issue markers, and lists WebMCP tools the page has registered. |
 | `sidePanel` | Shows the results in Chrome's side panel. |
 | `storage` | Keeps the latest report for each tab in session storage so it survives closing and reopening the panel (cleared when the tab navigates or closes); in local storage, a short score summary per URL to show changes between audits, and usage counters for the review prompt and "What's new". |
-| `<all_urls>` (optional) | Only requested if the person clicks **Allow on all sites**, so audits work without clicking the toolbar icon first. Not granted at install. |
+| `<all_urls>` (optional) | Never granted at install. Requested for one site at a time when the person starts a **Site scan** or turns on **Re-run on reload** (both need to reach the site again after the one-time access ends), or for all sites if they click **Allow on all sites**. |
 
 No host permissions are requested at install, which keeps the Chrome Web Store warning to a minimum and speeds up review.
 
@@ -97,6 +101,7 @@ sidepanel/scoring.js   Projected score gains for "Fix these first"
 sidepanel/overlay.js   Issue and step markers drawn on the page
 sidepanel/report-html.js  Standalone shareable HTML report
 sidepanel/agent-test.js   Agent test: on-device AI plan, name-matching fallback, evaluation
+sidepanel/site-scan.js    Site scan: page discovery, background-tab audits, shared problems, site report and CSV
 welcome/               Welcome tab shown on first install
 icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
@@ -153,4 +158,4 @@ Add an object to the `CHECKS` array in `content/auditor.js`:
 
 ## Ideas for the paid tier
 
-Multi-page site crawls, flow audits across several pages (a checkout, a sign-up), white-label reports for agencies, an agent test that actually performs the task in a sandboxed tab, and a CI action that fails builds when readiness drops.
+Scans beyond 25 pages and scheduled re-scans, flow audits across several pages (a checkout, a sign-up), white-label reports for agencies, an agent test that actually performs the task in a sandboxed tab, and a CI action that fails builds when readiness drops.

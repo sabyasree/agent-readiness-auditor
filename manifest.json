@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Agent-Readiness Auditor – AI Agent Website Checker",
   "short_name": "Agent Audit",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Can AI agents use your website? Score any page for Claude, Gemini & ChatGPT agents, see what they see, and get fixes.",
   "minimum_chrome_version": "116",
   "icons": {

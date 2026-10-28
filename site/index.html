@@ -187,7 +187,7 @@
   <main>
     <section class="hero">
       <div class="wrap">
-        <span class="eyebrow">Free Chrome extension · New in 1.3: Agent test</span>
+        <span class="eyebrow">Free Chrome extension · New in 1.4: Site scan</span>
         <h1>Can AI agents actually use your website?</h1>
         <p class="lead">Agent-Readiness Auditor scores how well agents like Claude, Gemini and ChatGPT can read your page, find its buttons and finish tasks on it. Then it shows you exactly what to fix.</p>
         <div class="cta">
@@ -250,13 +250,23 @@
         <div class="feature flip">
           <div class="text">
             <span class="tag">New</span>
+            <h3>Scan your whole site, fix the template once</h3>
+            <p>Audit up to 25 pages from your sitemap or navigation in one go, free. The scan shows which problems repeat across pages, and a problem on most pages almost always comes from one shared template or component.</p>
+            <p>Copy one fix prompt for the shared problems, open a site report for your team or client, or download a CSV.</p>
+          </div>
+          <div class="shot"><img src="img/site-scan.webp" width="1280" height="800" loading="lazy" alt="A site scan of six pages with an average score of 78: unnamed controls, missing metadata and missing structured data appear on all six pages and are marked as likely coming from a shared template. A site report lists every page with its score."></div>
+        </div>
+
+        <div class="feature">
+          <div class="text">
+            <span class="tag">New</span>
             <h3>Know what to fix first, and see it all on the page</h3>
             <p><b>Fix these first</b> picks the three changes worth the most points and shows the score you’d reach. <b>Mark issues on page</b> puts a numbered marker on every problem element at once; hover a number for details.</p>
           </div>
           <div class="shot"><img src="img/markers.webp" width="1280" height="800" loading="lazy" alt="Numbered red and amber markers on a product page’s problem elements, with the side panel’s Fix these first list."></div>
         </div>
 
-        <div class="feature">
+        <div class="feature flip">
           <div class="text">
             <h3>See your page the way an agent reads it</h3>
             <p>The Agent view shows the page as an agent reads it: its accessibility tree as text, with a token estimate. Buttons and links with no name are flagged in red, because to an agent they’re just “button”.</p>
@@ -265,7 +275,7 @@
           <div class="shot"><img src="img/agent-view.webp" width="1280" height="800" loading="lazy" alt="The Agent view tab listing the page as an accessibility tree, with unnamed buttons and a spin button marked “no name”, and the selected one highlighted on the page."></div>
         </div>
 
-        <div class="feature flip">
+        <div class="feature">
           <div class="text">
             <span class="tag">New</span>
             <h3>Ready for AI shopping agents?</h3>
@@ -274,10 +284,10 @@
           <div class="shot"><img src="img/shopping.webp" width="1280" height="800" loading="lazy" alt="The Shopping agents category on a product page: price and availability, shipping, returns and reviews, and the add-to-cart button are failing."></div>
         </div>
 
-        <div class="feature">
+        <div class="feature flip">
           <div class="text">
             <h3>Hand the fixes to your coding agent, or to your client</h3>
-            <p>Copy the whole report, the top fixes, or a single issue as a ready-made task for Claude Code, Cursor or Copilot. It tells the agent to fix each issue at its source, write a test, verify it and keep going until the checklist is done.</p>
+            <p>Every problem element comes with <b>suggested code</b> you can copy: a real button instead of a clickable div, a label for a field, a name for an icon button guessed from the page. Or copy the whole report, the top fixes, or a single issue as a ready-made task for Claude Code, Cursor or Copilot. It tells the agent to fix each issue at its source, write a test, verify it and keep going until the checklist is done.</p>
             <p><b>Share report</b> makes a clean, standalone report you can send to a client or save as PDF.</p>
             <div class="prompt"><b># Task: fix the top 3 agent-readiness issues on this page</b>
 <b>## Loop</b>
@@ -305,6 +315,21 @@
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg></div>
             <h3>Score on the icon</h3>
             <p>After an audit, the toolbar icon shows the page’s score, so you see it at a glance as you work.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v18M16 3v18"/><path d="M3 8h5M3 16h5M16 12h5"/></svg></div>
+            <h3>Compare with a competitor</h3>
+            <p>Put your page next to any page you’ve audited: scores by category, and where each one does better.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></div>
+            <h3>Re-run on reload</h3>
+            <p>Editing your site? The audit runs again every time you save and the page reloads.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg></div>
+            <h3>Suggested code</h3>
+            <p>Corrected markup for each problem element, native HTML first, ready to copy into your editor.</p>
           </div>
         </div>
       </div>
@@ -378,6 +403,10 @@
         <details>
           <summary>Does the Agent test send my page to an AI service?</summary>
           <p>No. It uses Chrome’s built-in model, Gemini Nano, which runs on your computer. Chrome downloads it once, on the first test, if your computer meets Chrome’s requirements. Without it, the test matches your task to control names inside the extension. Nothing leaves your browser either way.</p>
+        </details>
+        <details>
+          <summary>Can it check my whole site?</summary>
+          <p>Yes, up to 25 pages at a time, for free. Open the Site scan tab, choose pages from your sitemap or your navigation, and the extension audits them one by one in a background tab. It asks for access to that one site only.</p>
         </details>
         <details>
           <summary>Does it cost anything?</summary>

@@ -42,7 +42,7 @@ function toHtmlReport(r) {
       ${d.regressed.length ? `<p><b>New problems:</b> ${esc(d.regressed.join('; '))}</p>` : ''}
     </section>` : '';
 
-  const finding = (f) => `<li><code>${esc(f.snippet)}</code>${f.note ? `<div class="muted">${esc(f.note)}</div>` : ''}${f.selector ? `<div class="sel">${esc(f.selector)}</div>` : ''}</li>`;
+  const finding = (f) => `<li><code>${esc(f.snippet)}</code>${f.note ? `<div class="muted">${esc(f.note)}</div>` : ''}${f.selector ? `<div class="sel">${esc(f.selector)}</div>` : ''}${f.fix ? `<div class="fixlabel">Suggested fix</div><code class="fixcode">${esc(f.fix)}</code>` : ''}</li>`;
   const issueSections = r.categories.map((cat) => {
     const list = cat.checks.filter((c) => c.status === 'fail' || c.status === 'warn')
       .sort((a, b) => (a.status === 'fail' ? 0 : 1) - (b.status === 'fail' ? 0 : 1));
@@ -107,6 +107,8 @@ function toHtmlReport(r) {
   .findings { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
   .findings li { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; font-size: 13px; }
   code { font: 12px/1.45 ui-monospace, Menlo, Consolas, monospace; overflow-wrap: anywhere; white-space: pre-wrap; }
+  .fixlabel { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--pass); }
+  .fixcode { display: block; background: #fff; border: 1px dashed var(--line); border-radius: 4px; padding: 4px 6px; }
   .sel { font: 11px ui-monospace, Menlo, Consolas, monospace; color: var(--muted); overflow-wrap: anywhere; }
   .passed { columns: 2; padding-left: 18px; margin: 8px 0 0; font-size: 14px; }
   footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 24px; }

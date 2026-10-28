@@ -12,6 +12,8 @@ Agent-Readiness Auditor analyzes the web page you choose to audit and shows the 
 
 To show what changed between audits, the extension also keeps, in Chrome's local storage on your computer, a short summary of the last audit of each page you audited: its URL, the time, the score, and each check's status and issue count. It doesn't keep page content. It keeps at most 200 pages, and you can delete it all with **Export → Clear audit history**. It also keeps a few counters in local storage: how many audits you've run, whether you've answered the rating request, and which version's "What's new" note you've seen.
 
+**Site scan and Re-run on reload.** These features ask for access to the site you're auditing, and only that site. A site scan reads the site's robots.txt and sitemap to find pages, then opens them one at a time in a background tab that closes when the scan ends. The scan's results (page addresses, scores and problems found) are kept in local storage on your computer so you can view the last scan again; **Export → Clear audit history** deletes them too. Re-run on reload runs the audit again when that page reloads. You can remove a site's access at any time from `chrome://extensions`.
+
 **Toolbar badge.** After an audit, the page's score is shown on the extension's icon for that tab. It's cleared when the tab navigates.
 
 **What it sends.** Nothing. The extension has no servers, no analytics, no tracking and no third-party code. Reports leave your browser only if you copy, download or share them yourself.

@@ -613,3 +613,67 @@ button { font: inherit; color: inherit; }
 .test-note { margin: 10px 0 0; font-size: 13px; }
 .test-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .test-method { margin: 10px 0 0; font-size: 11.5px; color: var(--muted); }
+
+/* ---------- Suggested fix under a finding */
+
+.fix { margin-top: 6px; }
+.fix > summary { cursor: pointer; font-size: 12px; font-weight: 600; color: var(--pass); width: fit-content; }
+.fix pre {
+  margin: 6px 0;
+  padding: 7px 9px;
+  border-radius: 5px;
+  border: 1px dashed color-mix(in srgb, var(--pass) 45%, var(--line));
+  background: var(--surface);
+  font: 11.5px/1.45 var(--mono);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Site scan */
+
+.site-scan { padding: 14px 0 28px; }
+.scan-form { padding: 0 16px; display: grid; gap: 10px; justify-items: start; }
+.scan-row { display: grid; gap: 4px; }
+.scan-note { margin: 0; font-size: 12px; color: var(--muted); }
+.scan-last { margin: 16px 16px 0; padding: 10px 12px; display: flex; gap: 10px; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; }
+.scan-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 0 16px; font-size: 14px; }
+.scan-bar { margin: 10px 16px 12px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.scan-bar b { display: block; height: 100%; background: var(--accent); transition: width .3s; }
+.scan-pages, .scan-shared, .scan-sub { list-style: none; margin: 0; padding: 0; }
+.scan-pages { margin: 0 16px; border-top: 1px solid var(--line); }
+.scan-pages > li { display: grid; grid-template-columns: 30px 1fr; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+.scan-score { font: 600 15px/1 var(--serif); text-align: center; font-variant-numeric: tabular-nums; }
+.scan-path { font: 12px var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; text-align: left; color: var(--ink); }
+button.scan-path { text-decoration: none; }
+button.scan-path:hover { text-decoration: underline; }
+.scan-spin { width: 14px; height: 14px; margin: 0 auto; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.scan-summary { padding: 6px 16px 0; }
+.scan-summary .score-num { font-size: 52px; }
+.scan-summary .score-num small { font-size: 14px; }
+.scan-summary p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.scan-h { margin: 18px 16px 6px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.scan-shared { margin: 0 16px; border-top: 1px solid var(--line); }
+.scan-shared > li { border-bottom: 1px solid var(--line); }
+.scan-shared summary { display: grid; grid-template-columns: 44px 1fr; gap: 10px; padding: 8px 0; cursor: pointer; list-style: none; }
+.scan-shared summary::-webkit-details-marker { display: none; }
+.scan-count { font-size: 12px; font-weight: 800; text-align: center; padding: 2px 0; border-radius: 5px; color: var(--fail); background: color-mix(in srgb, var(--fail) 12%, transparent); height: fit-content; font-variant-numeric: tabular-nums; }
+.scan-sub { padding: 0 0 8px 54px; display: grid; gap: 2px; }
+.scan-sub .btn-link { font: 12px var(--mono); color: var(--accent); padding: 0; text-align: left; }
+.site-scan .test-actions { margin: 16px 16px 0; }
+.muted { color: var(--muted); }
+.scan-count-some { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+
+/* ---------- Compare */
+
+.compare-card { margin-top: 14px; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+.compare-card select { width: 100%; margin-bottom: 10px; }
+.compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.compare-table th { text-align: right; font-size: 11.5px; color: var(--muted); font-weight: 600; padding: 2px 0 4px 8px; }
+.compare-table th:first-child { text-align: left; padding-left: 0; }
+.compare-table td { padding: 4px 0; border-top: 1px solid var(--line); }
+.compare-table td.num { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; padding-left: 8px; width: 70px; }
+.compare-table tr.overall td { font-weight: 700; }
+.compare-card h3 { margin: 12px 0 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.compare-card ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.compare-note, .compare-empty { margin: 10px 0 0; font-size: 12px; color: var(--muted); }
