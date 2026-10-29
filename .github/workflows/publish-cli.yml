@@ -1,0 +1,40 @@
+# Publishes the command-line tool in cli/ to npm as "agent-readiness-audit".
+# Run it from the Actions tab ("Publish CLI to npm" → Run workflow). It needs
+# an npm access token saved as the repository secret NPM_TOKEN.
+name: Publish CLI to npm
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # signs the package with a provenance statement
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cli
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - name: Skip if this version is already on npm
+        id: check
+        run: |
+          name=$(node -p "require('./package.json').name")
+          version=$(node -p "require('./package.json').version")
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "$name@$version is already published. Bump the version in cli/package.json to publish again."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check.outputs.skip != 'true'
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

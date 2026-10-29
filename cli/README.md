@@ -1,24 +1,24 @@
-# agent-readiness
+# agent-readiness-audit
 
 Audit how well AI agents can read and use a web page, from the command line, in CI, or as an MCP server for coding agents. It runs the same checks as the [Agent-Readiness Auditor Chrome extension](https://chromewebstore.google.com/detail/agent-readiness-auditor/bgaigjpjdemhkngkaocgfekiedfaigfa) in a headless browser.
 
 ## Install
 
 ```
-npm install -g agent-readiness
+npm install -g agent-readiness-audit
 npx playwright install chromium
 ```
 
-Or run it without installing: `npx agent-readiness <url>`.
+Or run it without installing: `npx agent-readiness-audit <url>`.
 
 ## Use
 
 ```
-agent-readiness https://example.com              # one page: score, categories, issues, suggested code
-agent-readiness https://example.com --summary    # without the per-element details
-agent-readiness https://example.com --json       # the full report as JSON
-agent-readiness https://shop.example --pages 10  # 10 pages of the site and the problems they share
-agent-readiness http://localhost:3000 --min-score 80   # exit code 1 below 80, for CI
+agent-readiness-audit https://example.com              # one page: score, categories, issues, suggested code
+agent-readiness-audit https://example.com --summary    # without the per-element details
+agent-readiness-audit https://example.com --json       # the full report as JSON
+agent-readiness-audit https://shop.example --pages 10  # 10 pages of the site and the problems they share
+agent-readiness-audit http://localhost:3000 --min-score 80   # exit code 1 below 80, for CI
 ```
 
 Exit codes: `0` success, `1` score below `--min-score`, `2` the audit couldn't run.
@@ -36,7 +36,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: npm ci && npm run build && (npm start &) && npx wait-on http://localhost:3000
-      - run: npx -y agent-readiness http://localhost:3000 --min-score 80
+      - run: npx -y agent-readiness-audit http://localhost:3000 --min-score 80
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
       # first time on a runner: npx playwright install --with-deps chromium
@@ -49,7 +49,7 @@ Coding agents can audit pages themselves, fix what's reported, and audit again u
 **Claude Code**
 
 ```
-claude mcp add agent-readiness -- npx -y agent-readiness mcp
+claude mcp add agent-readiness -- npx -y agent-readiness-audit mcp
 ```
 
 **Cursor, Claude Desktop and other MCP clients** (`mcp.json` or `claude_desktop_config.json`):
@@ -57,7 +57,7 @@ claude mcp add agent-readiness -- npx -y agent-readiness mcp
 ```json
 {
   "mcpServers": {
-    "agent-readiness": { "command": "npx", "args": ["-y", "agent-readiness", "mcp"] }
+    "agent-readiness": { "command": "npx", "args": ["-y", "agent-readiness-audit", "mcp"] }
   }
 }
 ```

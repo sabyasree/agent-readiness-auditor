@@ -9,7 +9,7 @@ NOVEDADES DE LA 1.5
 ★ Comprobaciones de teclado y foco: controles que la tecla Tab se salta y controles sin indicador de foco visible.
 ★ Shadow DOM y marcos: ahora se auditan también los botones y campos dentro de web components y de iframes del mismo sitio.
 ★ Nombres sugeridos por IA en tu dispositivo para botones e imágenes sin nombre.
-★ Línea de comandos y servidor MCP: npx agent-readiness para CI, Claude Code y Cursor.
+★ Línea de comandos y servidor MCP: npx agent-readiness-audit para CI, Claude Code y Cursor.
 ★ En 6 idiomas: English, Español, Deutsch, 日本語, Português (Brasil) y বাংলা.
 
 TAMBIÉN INCLUYE

@@ -1,18 +1,46 @@
 {
-  "name": "agent-readiness",
+  "name": "agent-readiness-audit",
   "version": "1.5.0",
   "description": "Audit how well AI agents can use a web page or site, from the command line, in CI, or as an MCP server for coding agents.",
-  "keywords": ["ai-agents", "agent-readiness", "accessibility", "mcp", "playwright", "seo", "audit", "ci"],
+  "keywords": [
+    "ai-agents",
+    "agent-readiness",
+    "accessibility",
+    "mcp",
+    "playwright",
+    "seo",
+    "audit",
+    "ci"
+  ],
   "homepage": "https://agent-readiness-auditor.netlify.app/",
-  "repository": { "type": "git", "url": "git+https://github.com/sabyasree/agent-readiness-auditor.git", "directory": "cli" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabyasree/agent-readiness-auditor.git",
+    "directory": "cli"
+  },
   "license": "MIT",
-  "bin": { "agent-readiness": "bin/agent-readiness.js" },
+  "bin": {
+    "agent-readiness-audit": "bin/agent-readiness-audit.js"
+  },
   "main": "lib/audit.js",
-  "files": ["bin/", "lib/", "engine/", "README.md"],
-  "engines": { "node": ">=18" },
+  "files": [
+    "bin/",
+    "lib/",
+    "engine/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "prepack": "node scripts/copy-engine.js",
     "test": "node scripts/copy-engine.js && node test/smoke.js"
   },
-  "dependencies": { "playwright": "^1.48.0" }
+  "dependencies": {
+    "playwright": "^1.48.0"
+  },
+  "author": "Sabyasachi Mondal",
+  "bugs": {
+    "url": "https://github.com/sabyasree/agent-readiness-auditor/issues"
+  }
 }

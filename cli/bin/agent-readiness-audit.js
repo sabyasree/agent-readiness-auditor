@@ -5,13 +5,13 @@ const { launch, auditUrl, scanSite, pathOf } = require('../lib/audit');
 const { reportText, scanText } = require('../lib/format');
 const { version } = require('../package.json');
 
-const HELP = `agent-readiness ${version}
+const HELP = `agent-readiness-audit ${version}
 Audit how well AI agents can read and use a web page.
 
 Usage
-  agent-readiness <url> [options]     Audit one page
-  agent-readiness <url> --pages 10    Audit up to 25 pages of the site
-  agent-readiness mcp                 Run as an MCP server (stdio) for coding agents
+  agent-readiness-audit <url> [options]     Audit one page
+  agent-readiness-audit <url> --pages 10    Audit up to 25 pages of the site
+  agent-readiness-audit mcp                 Run as an MCP server (stdio) for coding agents
 
 Options
   --json              Print the full report as JSON
@@ -22,10 +22,10 @@ Options
   -v, --version       Show the version
 
 Examples
-  npx agent-readiness https://example.com
-  npx agent-readiness http://localhost:3000 --min-score 80
-  npx agent-readiness https://shop.example --pages 10 --json > scan.json
-  claude mcp add agent-readiness -- npx -y agent-readiness mcp
+  npx agent-readiness-audit https://example.com
+  npx agent-readiness-audit http://localhost:3000 --min-score 80
+  npx agent-readiness-audit https://shop.example --pages 10 --json > scan.json
+  claude mcp add agent-readiness -- npx -y agent-readiness-audit mcp
 
 First run: npx playwright install chromium`;
 
@@ -77,6 +77,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error(`agent-readiness: ${(e && e.message) || e}`);
+  console.error(`agent-readiness-audit: ${(e && e.message) || e}`);
   process.exitCode = 2;
 });

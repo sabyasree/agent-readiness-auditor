@@ -133,7 +133,7 @@ _locales/              Generated translations; edit scripts/locales/<lang>.json 
 welcome/               Welcome tab shown on first install
 icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
-cli/                   npm package "agent-readiness": command line, CI score gate and MCP server; not part of the extension zip
+cli/                   npm package "agent-readiness-audit": command line, CI score gate and MCP server; not part of the extension zip
 netlify.toml           Netlify settings: publishes site/ only
 store/                 Chrome Web Store description and 1280×800 screenshots; not part of the extension zip
 site/                  Static website deployed to Netlify: homepage, privacy policy, demo store (demo/), uninstall survey (goodbye.html, a Netlify form); not part of the extension zip

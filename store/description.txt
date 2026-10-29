@@ -14,7 +14,7 @@ NEW IN 1.5
 
 ★ Name suggestions from on-device AI: for an unnamed button or image, Chrome's built-in AI (Gemini Nano) suggests a name from the text around it. Nothing leaves your computer.
 
-★ Command line and MCP server: run the same audit in CI with "npx agent-readiness <url> --min-score 80", or let Claude Code and Cursor audit pages themselves through MCP.
+★ Command line and MCP server: run the same audit in CI with "npx agent-readiness-audit <url> --min-score 80", or let Claude Code and Cursor audit pages themselves through MCP.
 
 ★ In 6 languages: English, Español, Deutsch, 日本語, Português (Brasil) and বাংলা.
 
