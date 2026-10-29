@@ -176,6 +176,10 @@ Write summaries with `say('… $1 …', value)` or `sayN(count, singular, plural
 5. Netlify: under **Forms**, turn on form detection so the uninstall survey (`site/goodbye.html`) collects responses.
 6. Privacy tab: single purpose is "Audit web pages for AI-agent usability". Justify each permission using the table above. Declare that no user data is collected, and link to the hosted privacy policy (`site/privacy-policy.html`, deployed to Netlify).
 
+## Publishing the command-line tool to npm
+
+The `cli/` folder is published to npm as [`agent-readiness-audit`](https://www.npmjs.com/package/agent-readiness-audit) by the **Publish CLI to npm** workflow (`.github/workflows/publish-cli.yml`). It needs an npm access token saved as the repository secret `NPM_TOKEN`. To release a new version, raise `version` in `cli/package.json`, merge, and run the workflow from the **Actions** tab. It runs the smoke tests first and skips versions that are already on npm.
+
 ## Known limits
 
 - Cross-origin iframes and closed shadow roots can't be read; they're reported but not checked. Open shadow roots and same-site frames are checked.
