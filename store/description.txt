@@ -4,6 +4,12 @@ Open any page and click the icon. The audit starts right away, and in about a se
 
 Most "agent-ready" checkers only look for files like robots.txt and llms.txt. This one checks whether an agent can find your controls by name, fill in your forms, get past overlays, buy from your product pages and read your content without being misled.
 
+NEW IN 1.6
+
+★ Accessibility overlap: checks that are also WCAG 2.2 failures say so, such as unnamed buttons (4.1.2), missing alt text (1.1.1) and keyboard access (2.1.1), with a WCAG filter and links to W3C's guidance. Fix once, and it helps people using screen readers and keyboards as well as AI agents.
+
+★ Run the steps: after an Agent test, watch the plan carried out on the live page in a background tab, step by step, with what happened at each one. It never pays, places orders, deletes anything or types personal details.
+
 NEW IN 1.5
 
 ★ Weekly re-scan with alerts: after a site scan, turn on "Re-scan every week". The same pages are audited again each week, and you get an alert if the average score drops or a new problem spreads across pages.

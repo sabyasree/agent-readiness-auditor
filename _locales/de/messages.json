@@ -511,6 +511,24 @@
   },
   "description": "$1 of $2 tested controls show no change when focused."
  },
+ "m1ltt8wu": {
+  "message": "$P1$ dieser Probleme sind auch Barrierefreiheitsprobleme (WCAG 2.2).",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of these issues are also accessibility problems (WCAG 2.2)."
+ },
+ "mjq6u32": {
+  "message": "$P1$ dieser Probleme ist auch ein Barrierefreiheitsproblem (WCAG 2.2).",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of these issues is also an accessibility problem (WCAG 2.2)."
+ },
  "msejz1m": {
   "message": "$P1$ weiterer ist kein echter Button.",
   "placeholders": {
@@ -712,6 +730,15 @@
  "m1a3a2gt": {
   "message": "Eine kurze Bewertung im Chrome Web Store hilft anderen Entwicklern, sie zu finden. Dauert zehn Sekunden.",
   "description": "A quick rating on the Chrome Web Store helps other developers find it. It takes ten seconds."
+ },
+ "m1hsl3kq": {
+  "message": "Eine regelbasierte Punktzahl aus $P1$ Prüfungen der Seitenstruktur.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "A rule-based score from $1 checks of the page’s structure."
  },
  "m17jrxrt": {
   "message": "Ein Scan der ganzen Website",
@@ -1015,6 +1042,14 @@
  "m19kslz8": {
   "message": "Auf allen Websites erlauben",
   "description": "Allow on all sites"
+ },
+ "m1t6v70s": {
+  "message": "Auch ein Barrierefreiheitsproblem",
+  "description": "Also an accessibility issue"
+ },
+ "mrvutxg": {
+  "message": "Betrifft auch die Barrierefreiheit",
+  "description": "Also covers accessibility"
  },
  "mtg11ol": {
   "message": "Eine MCP-Server-Card unter /.well-known/mcp/server-card.json teilt Agenten mit, dass die Website Tools über das Model Context Protocol anbietet, und wie sie sich verbinden und anmelden. Es ist ein Entwurf mit bisher sehr geringer Verbreitung.",
@@ -1379,9 +1414,17 @@
   "message": "Kopieren fehlgeschlagen. Nutze stattdessen Markdown herunterladen.",
   "description": "Couldn’t copy. Use Download Markdown instead."
  },
+ "mpfs3s6": {
+  "message": "Dieser Schritt ließ sich nicht ausführen.",
+  "description": "Couldn’t do this step."
+ },
  "modgrbv": {
   "message": "Das HTML dieser Seite konnte für den Vergleich nicht geladen werden.",
   "description": "Couldn’t fetch this page’s HTML to compare."
+ },
+ "mweotj4": {
+  "message": "Dieses Bedienelement wurde auf der echten Seite nicht gefunden.",
+  "description": "Couldn’t find this control on the live page."
  },
  "mlfqwj8": {
   "message": "Kein Vorschlag erhalten. Die integrierte KI von Chrome wird vielleicht noch heruntergeladen.",
@@ -1411,9 +1454,9 @@
   "message": "Beschreibe zuerst eine Aufgabe.",
   "description": "Describe a task first."
  },
- "msmmp3": {
-  "message": "Beschreibe etwas, worum ein Mensch einen Agenten hier bitten würde. Der Test liest die Seite wie ein Agent, plant die Klicks und zeigt, wo ein Agent hängen bliebe. Auf der Seite wird nichts angeklickt.",
-  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked."
+ "m1p8iafe": {
+  "message": "Beschreibe etwas, worum ein Mensch einen Agenten hier bitten würde. Der Test liest die Seite wie ein Agent, plant die Klicks und zeigt, wo ein Agent hängen bliebe. Es wird nur geklickt, wenn du die Schritte ausführen lässt.",
+  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing is clicked unless you choose t"
  },
  "mrzztvp": {
   "message": "Beschreibung und Link-Metadaten",
@@ -1434,6 +1477,27 @@
  "msdjbbb": {
   "message": "Versperren Overlays, CAPTCHAs oder Frames den Weg?",
   "description": "Do overlays, CAPTCHAs or frames block the way?"
+ },
+ "mnhgsgu": {
+  "message": "Erledigt, aber es ist nichts Sichtbares passiert. Ein Agent wüsste nicht, ob es geklappt hat.",
+  "description": "Done, but nothing visible happened. An agent would wonder if it worked."
+ },
+ "mj8khdl": {
+  "message": "Erledigt. Ein Dialog wurde geöffnet.",
+  "description": "Done. A dialog opened."
+ },
+ "mfnoozi": {
+  "message": "Erledigt. Es ging weiter zu $P1$.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Done. It went to $1."
+ },
+ "mj1sp5r": {
+  "message": "Erledigt. Die Seite hat reagiert.",
+  "description": "Done. The page responded."
  },
  "mxssd9w": {
   "message": "Nicht mehr fragen",
@@ -1657,6 +1721,10 @@
   },
   "description": "Found on this page: $1."
  },
+ "mit1w8h": {
+  "message": "Feld gefunden. Der Plan hatte nichts einzugeben.",
+  "description": "Found the field. The plan had nothing to type."
+ },
  "m1p6tvg2": {
   "message": "Gefunden: $P1$.",
   "placeholders": {
@@ -1781,6 +1849,14 @@
  "m1ak6k27": {
   "message": "Probleme",
   "description": "Issues"
+ },
+ "m7ctq15": {
+  "message": "Probleme, die auch WCAG 2.2 verletzen und daher auch Menschen mit Screenreader, Tastatur oder Sprachsteuerung betreffen. Automatische Prüfungen decken nur einen Teil von WCAG ab.",
+  "description": "Issues that also fail WCAG 2.2, so they affect people using screen readers, keyboards or voice control too. Automated checks cover only part of WCAG."
+ },
+ "m1fzr8zo": {
+  "message": "Es betrifft Menschen, die Screenreader, Tastatur oder Sprachsteuerung nutzen. WCAG 2.2:",
+  "description": "It affects people who use screen readers, keyboards or voice control. WCAG 2.2:"
  },
  "m1149fxp": {
   "message": "Er findet die Bedienelemente nicht, die diese Aufgabe braucht.",
@@ -2115,6 +2191,10 @@
   "message": "Keine WebMCP-Tools gefunden. Dieser Browser unterstützt WebMCP.",
   "description": "No WebMCP tools found. This browser supports WebMCP."
  },
+ "m1nkttdi": {
+  "message": "Keine Barrierefreiheitsprobleme gefunden",
+  "description": "No accessibility issues found"
+ },
  "m14brns1": {
   "message": "Kein alt-Attribut",
   "description": "No alt attribute"
@@ -2291,6 +2371,10 @@
   "message": "Kein sichtbarer Fokusindikator",
   "description": "No visible focus indicator"
  },
+ "m84gmbc": {
+  "message": "Keine der WCAG-bezogenen Prüfungen hat ein Problem gefunden. Automatische Prüfungen decken nur einen Teil von WCAG ab, teste also auch mit einem Screenreader.",
+  "description": "None of the WCAG-related checks found a problem. Automated checks catch only part of WCAG, so test with a screen reader too."
+ },
  "mz0f7od": {
   "message": "Nicht zutreffend",
   "description": "Not applicable"
@@ -2365,6 +2449,10 @@
   "message": "Demo-Shop öffnen",
   "description": "Open the demo store"
  },
+ "mj0ehgp": {
+  "message": "Seite öffnen, auf der es endete",
+  "description": "Open the page it ended on"
+ },
  "m1jyji90": {
   "message": "Diese Seite im aktuellen Tab öffnen",
   "description": "Open this page in the current tab"
@@ -2372,6 +2460,10 @@
  "m1fzz17t": {
   "message": "Im aktuellen Tab geöffnet. Starte dort die Prüfung für alle Details.",
   "description": "Opened in the current tab. Run the audit there for full details."
+ },
+ "m14ohfp5": {
+  "message": "Öffnet diese Seite in einem Hintergrund-Tab und führt jeden Schritt aus (Klicks, Eingaben und Auswahlen), mit deiner Anmeldung auf dieser Website. Es stoppt vor allem, was bezahlen, bestellen, löschen oder persönliche Daten senden könnte. Der Tab schließt sich danach.",
+  "description": "Opens this page in a background tab and does each step: clicks, typing and choices, using your login on this site. It stops before anything that could pay, place an order, delete or send personal deta"
  },
  "m3lrcg1": {
   "message": "Andere",
@@ -2661,6 +2753,18 @@
   "message": "Prüfung erneut starten",
   "description": "Run the audit again"
  },
+ "mnai80k": {
+  "message": "Schritte ausführen",
+  "description": "Run the steps"
+ },
+ "moa8638": {
+  "message": "Schritte erneut ausführen",
+  "description": "Run the steps again"
+ },
+ "m1bjphpf": {
+  "message": "Schritte laufen in einem Hintergrund-Tab…",
+  "description": "Running the steps in a background tab…"
+ },
  "mk45151": {
   "message": "Läuft nach jedem Neuladen erneut",
   "description": "Runs again after each reload"
@@ -2750,6 +2854,14 @@
  "m1us7e71": {
   "message": "Sieh die Seite so, wie ein Agent sie liest, mit Token-Zählung.",
   "description": "See the page as an agent reads it, with a token count."
+ },
+ "mk4hxc2": {
+  "message": "Anzeigen",
+  "description": "See them"
+ },
+ "m1w5zr86": {
+  "message": "Sieh, welche Probleme auch die Barrierefreiheit betreffen, mit ihren WCAG-2.2-Kriterien, und einen WCAG-Filter im Tab Probleme. Im Agenten-Test probiert „Schritte ausführen“ den Plan jetzt auf der echten Seite aus.",
+  "description": "See which issues are also accessibility problems, with their WCAG 2.2 criteria, and a WCAG filter on the Issues tab. In the Agent test, \"Run the steps\" now tries the plan on the live page."
  },
  "mpj4plr": {
   "message": "Schicke einem Kunden einen sauberen Bericht oder speichere ihn als PDF.",
@@ -2899,6 +3011,14 @@
   "message": "Stoppen",
   "description": "Stop"
  },
+ "m1kg3ppx": {
+  "message": "Hier gestoppt. Der Test bezahlt, bestellt, löscht oder kündigt nie etwas.",
+  "description": "Stopped here. The test never pays, places orders, deletes or cancels anything."
+ },
+ "m1ulnoav": {
+  "message": "Hier gestoppt. Der Test gibt nie persönliche Daten wie E-Mail, Passwort oder Kartennummer ein.",
+  "description": "Stopped here. The test never types personal details such as an email, password or card number."
+ },
  "m8gv6f8": {
   "message": "Strukturierte Daten",
   "description": "Structured data"
@@ -2981,6 +3101,43 @@
    }
   },
   "description": "The Product block is missing $1."
+ },
+ "m1ov1kil": {
+  "message": "Der Agent blieb auf der echten Seite bei Schritt $P1$ von $P2$ hängen.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "The agent got stuck at step $1 of $2 on the live page."
+ },
+ "m1unfple": {
+  "message": "Der Agent schaffte $P1$ von $P2$ Schritten und stoppte dann aus Sicherheitsgründen.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   },
+   "p2": {
+    "content": "$2"
+   }
+  },
+  "description": "The agent got through $1 of $2 steps, then stopped for safety."
+ },
+ "mm6dx50": {
+  "message": "Der Agent schaffte alle $P1$ Schritte auf der echten Seite.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The agent got through all $1 steps on the live page."
+ },
+ "m6l3bu": {
+  "message": "Der Agent schaffte den Schritt auf der echten Seite.",
+  "description": "The agent got through the step on the live page."
  },
  "m1d3spks": {
   "message": "Der Plan des Agenten",
@@ -3126,6 +3283,15 @@
   },
   "description": "The test didn’t finish: $1"
  },
+ "m1ckmi2a": {
+  "message": "Der Test braucht Zugriff auf $P1$, um die Seite zu öffnen.",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The test needs access to $1 to open the page."
+ },
  "mb99cvy": {
   "message": "Das getestete Bedienelement zeigt einen Fokusindikator.",
   "description": "The tested control shows a focus indicator."
@@ -3193,6 +3359,10 @@
    }
   },
   "description": "This check couldn’t run on this page ($1)."
+ },
+ "m1hcfqmf": {
+  "message": "Diese Prüfung gehört zu WCAG 2.2:",
+  "description": "This check is part of WCAG 2.2:"
  },
  "m1lo2og5": {
   "message": "Dieses Bedienelement hat keinen Namen, ein Agent müsste also raten.",
@@ -3296,6 +3466,10 @@
   "message": "Erneut versuchen",
   "description": "Try again"
  },
+ "m1qjcy2i": {
+  "message": "Auf der echten Seite ausprobieren",
+  "description": "Try it on the live page"
+ },
  "mwuzv1b": {
   "message": "Demo-Shop ausprobieren",
   "description": "Try the demo store"
@@ -3328,6 +3502,10 @@
  "mwn40ai": {
   "message": "Gib „in den Warenkorb“ oder „registrieren“ ein und sieh, wo ein Agent hängen bleibt.",
   "description": "Type “add to cart” or “sign up” and see where an agent gets stuck."
+ },
+ "m3vg6fh": {
+  "message": "Eingegeben.",
+  "description": "Typed it in."
  },
  "ml6bdth": {
   "message": "Unbekannter Fehler",
@@ -3406,6 +3584,10 @@
   "message": "Warnung",
   "description": "Warning"
  },
+ "m1bchidl": {
+  "message": "Sieh einem Agenten bei einer Aufgabe zu",
+  "description": "Watch an agent try a task"
+ },
  "m13skb79": {
   "message": "WebMCP lässt eine Seite Agenten benannte Tools wie „search_flights“ anbieten, statt sie durch die Oberfläche klicken zu lassen. Es ist ein Origin Trial in Chrome mit kaum Verbreitung, also optional.",
   "description": "WebMCP lets a page offer agents named tools, like “search_flights”, instead of making them click through the interface. It’s an origin trial in Chrome with almost no adoption yet, so it’s optional."
@@ -3429,10 +3611,6 @@
  "m1pkpjlc": {
   "message": "Wöchentlicher Scan · öffne die Website und den Tab Website-Scan für Details",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m57qeo5": {
-  "message": "Wöchentliche Scans mit Benachrichtigung, wenn eine Website schlechter wird, Tastatur- und Fokusprüfungen, Buttons in Shadow DOM und Frames, KI-Namensvorschläge für unbenannte Buttons und die Oberfläche in 6 Sprachen.",
-  "description": "Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages."
  },
  "m1g2zi34": {
   "message": "Willkommen beim Agent-Readiness Auditor",

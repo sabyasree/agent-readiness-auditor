@@ -59,12 +59,14 @@ function toHtmlReport(r) {
         <p>${esc(c.summary)}</p>
         <p><b>Why it matters:</b> ${esc(c.why)}</p>
         <p><b>How to fix:</b> ${esc(c.fix)}</p>
+        ${c.wcag && c.wcag.length ? `<p class="wcag"><b>Also an accessibility issue:</b> WCAG 2.2 ${c.wcag.map((w) => `<a href="${esc(w.url)}">${esc(w.sc)} ${esc(w.name)}</a> (${esc(w.level)})`).join(', ')}</p>` : ''}
         ${c.findings.length ? `<ul class="findings">${c.findings.slice(0, 10).map(finding).join('')}</ul>` : ''}
         ${c.issues > Math.min(10, c.findings.length) && c.findings.length ? `<p class="muted small">…and ${c.issues - Math.min(10, c.findings.length)} more.</p>` : ''}
       </article>`).join('')}
     </section>`;
   }).join('');
 
+  const a11y = r.categories.flatMap((cat) => cat.checks).filter((c) => (c.status === 'fail' || c.status === 'warn') && c.wcag && c.wcag.length).length;
   const passed = r.categories.flatMap((c) => c.checks.filter((k) => k.status === 'pass').map((k) => k.title));
 
   return `<!doctype html>
@@ -112,6 +114,7 @@ function toHtmlReport(r) {
   .fixlabel { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--pass); }
   .fixcode { display: block; background: #fff; border: 1px dashed var(--line); border-radius: 4px; padding: 4px 6px; }
   .sel { font: 11px ui-monospace, Menlo, Consolas, monospace; color: var(--muted); overflow-wrap: anywhere; }
+  .wcag { font-size: 14px; } .wcag a { color: inherit; }
   .passed { columns: 2; padding-left: 18px; margin: 8px 0 0; font-size: 14px; }
   footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 24px; }
   @media (max-width: 560px) { .hero { grid-template-columns: 1fr; } .passed { columns: 1; } td.bar { display: none; } }
@@ -136,6 +139,7 @@ function toHtmlReport(r) {
         <div class="grade">${esc(r.grade)}</div>
         <p class="muted">${esc(r.gradeText)}</p>
         <p class="small">${r.counts.fail} failing · ${r.counts.warn} warnings · ${r.counts.pass} passed${r.stats.tokens != null ? ` · about ${r.stats.tokens.toLocaleString()} tokens as an accessibility snapshot` : ''}</p>
+        ${a11y ? `<p class="small">${a11y} of the issues ${a11y === 1 ? 'is' : 'are'} also ${a11y === 1 ? 'an accessibility problem' : 'accessibility problems'} under WCAG 2.2.</p>` : ''}
       </div>
     </div>
     <table>${cats}</table>

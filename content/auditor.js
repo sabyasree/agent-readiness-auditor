@@ -10,7 +10,7 @@
 (() => {
   'use strict';
 
-  const VERSION = '1.5.0';
+  const VERSION = '1.6.0';
   if (window.__ARA && window.__ARA.version === VERSION) return;
 
   const FINDING_CAP = 50;
@@ -878,6 +878,52 @@
     { re: /\bcity\b|\btown\b/, ac: 'address-level2', what: 'a city' },
     { re: /birth|\bdob\b/, type: 'date', ac: 'bday', what: 'a date of birth' },
   ];
+
+  // WCAG 2.2 success criteria each check also tests. Agents and assistive
+  // technology read the same accessibility tree, so these issues affect
+  // people using screen readers, keyboards and voice control too.
+  const WCAG_SC = {
+    '1.1.1': ['Non-text Content', 'A', 'non-text-content'],
+    '1.3.1': ['Info and Relationships', 'A', 'info-and-relationships'],
+    '1.3.5': ['Identify Input Purpose', 'AA', 'identify-input-purpose'],
+    '2.1.1': ['Keyboard', 'A', 'keyboard'],
+    '2.4.1': ['Bypass Blocks', 'A', 'bypass-blocks'],
+    '2.4.2': ['Page Titled', 'A', 'page-titled'],
+    '2.4.3': ['Focus Order', 'A', 'focus-order'],
+    '2.4.4': ['Link Purpose (In Context)', 'A', 'link-purpose-in-context'],
+    '2.4.6': ['Headings and Labels', 'AA', 'headings-and-labels'],
+    '2.4.7': ['Focus Visible', 'AA', 'focus-visible'],
+    '2.4.11': ['Focus Not Obscured (Minimum)', 'AA', 'focus-not-obscured-minimum'],
+    '2.5.3': ['Label in Name', 'A', 'label-in-name'],
+    '2.5.8': ['Target Size (Minimum)', 'AA', 'target-size-minimum'],
+    '3.1.1': ['Language of Page', 'A', 'language-of-page'],
+    '3.3.2': ['Labels or Instructions', 'A', 'labels-or-instructions'],
+    '4.1.2': ['Name, Role, Value', 'A', 'name-role-value'],
+  };
+  const WCAG_BY_CHECK = {
+    'fake-controls': ['4.1.2', '2.1.1'],
+    'dead-links': ['2.1.1', '4.1.2'],
+    'keyboard-reachable': ['2.1.1'],
+    'focus-visible': ['2.4.7'],
+    'positive-tabindex': ['2.4.3'],
+    'unnamed-controls': ['4.1.2', '2.4.4'],
+    'vague-names': ['2.4.4', '2.4.6'],
+    'image-alt': ['1.1.1'],
+    'aria-misuse': ['4.1.2', '2.5.3', '1.3.1'],
+    'unlabeled-fields': ['3.3.2', '1.3.1', '4.1.2'],
+    'field-hints': ['1.3.5'],
+    'required-fields': ['3.3.2', '1.3.1'],
+    'overlays': ['2.4.11', '4.1.2'],
+    'small-targets': ['2.5.8'],
+    'page-title': ['2.4.2'],
+    'page-language': ['3.1.1'],
+    'landmarks': ['1.3.1', '2.4.1'],
+    'headings': ['1.3.1', '2.4.6'],
+    'cart-button': ['4.1.2'],
+  };
+  const wcagFor = (id) => (WCAG_BY_CHECK[id] || []).map((sc) => ({
+    sc, name: WCAG_SC[sc][0], level: WCAG_SC[sc][1], url: `https://www.w3.org/WAI/WCAG22/Understanding/${WCAG_SC[sc][2]}.html`,
+  }));
 
   const CHECKS = [
     // ---- Real controls
@@ -2146,6 +2192,8 @@
 
     const ctx = gather();
     ctx.view = buildAgentView();
+    // The Agent test's live run only needs the agent view and element refs.
+    if (opts.viewOnly) return { agentView: ctx.view };
     ctx.probe = opts.probe || null;
 
     // In a site scan, files that are the same for every page are checked once, not per page.
@@ -2162,7 +2210,7 @@
       const list = out.findings || [];
       const status = statusFor(c, out);
       return {
-        id: c.id, category: c.category, title: c.title, why: c.why, fix: c.fix, weight: c.weight,
+        id: c.id, category: c.category, title: c.title, why: c.why, fix: c.fix, weight: c.weight, wcag: wcagFor(c.id),
         status,
         score: out.score == null ? null : Math.round(out.score * 100),
         issues: out.issues ?? list.length,

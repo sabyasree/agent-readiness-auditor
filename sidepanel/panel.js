@@ -53,7 +53,7 @@ const state = {
 };
 
 const VERSION = chrome.runtime.getManifest().version;
-const WHATS_NEW = 'Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages.';
+const WHATS_NEW = 'See which issues are also accessibility problems, with their WCAG 2.2 criteria, and a WCAG filter on the Issues tab. In the Agent test, "Run the steps" now tries the plan on the live page.';
 
 const $view = document.getElementById('view');
 const $run = document.getElementById('runBtn');
@@ -686,9 +686,14 @@ function checkMeta(c) {
   return t(STATUS_LABEL[c.status]);
 }
 
+const isIssueCheck = (c) => c.status === 'fail' || c.status === 'warn';
+/** Failing or warning checks that are also WCAG accessibility issues. */
+const wcagIssues = (r) => r.categories.flatMap((cat) => cat.checks).filter((c) => isIssueCheck(c) && c.wcag && c.wcag.length);
+
 function visibleChecks(cat) {
   const list = [...cat.checks].sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status]);
-  if (state.filter === 'issues') return list.filter((c) => c.status === 'fail' || c.status === 'warn');
+  if (state.filter === 'issues') return list.filter(isIssueCheck);
+  if (state.filter === 'wcag') return list.filter((c) => isIssueCheck(c) && c.wcag && c.wcag.length);
   if (state.filter === 'passed') return list.filter((c) => c.status === 'pass' || c.status === 'info' || c.status === 'na');
   return list;
 }
@@ -717,6 +722,26 @@ function renderFinding(f, label) {
   );
 }
 
+/** "WCAG 2.2 4.1.2 Name, Role, Value (A), …" for exports. */
+const wcagText = (c) => `WCAG 2.2 ${c.wcag.map((w) => `${w.sc} ${w.name} (${w.level})`).join(', ')}`;
+
+/** The WCAG 2.2 success criteria a check also covers, each linked to W3C's explanation. */
+function wcagNote(c, hasIssues) {
+  if (!c.wcag || !c.wcag.length) return null;
+  return h('div', { class: 'wcag-note' },
+    icon(A11Y_ICON, 'wcag-ico'),
+    h('div', {},
+      h('strong', { text: hasIssues ? t('Also an accessibility issue') : t('Also covers accessibility') }),
+      h('span', { text: hasIssues
+        ? t('It affects people who use screen readers, keyboards or voice control. WCAG 2.2:')
+        : t('This check is part of WCAG 2.2:') }),
+      h('ul', {}, c.wcag.map((w) => h('li', {},
+        h('a', { href: w.url, target: '_blank', rel: 'noopener' }, `${w.sc} ${w.name}`),
+        h('span', { class: 'wcag-level', text: ` (${w.level})` })))),
+    ));
+}
+const A11Y_ICON = '<circle cx="12" cy="4.5" r="1.8" fill="currentColor" stroke="none"/><path d="M5 8.5l7 1.5 7-1.5"/><path d="M12 10v4.5l-3 6M12 14.5l3 6"/>';
+
 function renderCheck(c, open) {
   const list = h('ul', { class: 'findings' });
   const shown = c.findings.slice(0, FINDINGS_PREVIEW);
@@ -740,7 +765,8 @@ function renderCheck(c, open) {
   return h('details', { class: 'check', id: `check-${c.id}`, open: open || null },
     h('summary', {},
       glyph(c.status),
-      h('span', { class: 'check-title', text: t(c.title) }),
+      h('span', { class: 'check-title' }, t(c.title),
+        hasIssues && c.wcag && c.wcag.length ? h('span', { class: 'wcag-tag', title: t('Also an accessibility issue'), text: 'WCAG' }) : null),
       h('span', { class: 'check-meta', text: checkMeta(c) }),
       h('span', { html: CHEVRON, style: { display: 'inline-flex' } }),
     ),
@@ -749,6 +775,7 @@ function renderCheck(c, open) {
       h('h3', { text: t('Why it matters') }),
       h('p', { text: t(c.why) }),
       hasIssues || c.status === 'info' ? [h('h3', { text: t('How to fix') }), h('p', { text: t(c.fix) })] : null,
+      wcagNote(c, hasIssues),
       hasIssues ? h('div', { class: 'check-actions' },
         h('button', {
           class: 'btn btn-quiet btn-small', type: 'button', title: t('Copy a prompt that asks a coding agent to fix and test this issue'),
@@ -820,7 +847,24 @@ function scoreHeader(r) {
       ),
     ),
     h('p', { class: 'score-text', text: t(r.gradeText) }),
+    scoreNotes(r),
     renderDiff(r.previous),
+  );
+}
+
+/** How the score is made, with a way to watch an agent try, and the accessibility overlap. */
+function scoreNotes(r) {
+  const total = r.categories.reduce((n, cat) => n + cat.checks.length, 0);
+  const a11y = r.categories.some((cat) => cat.checks.some((c) => c.wcag)) ? wcagIssues(r).length : 0;
+  return h('div', { class: 'score-notes' },
+    h('p', {},
+      h('span', { text: `${t('A rule-based score from $1 checks of the page’s structure.', total)} ` }),
+      h('button', { type: 'button', class: 'btn-link', onclick: () => switchTab('test') }, t('Watch an agent try a task'))),
+    a11y ? h('p', { class: 'score-a11y' },
+      icon(A11Y_ICON, 'wcag-ico'),
+      h('span', {},
+        `${tn(a11y, '$1 of these issues is also an accessibility problem (WCAG 2.2).', '$1 of these issues are also accessibility problems (WCAG 2.2).')} `,
+        h('button', { type: 'button', class: 'btn-link', onclick: () => { state.filter = 'wcag'; switchTab('issues'); } }, t('See them')))) : null,
   );
 }
 
@@ -898,10 +942,15 @@ function issuesView(r) {
       filterBtn('issues', 'Issues', issueCount),
       filterBtn('passed', 'Passed', passCount),
       filterBtn('all', 'All', issueCount + passCount),
+      r.categories.some((cat) => cat.checks.some((c) => c.wcag)) ? filterBtn('wcag', 'WCAG', wcagIssues(r).length) : null,
     ),
     buildExportMenu(),
   );
   const sections = [];
+  if (state.filter === 'wcag') {
+    sections.push(h('p', { class: 'wcag-intro' }, icon(A11Y_ICON, 'wcag-ico'),
+      h('span', { text: t('Issues that also fail WCAG 2.2, so they affect people using screen readers, keyboards or voice control too. Automated checks cover only part of WCAG.') })));
+  }
   let firstIssueOpened = false;
   for (const cat of r.categories) {
     const checks = visibleChecks(cat);
@@ -921,8 +970,10 @@ function issuesView(r) {
   }
   if (!sections.length) {
     sections.push(h('div', { class: 'all-clear' },
-      h('strong', { text: state.filter === 'issues' ? t('No issues found') : t('Nothing to show') }),
-      state.filter === 'issues' ? t('Every check passed or doesn’t apply to this page.') : t('Switch to All to see every check.'),
+      h('strong', { text: state.filter === 'issues' ? t('No issues found') : state.filter === 'wcag' ? t('No accessibility issues found') : t('Nothing to show') }),
+      state.filter === 'issues' ? t('Every check passed or doesn’t apply to this page.')
+        : state.filter === 'wcag' ? t('None of the WCAG-related checks found a problem. Automated checks catch only part of WCAG, so test with a screen reader too.')
+          : t('Switch to All to see every check.'),
     ));
   }
   return [toolbar, ...sections, auditFoot(r)];
@@ -1169,7 +1220,7 @@ function renderAgentTest(r) {
 
   if (ts.result) result.append(renderTestResult(r, ts.result));
   return h('section', { class: 'agent-test' },
-    h('p', { class: 'view-intro', text: t('Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked.') }),
+    h('p', { class: 'view-intro', text: t('Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing is clicked unless you choose to run the steps.') }),
     h('div', { class: 'test-form' },
       h('label', { for: 'task', class: 'test-label', text: t('Task') }),
       h('div', { class: 'test-row' }, input, runBtn),
@@ -1225,6 +1276,7 @@ function renderTestResult(r, res) {
         onclick: () => copyText(toPrompt(r, checkIds), t('Fix prompt copied')),
       }, t('Copy fix prompt')) : null,
     ),
+    liveRunSection(r, res),
     h('p', { class: 'test-method', text: res.mode === 'ai' ? t('Planned by Gemini Nano on your device. Small models make mistakes; treat this as a quick check, not proof.') : t('Matched by control names. With Chrome’s built-in AI the test plans multi-step tasks.') }),
   );
 }
@@ -1294,6 +1346,7 @@ function toMarkdown(r) {
       L.push(`### ${STATUS_LABEL[c.status]}: ${c.title}`, '');
       L.push(c.summary, '');
       if (c.status === 'fail' || c.status === 'warn') {
+        if (c.wcag && c.wcag.length) L.push(`**Also an accessibility issue:** ${wcagText(c)}`, '');
         L.push(`**Why it matters:** ${c.why}`, '');
         L.push(`**How to fix:** ${c.fix}`, '');
         for (const f of c.findings.slice(0, 20)) {
@@ -1372,6 +1425,7 @@ function toPrompt(r, ids) {
     L.push(`### ${i + 1}. ${c.title}`, '');
     L.push(`**Status:** ${STATUS_LABEL[c.status]} · **Category:** ${cat.name} · **Check id:** \`${c.id}\``, '');
     L.push(c.summary, '');
+    if (c.wcag && c.wcag.length) L.push(`**Also an accessibility issue:** ${wcagText(c)}. Keep the fix accessible: test it with the keyboard and a screen reader as well as the agent.`, '');
     L.push(`**Why it matters:** ${c.why}`, '');
     L.push(`**How to fix:** ${c.fix}`, '');
     if (c.findings.length) L.push('**Affected elements:**', '');

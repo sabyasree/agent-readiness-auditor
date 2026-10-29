@@ -4,6 +4,10 @@ Abra qualquer página e clique no ícone. Em cerca de um segundo você recebe um
 
 A maioria dos verificadores de "agent-ready" só procura arquivos como robots.txt e llms.txt. Este verifica se um agente encontra seus controles pelo nome, preenche seus formulários, passa pelas sobreposições, compra nas suas páginas de produto e lê seu conteúdo sem ser enganado.
 
+NOVIDADES DA 1.6
+★ Acessibilidade: verificações que também violam a WCAG 2.2 avisam (por exemplo 4.1.2, 1.1.1 e 2.1.1), com filtro WCAG e links para a orientação do W3C.
+★ Executar os passos: depois de um teste de agente, veja o plano ser executado na página real, em uma aba em segundo plano, passo a passo. Nunca paga, faz pedidos, exclui nada nem digita dados pessoais.
+
 NOVIDADES DA 1.5
 ★ Reanálise semanal com alertas: depois de analisar um site, as mesmas páginas são verificadas toda semana e você recebe um alerta se a nota cair.
 ★ Verificações de teclado e foco: controles que a tecla Tab pula e controles sem indicador de foco visível.

@@ -1,6 +1,6 @@
 {
   "name": "agent-readiness-audit",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Audit how well AI agents can use a web page or site, from the command line, in CI, or as an MCP server for coding agents.",
   "keywords": [
     "ai-agents",

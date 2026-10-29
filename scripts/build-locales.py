@@ -11,7 +11,7 @@ message files keyed by the same hash t() uses, with $1, $2… placeholders.
 import json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-UI_FILES = ['sidepanel/panel.js', 'sidepanel/site-scan.js', 'sidepanel/ai-name.js', 'sidepanel/agent-test.js', 'welcome/welcome.js', 'background.js']
+UI_FILES = ['sidepanel/panel.js', 'sidepanel/site-scan.js', 'sidepanel/ai-name.js', 'sidepanel/agent-test.js', 'sidepanel/agent-run.js', 'welcome/welcome.js', 'background.js']
 HTML_FILES = ['sidepanel/panel.html', 'welcome/welcome.html']
 # Exports and prompts stay in English: they're pasted into coding agents and shared.
 SKIP_FUNCS = ('toMarkdown', 'toPrompt', 'scanPrompt', 'scanHtml', 'scanCsv', 'viewText')

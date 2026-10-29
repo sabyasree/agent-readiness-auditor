@@ -25,10 +25,12 @@ function reportText(r, { details = true, maxFindings = 8 } = {}) {
     L.push('', 'No issues found.');
     return L.join('\n');
   }
-  L.push('', `Issues (${issues.length}):`);
+  const a11y = issues.filter(({ k }) => k.wcag && k.wcag.length).length;
+  L.push('', `Issues (${issues.length}${a11y ? `, ${a11y} also ${a11y === 1 ? 'a WCAG 2.2 accessibility issue' : 'WCAG 2.2 accessibility issues'}` : ''}):`);
   for (const { cat, k } of issues) {
     L.push('', `[${LABEL[k.status]}] ${k.title} (${cat.name}, ${k.id})`);
     L.push(`  ${k.summary}`);
+    if (k.wcag && k.wcag.length) L.push(`  WCAG 2.2: ${k.wcag.map((w) => `${w.sc} ${w.name} (${w.level})`).join(', ')}`);
     if (!details) continue;
     L.push(`  Why: ${k.why}`);
     L.push(`  Fix: ${k.fix}`);
