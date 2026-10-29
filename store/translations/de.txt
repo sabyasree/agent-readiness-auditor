@@ -4,6 +4,10 @@ Können KI-Agenten deine Website wirklich nutzen? Agent-Readiness Auditor prüft
 
 Die meisten „Agent-ready“-Checker suchen nur nach Dateien wie robots.txt und llms.txt. Dieser prüft, ob ein Agent deine Bedienelemente am Namen findet, Formulare ausfüllt, an Overlays vorbeikommt, auf Produktseiten kaufen kann und deine Inhalte liest, ohne in die Irre geführt zu werden.
 
+NEU IN 1.6
+★ Barrierefreiheit: Prüfungen, die auch WCAG 2.2 verletzen, sagen das (zum Beispiel 4.1.2, 1.1.1 und 2.1.1), mit WCAG-Filter und Links zu den W3C-Erläuterungen.
+★ Schritte ausführen: Nach einem Agenten-Test siehst du, wie der Plan Schritt für Schritt auf der echten Seite in einem Hintergrund-Tab abläuft. Es wird nie bezahlt, bestellt, gelöscht oder persönliche Daten eingegeben.
+
 NEU IN 1.5
 ★ Wöchentlicher Scan mit Benachrichtigung: Nach einem Website-Scan werden dieselben Seiten jede Woche erneut geprüft, und du wirst benachrichtigt, wenn die Punktzahl sinkt.
 ★ Tastatur- und Fokusprüfungen: Bedienelemente, die die Tab-Taste überspringt, und solche ohne sichtbaren Fokus.

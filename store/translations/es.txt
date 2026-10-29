@@ -4,6 +4,10 @@ Abre cualquier página y haz clic en el icono. En un segundo tienes una puntuaci
 
 La mayoría de los comprobadores solo buscan archivos como robots.txt y llms.txt. Este comprueba si un agente puede encontrar tus controles por su nombre, rellenar tus formularios, superar las superposiciones, comprar en tus páginas de producto y leer tu contenido sin ser engañado.
 
+NOVEDADES DE LA 1.6
+★ Accesibilidad: las comprobaciones que también incumplen WCAG 2.2 lo indican (por ejemplo 4.1.2, 1.1.1 y 2.1.1), con un filtro WCAG y enlaces a la guía del W3C.
+★ Ejecutar los pasos: tras una prueba de agente, mira cómo se ejecuta el plan en la página real, en una pestaña en segundo plano, paso a paso. Nunca paga, hace pedidos, borra nada ni escribe datos personales.
+
 NOVEDADES DE LA 1.5
 ★ Reanálisis semanal con alertas: tras analizar un sitio, las mismas páginas se revisan cada semana y recibes una alerta si la puntuación baja.
 ★ Comprobaciones de teclado y foco: controles que la tecla Tab se salta y controles sin indicador de foco visible.

@@ -6,6 +6,8 @@ Most "agent-ready" tools only check whether crawler files like robots.txt and ll
 
 Features:
 
+- **Accessibility overlap (WCAG 2.2).** Checks that also test a WCAG 2.2 success criterion say so, with links to W3C's explanation: unnamed controls (4.1.2), missing alt text (1.1.1), unlabeled fields (3.3.2), keyboard access (2.1.1), focus visibility (2.4.7), target size (2.5.8) and more. The Issues tab has a **WCAG** filter, the overview counts the overlapping issues, and reports, prompts and the CLI list the criteria.
+- **Run the steps.** After an Agent test, **Run the steps** carries the plan out on a fresh copy of the page in a background tab: it finds each control by role and name, clicks, types or chooses, and reports what happened at each step. It never pays, places orders, deletes or cancels, and never types personal details.
 - **Weekly re-scan with alerts.** After a site scan, turn on **Re-scan every week**: the background worker audits the same pages again each week and, if notifications are allowed, alerts you when the average drops by 3 points or more, or a new problem shows up on most pages.
 - **Keyboard and focus.** Controls the Tab key skips (`tabindex="-1"` outside widgets that manage focus) and controls with no visible focus indicator.
 - **Shadow DOM and frames.** Controls and fields inside open shadow roots and same-site iframes are audited along with the rest of the page.
@@ -76,7 +78,9 @@ Overall grade: 90+ Agent-ready, 75–89 Mostly ready, 50–74 Needs work, below 
 
 ## Agent test
 
-The **Agent test** tab takes a task in plain words. It lists the page's interactive elements as an agent sees them (role, accessible name, state and the heading above each) and asks Chrome's built-in model, Gemini Nano, through the [Prompt API](https://developer.chrome.com/docs/ai/prompt-api), for a plan constrained to a JSON schema. The plan is then checked: steps must point at real, named controls, and anything the task mentions that people can click but agents can't (from the clickable-div and cart-button checks) is reported. **Show steps on page** marks each step in order. Nothing on the page is clicked.
+The **Agent test** tab takes a task in plain words. It lists the page's interactive elements as an agent sees them (role, accessible name, state and the heading above each) and asks Chrome's built-in model, Gemini Nano, through the [Prompt API](https://developer.chrome.com/docs/ai/prompt-api), for a plan constrained to a JSON schema. The plan is then checked: steps must point at real, named controls, and anything the task mentions that people can click but agents can't (from the clickable-div and cart-button checks) is reported. **Show steps on page** marks each step in order. Planning clicks nothing.
+
+**Run the steps** then tries the plan for real, in a background tab with the person's own login: each step's control is found again by role and name in the fresh page's accessibility tree, then clicked, typed into (search fields are submitted) or chosen. The result per step is *done* (the page changed or a dialog opened), *went to* another page, *nothing visible happened*, or *couldn't find the control*. The run stops before clicking anything named like pay, buy now, place or confirm an order, checkout, delete, cancel or unsubscribe, and before typing into email, password, phone, address or card fields. The tab closes when it's done.
 
 The model runs on the device and needs Chrome's hardware requirements (about 22 GB free disk, and a GPU with more than 4 GB of VRAM or 16 GB of RAM). Chrome downloads it once, on the first test. Where it isn't available, the test falls back to matching the task's words, with common synonyms, to control names.
 
@@ -108,7 +112,7 @@ The checks are heuristics. They find likely problems quickly; confirming with a 
 | `storage` | Keeps the latest report for each tab in session storage so it survives closing and reopening the panel (cleared when the tab navigates or closes); in local storage, a short score summary per URL to show changes between audits, and usage counters for the review prompt and "What's new". |
 | `alarms` | Wakes the background worker every few hours to run any weekly re-scans that are due. Does nothing unless a re-scan is turned on. |
 | `notifications` (optional) | Requested when the person turns on a weekly re-scan, to alert them when the site gets worse. |
-| `<all_urls>` (optional) | Never granted at install. Requested for one site at a time when the person starts a **Site scan** or turns on **Re-run on reload** (both need to reach the site again after the one-time access ends), or for all sites if they click **Allow on all sites**. |
+| `<all_urls>` (optional) | Never granted at install. Requested for one site at a time when the person starts a **Site scan**, turns on **Re-run on reload** or presses **Run the steps** in the Agent test (both need to reach the site again after the one-time access ends), or for all sites if they click **Allow on all sites**. |
 
 No host permissions are requested at install, which keeps the Chrome Web Store warning to a minimum and speeds up review.
 
@@ -170,7 +174,7 @@ Write summaries with `say('… $1 …', value)` or `sayN(count, singular, plural
 ## Publishing to the Chrome Web Store
 
 1. Bump `version` in `manifest.json`.
-2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x 'site/*' -x netlify.toml -x 'store/*' -x 'cli/*' -x 'scripts/*'`.
+2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x '.github/*' -x 'site/*' -x netlify.toml -x 'store/*' -x 'cli/*' -x 'scripts/*'`.
 3. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), create a new item and upload the zip.
 4. Listing assets you'll need: at least one 1280×800 screenshot of the side panel next to a page, a 440×280 small promo tile, and the 128 px icon from `icons/`.
 5. Netlify: under **Forms**, turn on form detection so the uninstall survey (`site/goodbye.html`) collects responses.
@@ -193,6 +197,8 @@ Copyright © 2026 Sabyasachi Mondal. All rights reserved. You may use the extens
 - Layout shifts are read from the browser's record since the page loaded. Shifts caused by your own clicks or typing are ignored.
 - Registered WebMCP tools can only be listed in browsers that expose Chrome's WebMCP testing API. Elsewhere the check looks for declarative `toolname` forms and inline scripts that register tools.
 - The Agent test plans from the accessibility tree only, like most agents. It doesn't click anything, so it can't catch problems that appear mid-flow (a size picker that opens a dialog, a login wall). Small on-device models also make mistakes; treat a result as a quick check.
+- WCAG tags mark where a check overlaps a WCAG 2.2 success criterion. Automated checks cover only part of WCAG, so they aren't a conformance audit; test with a screen reader and the keyboard too.
+- **Run the steps** follows the planned steps only. It doesn't recover from mistakes the way a real agent might, and pages that need a sign-in, a CAPTCHA or a payment will stop it.
 - Hidden-instruction detection matches common prompt-injection wording. It can miss reworded or encoded injections, and it doesn't flag visible text, such as an article about prompt injection.
 
 ## Ideas for the paid tier

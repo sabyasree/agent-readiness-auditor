@@ -188,7 +188,7 @@
   <main>
     <section class="hero">
       <div class="wrap">
-        <span class="eyebrow">Free Chrome extension · New in 1.5: weekly re-scans, CLI and 6 languages</span>
+        <span class="eyebrow">Free Chrome extension · New in 1.6: WCAG accessibility overlap and live agent runs</span>
         <h1>Can AI agents actually use your website?</h1>
         <p class="lead">Agent-Readiness Auditor scores how well agents like Claude, Gemini and ChatGPT can read your page, find its buttons and finish tasks on it. Then it shows you exactly what to fix.</p>
         <div class="cta">
@@ -410,7 +410,7 @@
         </details>
         <details>
           <summary>Isn’t this just an accessibility checker?</summary>
-          <p>There’s a lot of overlap, because agents and screen readers read the same structure. But it also checks things accessibility tools don’t: hidden prompt injections, content that only appears after JavaScript runs, selectors that break on every release, how many tokens come before your main content, and agent protocols like MCP and WebMCP.</p>
+          <p>There’s a lot of overlap, because agents and screen readers read the same structure, and the extension shows it: checks that are also WCAG 2.2 failures are marked with their success criteria, and a WCAG filter lists them. But it also checks things accessibility tools don’t: hidden prompt injections, content that only appears after JavaScript runs, selectors that break on every release, how many tokens come before your main content, and agent protocols like MCP and WebMCP.</p>
         </details>
         <details>
           <summary>Do I need llms.txt or an MCP server to score well?</summary>
@@ -418,7 +418,7 @@
         </details>
         <details>
           <summary>Does the Agent test send my page to an AI service?</summary>
-          <p>No. It uses Chrome’s built-in model, Gemini Nano, which runs on your computer. Chrome downloads it once, on the first test, if your computer meets Chrome’s requirements. Without it, the test matches your task to control names inside the extension. Nothing leaves your browser either way.</p>
+          <p>No. It uses Chrome’s built-in model, Gemini Nano, which runs on your computer. Chrome downloads it once, on the first test, if your computer meets Chrome’s requirements. Without it, the test matches your task to control names inside the extension. Nothing leaves your browser either way. Press <strong>Run the steps</strong> to watch the plan carried out on the live page in a background tab; it never pays, places orders, deletes anything or types personal details.</p>
         </details>
         <details>
           <summary>Can it check my whole site?</summary>

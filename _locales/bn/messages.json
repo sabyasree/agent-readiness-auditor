@@ -511,6 +511,24 @@
   },
   "description": "$1 of $2 tested controls show no change when focused."
  },
+ "m1ltt8wu": {
+  "message": "এর মধ্যে $P1$টি সমস্যা অ্যাক্সেসিবিলিটিরও সমস্যা (WCAG 2.2)।",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of these issues are also accessibility problems (WCAG 2.2)."
+ },
+ "mjq6u32": {
+  "message": "এর মধ্যে $P1$টি সমস্যা অ্যাক্সেসিবিলিটিরও সমস্যা (WCAG 2.2)।",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of these issues is also an accessibility problem (WCAG 2.2)."
+ },
  "msejz1m": {
   "message": "আরও $P1$টি আসল বোতাম নয়।",
   "placeholders": {
@@ -712,6 +730,15 @@
  "m1a3a2gt": {
   "message": "Chrome Web Store-এ একটি দ্রুত রেটিং অন্য ডেভেলপারদের এটি খুঁজে পেতে সাহায্য করে। মাত্র দশ সেকেন্ড লাগে।",
   "description": "A quick rating on the Chrome Web Store helps other developers find it. It takes ten seconds."
+ },
+ "m1hsl3kq": {
+  "message": "পেজের কাঠামোর $P1$টি চেক থেকে নিয়মভিত্তিক স্কোর।",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "A rule-based score from $1 checks of the page’s structure."
  },
  "m17jrxrt": {
   "message": "পুরো সাইটের স্ক্যান",
@@ -1015,6 +1042,14 @@
  "m19kslz8": {
   "message": "সব সাইটে অনুমতি দিন",
   "description": "Allow on all sites"
+ },
+ "m1t6v70s": {
+  "message": "অ্যাক্সেসিবিলিটিরও সমস্যা",
+  "description": "Also an accessibility issue"
+ },
+ "mrvutxg": {
+  "message": "অ্যাক্সেসিবিলিটিও যাচাই করে",
+  "description": "Also covers accessibility"
  },
  "mtg11ol": {
   "message": "/.well-known/mcp/server-card.json-এ থাকা MCP সার্ভার কার্ড এজেন্টকে জানায় যে সাইটটি Model Context Protocol-এর মাধ্যমে টুল দেয়, এবং কীভাবে সংযোগ ও সাইন-ইন করতে হয়। এটি এখনো খসড়া, ব্যবহার খুবই কম।",
@@ -1379,9 +1414,17 @@
   "message": "কপি করা যায়নি। এর বদলে Markdown ডাউনলোড ব্যবহার করুন।",
   "description": "Couldn’t copy. Use Download Markdown instead."
  },
+ "mpfs3s6": {
+  "message": "এই ধাপটি করা যায়নি।",
+  "description": "Couldn’t do this step."
+ },
  "modgrbv": {
   "message": "তুলনার জন্য এই পেজের HTML আনা যায়নি।",
   "description": "Couldn’t fetch this page’s HTML to compare."
+ },
+ "mweotj4": {
+  "message": "আসল পেজে এই কন্ট্রোলটি পাওয়া যায়নি।",
+  "description": "Couldn’t find this control on the live page."
  },
  "mlfqwj8": {
   "message": "কোনো পরামর্শ পাওয়া যায়নি। Chrome-এর বিল্ট-ইন AI হয়তো এখনো ডাউনলোড হচ্ছে।",
@@ -1411,9 +1454,9 @@
   "message": "আগে একটি কাজ লিখুন।",
   "description": "Describe a task first."
  },
- "msmmp3": {
-  "message": "এখানে একজন মানুষ এজেন্টকে কী করতে বলতে পারেন তা লিখুন। টেস্টটি এজেন্টের মতো করে পেজ পড়ে, ক্লিকের পরিকল্পনা করে, এবং দেখায় এজেন্ট কোথায় আটকে যাবে। পেজে কিছুই ক্লিক করা হয় না।",
-  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked."
+ "m1p8iafe": {
+  "message": "এখানে একজন মানুষ এজেন্টকে কী করতে বলতে পারেন তা লিখুন। টেস্টটি এজেন্টের মতো করে পেজ পড়ে, ক্লিকের পরিকল্পনা করে, এবং দেখায় এজেন্ট কোথায় আটকে যাবে। আপনি ধাপগুলো চালাতে না বললে কিছুই ক্লিক করা হয় না।",
+  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing is clicked unless you choose t"
  },
  "mrzztvp": {
   "message": "বিবরণ ও লিংক মেটাডেটা",
@@ -1434,6 +1477,27 @@
  "msdjbbb": {
   "message": "ওভারলে, CAPTCHA বা ফ্রেম কি পথ আটকায়?",
   "description": "Do overlays, CAPTCHAs or frames block the way?"
+ },
+ "mnhgsgu": {
+  "message": "করা হয়েছে, কিন্তু চোখে পড়ার মতো কিছু ঘটেনি। এজেন্ট বুঝতে পারবে না কাজ হয়েছে কি না।",
+  "description": "Done, but nothing visible happened. An agent would wonder if it worked."
+ },
+ "mj8khdl": {
+  "message": "করা হয়েছে। একটি ডায়ালগ খুলেছে।",
+  "description": "Done. A dialog opened."
+ },
+ "mfnoozi": {
+  "message": "করা হয়েছে। $P1$-এ গেছে।",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Done. It went to $1."
+ },
+ "mj1sp5r": {
+  "message": "করা হয়েছে। পেজটি সাড়া দিয়েছে।",
+  "description": "Done. The page responded."
  },
  "mxssd9w": {
   "message": "আর জিজ্ঞেস করবেন না",
@@ -1657,6 +1721,10 @@
   },
   "description": "Found on this page: $1."
  },
+ "mit1w8h": {
+  "message": "ফিল্ডটি পাওয়া গেছে। পরিকল্পনায় টাইপ করার মতো কিছু ছিল না।",
+  "description": "Found the field. The plan had nothing to type."
+ },
  "m1p6tvg2": {
   "message": "পাওয়া গেছে: $P1$।",
   "placeholders": {
@@ -1781,6 +1849,14 @@
  "m1ak6k27": {
   "message": "সমস্যা",
   "description": "Issues"
+ },
+ "m7ctq15": {
+  "message": "যে সমস্যাগুলো WCAG 2.2-ও ভঙ্গ করে, তাই স্ক্রিন রিডার, কিবোর্ড বা ভয়েস কন্ট্রোল ব্যবহারকারীদেরও অসুবিধা হয়। স্বয়ংক্রিয় চেক WCAG-এর কেবল একটি অংশ যাচাই করে।",
+  "description": "Issues that also fail WCAG 2.2, so they affect people using screen readers, keyboards or voice control too. Automated checks cover only part of WCAG."
+ },
+ "m1fzr8zo": {
+  "message": "যাঁরা স্ক্রিন রিডার, কিবোর্ড বা ভয়েস কন্ট্রোল ব্যবহার করেন তাঁদেরও এতে সমস্যা হয়। WCAG 2.2:",
+  "description": "It affects people who use screen readers, keyboards or voice control. WCAG 2.2:"
  },
  "m1149fxp": {
   "message": "এই কাজের জন্য দরকারি কন্ট্রোলগুলো সে খুঁজে পায় না।",
@@ -2115,6 +2191,10 @@
   "message": "কোনো WebMCP টুল পাওয়া যায়নি। এই ব্রাউজার WebMCP সমর্থন করে।",
   "description": "No WebMCP tools found. This browser supports WebMCP."
  },
+ "m1nkttdi": {
+  "message": "অ্যাক্সেসিবিলিটির কোনো সমস্যা পাওয়া যায়নি",
+  "description": "No accessibility issues found"
+ },
  "m14brns1": {
   "message": "alt অ্যাট্রিবিউট নেই",
   "description": "No alt attribute"
@@ -2291,6 +2371,10 @@
   "message": "দৃশ্যমান ফোকাস চিহ্ন নেই",
   "description": "No visible focus indicator"
  },
+ "m84gmbc": {
+  "message": "WCAG-সম্পর্কিত কোনো চেকে সমস্যা পাওয়া যায়নি। স্বয়ংক্রিয় চেক WCAG-এর কেবল একটি অংশ ধরতে পারে, তাই স্ক্রিন রিডার দিয়েও পরীক্ষা করুন।",
+  "description": "None of the WCAG-related checks found a problem. Automated checks catch only part of WCAG, so test with a screen reader too."
+ },
  "mz0f7od": {
   "message": "প্রযোজ্য নয়",
   "description": "Not applicable"
@@ -2365,6 +2449,10 @@
   "message": "ডেমো স্টোর খুলুন",
   "description": "Open the demo store"
  },
+ "mj0ehgp": {
+  "message": "যে পেজে শেষ হয়েছে সেটি খুলুন",
+  "description": "Open the page it ended on"
+ },
  "m1jyji90": {
   "message": "এই পেজটি বর্তমান ট্যাবে খুলুন",
   "description": "Open this page in the current tab"
@@ -2372,6 +2460,10 @@
  "m1fzz17t": {
   "message": "বর্তমান ট্যাবে খোলা হয়েছে। পুরো বিবরণের জন্য সেখানে অডিট চালান।",
   "description": "Opened in the current tab. Run the audit there for full details."
+ },
+ "m14ohfp5": {
+  "message": "এই পেজটি একটি ব্যাকগ্রাউন্ড ট্যাবে খুলে এই সাইটে আপনার লগইন ব্যবহার করে প্রতিটি ধাপ করে: ক্লিক, টাইপ ও বেছে নেওয়া। টাকা দেওয়া, অর্ডার করা, মুছে ফেলা বা ব্যক্তিগত তথ্য পাঠানোর মতো কিছুর আগেই এটি থেমে যায়। শেষ হলে ট্যাবটি বন্ধ হয়ে যায়।",
+  "description": "Opens this page in a background tab and does each step: clicks, typing and choices, using your login on this site. It stops before anything that could pay, place an order, delete or send personal deta"
  },
  "m3lrcg1": {
   "message": "অন্যটি",
@@ -2661,6 +2753,18 @@
   "message": "আবার অডিট চালান",
   "description": "Run the audit again"
  },
+ "mnai80k": {
+  "message": "ধাপগুলো চালান",
+  "description": "Run the steps"
+ },
+ "moa8638": {
+  "message": "ধাপগুলো আবার চালান",
+  "description": "Run the steps again"
+ },
+ "m1bjphpf": {
+  "message": "ব্যাকগ্রাউন্ড ট্যাবে ধাপগুলো চলছে…",
+  "description": "Running the steps in a background tab…"
+ },
  "mk45151": {
   "message": "প্রতিবার রিলোডের পরে আবার চলে",
   "description": "Runs again after each reload"
@@ -2750,6 +2854,14 @@
  "m1us7e71": {
   "message": "এজেন্ট যেভাবে পড়ে সেভাবে পেজটি দেখুন, টোকেন গণনাসহ।",
   "description": "See the page as an agent reads it, with a token count."
+ },
+ "mk4hxc2": {
+  "message": "দেখুন",
+  "description": "See them"
+ },
+ "m1w5zr86": {
+  "message": "কোন সমস্যাগুলো অ্যাক্সেসিবিলিটিরও সমস্যা, WCAG 2.2-এর মানদণ্ডসহ দেখুন, আর সমস্যা ট্যাবে WCAG ফিল্টার। এজেন্ট টেস্টে “ধাপগুলো চালান” এখন পরিকল্পনাটি আসল পেজে চেষ্টা করে।",
+  "description": "See which issues are also accessibility problems, with their WCAG 2.2 criteria, and a WCAG filter on the Issues tab. In the Agent test, \"Run the steps\" now tries the plan on the live page."
  },
  "mpj4plr": {
   "message": "ক্লায়েন্টকে একটি পরিষ্কার রিপোর্ট পাঠান বা PDF হিসেবে সেভ করুন।",
@@ -2899,6 +3011,14 @@
   "message": "থামান",
   "description": "Stop"
  },
+ "m1kg3ppx": {
+  "message": "এখানে থেমেছে। টেস্টটি কখনো টাকা দেয় না, অর্ডার করে না, কিছু মুছে বা বাতিল করে না।",
+  "description": "Stopped here. The test never pays, places orders, deletes or cancels anything."
+ },
+ "m1ulnoav": {
+  "message": "এখানে থেমেছে। টেস্টটি কখনো ইমেল, পাসওয়ার্ড বা কার্ড নম্বরের মতো ব্যক্তিগত তথ্য টাইপ করে না।",
+  "description": "Stopped here. The test never types personal details such as an email, password or card number."
+ },
  "m8gv6f8": {
   "message": "স্ট্রাকচার্ড ডেটা",
   "description": "Structured data"
@@ -2981,6 +3101,43 @@
    }
   },
   "description": "The Product block is missing $1."
+ },
+ "m1ov1kil": {
+  "message": "আসল পেজে এজেন্ট $P2$টি ধাপের মধ্যে $P1$ নম্বরে আটকে গেছে।",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The agent got stuck at step $1 of $2 on the live page."
+ },
+ "m1unfple": {
+  "message": "এজেন্ট $P2$টি ধাপের মধ্যে $P1$টি শেষ করে নিরাপত্তার জন্য থেমেছে।",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The agent got through $1 of $2 steps, then stopped for safety."
+ },
+ "mm6dx50": {
+  "message": "আসল পেজে এজেন্ট $P1$টি ধাপের সবগুলো শেষ করেছে।",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The agent got through all $1 steps on the live page."
+ },
+ "m6l3bu": {
+  "message": "আসল পেজে এজেন্ট ধাপটি শেষ করেছে।",
+  "description": "The agent got through the step on the live page."
  },
  "m1d3spks": {
   "message": "এজেন্টের পরিকল্পনা",
@@ -3126,6 +3283,15 @@
   },
   "description": "The test didn’t finish: $1"
  },
+ "m1ckmi2a": {
+  "message": "পেজটি খুলতে টেস্টের $P1$-এ অ্যাক্সেস দরকার।",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The test needs access to $1 to open the page."
+ },
  "mb99cvy": {
   "message": "পরীক্ষিত কন্ট্রোলে ফোকাস চিহ্ন দেখা যায়।",
   "description": "The tested control shows a focus indicator."
@@ -3193,6 +3359,10 @@
    }
   },
   "description": "This check couldn’t run on this page ($1)."
+ },
+ "m1hcfqmf": {
+  "message": "এই চেকটি WCAG 2.2-এর অংশ:",
+  "description": "This check is part of WCAG 2.2:"
  },
  "m1lo2og5": {
   "message": "এই কন্ট্রোলের কোনো নাম নেই, তাই এজেন্টকে অনুমান করতে হবে।",
@@ -3296,6 +3466,10 @@
   "message": "আবার চেষ্টা করুন",
   "description": "Try again"
  },
+ "m1qjcy2i": {
+  "message": "আসল পেজে চেষ্টা করুন",
+  "description": "Try it on the live page"
+ },
  "mwuzv1b": {
   "message": "ডেমো স্টোর চেষ্টা করুন",
   "description": "Try the demo store"
@@ -3328,6 +3502,10 @@
  "mwn40ai": {
   "message": "“কার্টে যোগ করুন” বা “সাইন আপ” লিখে দেখুন এজেন্ট কোথায় আটকে যায়।",
   "description": "Type “add to cart” or “sign up” and see where an agent gets stuck."
+ },
+ "m3vg6fh": {
+  "message": "টাইপ করা হয়েছে।",
+  "description": "Typed it in."
  },
  "ml6bdth": {
   "message": "অজানা ত্রুটি",
@@ -3406,6 +3584,10 @@
   "message": "সতর্কতা",
   "description": "Warning"
  },
+ "m1bchidl": {
+  "message": "একটি কাজে এজেন্টের চেষ্টা দেখুন",
+  "description": "Watch an agent try a task"
+ },
  "m13skb79": {
   "message": "WebMCP দিয়ে একটি পেজ এজেন্টকে ইন্টারফেসে ক্লিক না করিয়ে “search_flights”-এর মতো নামযুক্ত টুল দিতে পারে। এটি Chrome-এ একটি origin trial, এখনো প্রায় কেউ ব্যবহার করে না, তাই ঐচ্ছিক।",
   "description": "WebMCP lets a page offer agents named tools, like “search_flights”, instead of making them click through the interface. It’s an origin trial in Chrome with almost no adoption yet, so it’s optional."
@@ -3429,10 +3611,6 @@
  "m1pkpjlc": {
   "message": "সাপ্তাহিক রি-স্ক্যান · বিস্তারিত দেখতে সাইটটি খুলে সাইট স্ক্যান ট্যাবে যান",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m57qeo5": {
-  "message": "সাইটের অবনতি হলে অ্যালার্ট দেওয়া সাপ্তাহিক রি-স্ক্যান, কিবোর্ড ও ফোকাস চেক, শ্যাডো DOM ও ফ্রেমের ভেতরের বোতাম পরীক্ষা, নামহীন বোতামের জন্য AI-র প্রস্তাবিত নাম, আর ৬টি ভাষায় ইন্টারফেস।",
-  "description": "Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages."
  },
  "m1g2zi34": {
   "message": "Agent-Readiness Auditor-এ স্বাগতম",

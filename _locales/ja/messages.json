@@ -511,6 +511,24 @@
   },
   "description": "$1 of $2 tested controls show no change when focused."
  },
+ "m1ltt8wu": {
+  "message": "これらの問題のうち $P1$ 件はアクセシビリティの問題でもあります（WCAG 2.2）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of these issues are also accessibility problems (WCAG 2.2)."
+ },
+ "mjq6u32": {
+  "message": "これらの問題のうち $P1$ 件はアクセシビリティの問題でもあります（WCAG 2.2）。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "$1 of these issues is also an accessibility problem (WCAG 2.2)."
+ },
  "msejz1m": {
   "message": "ほかの $P1$ 個は本物のボタンではありません。",
   "placeholders": {
@@ -712,6 +730,15 @@
  "m1a3a2gt": {
   "message": "Chrome ウェブストアで評価していただけると、ほかの開発者が見つけやすくなります。10 秒で終わります。",
   "description": "A quick rating on the Chrome Web Store helps other developers find it. It takes ten seconds."
+ },
+ "m1hsl3kq": {
+  "message": "ページ構造の $P1$ 項目のチェックによる、ルールベースのスコアです。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "A rule-based score from $1 checks of the page’s structure."
  },
  "m17jrxrt": {
   "message": "サイト全体のスキャン",
@@ -1015,6 +1042,14 @@
  "m19kslz8": {
   "message": "すべてのサイトで許可",
   "description": "Allow on all sites"
+ },
+ "m1t6v70s": {
+  "message": "アクセシビリティの問題でもあります",
+  "description": "Also an accessibility issue"
+ },
+ "mrvutxg": {
+  "message": "アクセシビリティにも関係します",
+  "description": "Also covers accessibility"
  },
  "mtg11ol": {
   "message": "/.well-known/mcp/server-card.json の MCP サーバーカードは、サイトが Model Context Protocol でツールを提供していること、接続とサインインの方法をエージェントに伝えます。現時点ではドラフト段階で、ほとんど普及していません。",
@@ -1379,9 +1414,17 @@
   "message": "コピーできませんでした。代わりに「Markdown をダウンロード」を使ってください。",
   "description": "Couldn’t copy. Use Download Markdown instead."
  },
+ "mpfs3s6": {
+  "message": "このステップを実行できませんでした。",
+  "description": "Couldn’t do this step."
+ },
  "modgrbv": {
   "message": "比較のためにこのページの HTML を取得できませんでした。",
   "description": "Couldn’t fetch this page’s HTML to compare."
+ },
+ "mweotj4": {
+  "message": "実際のページでこのコントロールが見つかりませんでした。",
+  "description": "Couldn’t find this control on the live page."
  },
  "mlfqwj8": {
   "message": "提案を取得できませんでした。Chrome の組み込み AI がまだダウンロード中かもしれません。",
@@ -1411,9 +1454,9 @@
   "message": "まずタスクを入力してください。",
   "description": "Describe a task first."
  },
- "msmmp3": {
-  "message": "人がここでエージェントに頼みそうなことを入力してください。テストはエージェントと同じ方法でページを読み、クリック手順を計画して、どこで行き詰まるかを示します。ページ上で実際にクリックはしません。",
-  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing on the page is clicked."
+ "m1p8iafe": {
+  "message": "人がここでエージェントに頼みそうなことを入力してください。テストはエージェントと同じ方法でページを読み、クリック手順を計画して、どこで行き詰まるかを示します。手順の実行を選ばない限り、何もクリックしません。",
+  "description": "Describe something a person would ask an agent to do here. The test reads the page the way agents do, plans the clicks, and shows where an agent would get stuck. Nothing is clicked unless you choose t"
  },
  "mrzztvp": {
   "message": "説明文とリンクのメタデータ",
@@ -1434,6 +1477,27 @@
  "msdjbbb": {
   "message": "オーバーレイ、CAPTCHA、フレームが邪魔していませんか？",
   "description": "Do overlays, CAPTCHAs or frames block the way?"
+ },
+ "mnhgsgu": {
+  "message": "実行しましたが、目に見える変化はありませんでした。エージェントは成功したか判断できません。",
+  "description": "Done, but nothing visible happened. An agent would wonder if it worked."
+ },
+ "mj8khdl": {
+  "message": "実行しました。ダイアログが開きました。",
+  "description": "Done. A dialog opened."
+ },
+ "mfnoozi": {
+  "message": "実行しました。$P1$ に移動しました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "Done. It went to $1."
+ },
+ "mj1sp5r": {
+  "message": "実行しました。ページが反応しました。",
+  "description": "Done. The page responded."
  },
  "mxssd9w": {
   "message": "今後表示しない",
@@ -1657,6 +1721,10 @@
   },
   "description": "Found on this page: $1."
  },
+ "mit1w8h": {
+  "message": "項目は見つかりました。計画に入力する内容がありませんでした。",
+  "description": "Found the field. The plan had nothing to type."
+ },
  "m1p6tvg2": {
   "message": "検出: $P1$。",
   "placeholders": {
@@ -1781,6 +1849,14 @@
  "m1ak6k27": {
   "message": "問題",
   "description": "Issues"
+ },
+ "m7ctq15": {
+  "message": "WCAG 2.2 にも違反している問題です。スクリーンリーダー、キーボード、音声操作を使う人にも影響します。自動チェックで確認できるのは WCAG の一部だけです。",
+  "description": "Issues that also fail WCAG 2.2, so they affect people using screen readers, keyboards or voice control too. Automated checks cover only part of WCAG."
+ },
+ "m1fzr8zo": {
+  "message": "スクリーンリーダー、キーボード、音声操作を使う人にも影響します。WCAG 2.2:",
+  "description": "It affects people who use screen readers, keyboards or voice control. WCAG 2.2:"
  },
  "m1149fxp": {
   "message": "このタスクに必要なコントロールが見つかりません。",
@@ -2115,6 +2191,10 @@
   "message": "WebMCP ツールは見つかりませんでした。このブラウザは WebMCP に対応しています。",
   "description": "No WebMCP tools found. This browser supports WebMCP."
  },
+ "m1nkttdi": {
+  "message": "アクセシビリティの問題は見つかりませんでした",
+  "description": "No accessibility issues found"
+ },
  "m14brns1": {
   "message": "alt 属性がない",
   "description": "No alt attribute"
@@ -2291,6 +2371,10 @@
   "message": "フォーカスが見えない",
   "description": "No visible focus indicator"
  },
+ "m84gmbc": {
+  "message": "WCAG に関連するチェックでは問題は見つかりませんでした。自動チェックで確認できるのは WCAG の一部だけなので、スクリーンリーダーでもテストしてください。",
+  "description": "None of the WCAG-related checks found a problem. Automated checks catch only part of WCAG, so test with a screen reader too."
+ },
  "mz0f7od": {
   "message": "該当なし",
   "description": "Not applicable"
@@ -2365,6 +2449,10 @@
   "message": "デモストアを開く",
   "description": "Open the demo store"
  },
+ "mj0ehgp": {
+  "message": "最後に表示されたページを開く",
+  "description": "Open the page it ended on"
+ },
  "m1jyji90": {
   "message": "このページを現在のタブで開く",
   "description": "Open this page in the current tab"
@@ -2372,6 +2460,10 @@
  "m1fzz17t": {
   "message": "現在のタブで開きました。詳細はそのページで診断してください。",
   "description": "Opened in the current tab. Run the audit there for full details."
+ },
+ "m14ohfp5": {
+  "message": "このページをバックグラウンドのタブで開き、このサイトでのあなたのログイン状態のまま、クリック、入力、選択の各ステップを実行します。支払い、注文、削除、個人情報の送信につながる操作の手前で止まります。終わるとタブは閉じます。",
+  "description": "Opens this page in a background tab and does each step: clicks, typing and choices, using your login on this site. It stops before anything that could pay, place an order, delete or send personal deta"
  },
  "m3lrcg1": {
   "message": "比較先",
@@ -2661,6 +2753,18 @@
   "message": "もう一度診断",
   "description": "Run the audit again"
  },
+ "mnai80k": {
+  "message": "手順を実行",
+  "description": "Run the steps"
+ },
+ "moa8638": {
+  "message": "手順をもう一度実行",
+  "description": "Run the steps again"
+ },
+ "m1bjphpf": {
+  "message": "バックグラウンドのタブで手順を実行中…",
+  "description": "Running the steps in a background tab…"
+ },
  "mk45151": {
   "message": "再読み込みのたびに再実行",
   "description": "Runs again after each reload"
@@ -2750,6 +2854,14 @@
  "m1us7e71": {
   "message": "エージェントが読むとおりにページを表示し、トークン数も確認できます。",
   "description": "See the page as an agent reads it, with a token count."
+ },
+ "mk4hxc2": {
+  "message": "確認する",
+  "description": "See them"
+ },
+ "m1w5zr86": {
+  "message": "アクセシビリティの問題でもある項目を WCAG 2.2 の達成基準つきで表示し、問題タブに WCAG フィルターを追加。エージェントテストでは「手順を実行」で計画を実際のページで試せます。",
+  "description": "See which issues are also accessibility problems, with their WCAG 2.2 criteria, and a WCAG filter on the Issues tab. In the Agent test, \"Run the steps\" now tries the plan on the live page."
  },
  "mpj4plr": {
   "message": "クライアントにきれいなレポートを送ったり、PDF で保存したりできます。",
@@ -2899,6 +3011,14 @@
   "message": "停止",
   "description": "Stop"
  },
+ "m1kg3ppx": {
+  "message": "ここで停止しました。テストでは支払い、注文、削除、キャンセルは一切行いません。",
+  "description": "Stopped here. The test never pays, places orders, deletes or cancels anything."
+ },
+ "m1ulnoav": {
+  "message": "ここで停止しました。テストではメールアドレス、パスワード、カード番号などの個人情報は入力しません。",
+  "description": "Stopped here. The test never types personal details such as an email, password or card number."
+ },
  "m8gv6f8": {
   "message": "構造化データ",
   "description": "Structured data"
@@ -2981,6 +3101,43 @@
    }
   },
   "description": "The Product block is missing $1."
+ },
+ "m1ov1kil": {
+  "message": "実際のページで、エージェントは $P2$ ステップ中 $P1$ ステップ目で行き詰まりました。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The agent got stuck at step $1 of $2 on the live page."
+ },
+ "m1unfple": {
+  "message": "エージェントは $P2$ ステップ中 $P1$ ステップを完了し、安全のため停止しました。",
+  "placeholders": {
+   "p2": {
+    "content": "$2"
+   },
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The agent got through $1 of $2 steps, then stopped for safety."
+ },
+ "mm6dx50": {
+  "message": "エージェントは実際のページで $P1$ ステップすべてを完了しました。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The agent got through all $1 steps on the live page."
+ },
+ "m6l3bu": {
+  "message": "エージェントは実際のページでステップを完了しました。",
+  "description": "The agent got through the step on the live page."
  },
  "m1d3spks": {
   "message": "エージェントの計画",
@@ -3126,6 +3283,15 @@
   },
   "description": "The test didn’t finish: $1"
  },
+ "m1ckmi2a": {
+  "message": "ページを開くには $P1$ へのアクセス許可が必要です。",
+  "placeholders": {
+   "p1": {
+    "content": "$1"
+   }
+  },
+  "description": "The test needs access to $1 to open the page."
+ },
  "mb99cvy": {
   "message": "テストしたコントロールにはフォーカス表示があります。",
   "description": "The tested control shows a focus indicator."
@@ -3193,6 +3359,10 @@
    }
   },
   "description": "This check couldn’t run on this page ($1)."
+ },
+ "m1hcfqmf": {
+  "message": "このチェックは WCAG 2.2 の一部です:",
+  "description": "This check is part of WCAG 2.2:"
  },
  "m1lo2og5": {
   "message": "このコントロールには名前がないため、エージェントは推測するしかありません。",
@@ -3296,6 +3466,10 @@
   "message": "再試行",
   "description": "Try again"
  },
+ "m1qjcy2i": {
+  "message": "実際のページで試す",
+  "description": "Try it on the live page"
+ },
  "mwuzv1b": {
   "message": "デモストアを試す",
   "description": "Try the demo store"
@@ -3328,6 +3502,10 @@
  "mwn40ai": {
   "message": "「カートに追加」や「登録」と入力して、エージェントがどこで行き詰まるかを確認します。",
   "description": "Type “add to cart” or “sign up” and see where an agent gets stuck."
+ },
+ "m3vg6fh": {
+  "message": "入力しました。",
+  "description": "Typed it in."
  },
  "ml6bdth": {
   "message": "不明なエラー",
@@ -3406,6 +3584,10 @@
   "message": "警告",
   "description": "Warning"
  },
+ "m1bchidl": {
+  "message": "エージェントがタスクを試す様子を見る",
+  "description": "Watch an agent try a task"
+ },
  "m13skb79": {
   "message": "WebMCP を使うと、ページは画面をクリックさせる代わりに「search_flights」のような名前付きツールをエージェントに提供できます。Chrome のオリジントライアル段階でまだほとんど普及していないため、任意です。",
   "description": "WebMCP lets a page offer agents named tools, like “search_flights”, instead of making them click through the interface. It’s an origin trial in Chrome with almost no adoption yet, so it’s optional."
@@ -3429,10 +3611,6 @@
  "m1pkpjlc": {
   "message": "週次再スキャン · 詳細はサイトを開いて「サイトスキャン」タブで確認",
   "description": "Weekly re-scan · open the site and the Site scan tab for details"
- },
- "m57qeo5": {
-  "message": "サイトが悪化したら通知する週次再スキャン、キーボードとフォーカスのチェック、シャドウ DOM やフレーム内のボタンの診断、名前のないボタンへの AI による名前の提案、そして 6 言語対応のインターフェース。",
-  "description": "Weekly re-scans that alert you when a site gets worse, keyboard and focus checks, buttons inside shadow DOM and frames, AI name suggestions for unnamed buttons, and the interface in 6 languages."
  },
  "m1g2zi34": {
   "message": "Agent-Readiness Auditor へようこそ",

@@ -1,6 +1,6 @@
 # Privacy policy: Agent-Readiness Auditor
 
-Last updated: October 28, 2026
+Last updated: October 30, 2026
 
 Agent-Readiness Auditor analyzes the web page you choose to audit and shows the results in Chrome's side panel.
 
@@ -13,6 +13,8 @@ Agent-Readiness Auditor analyzes the web page you choose to audit and shows the 
 To show what changed between audits, the extension also keeps, in Chrome's local storage on your computer, a short summary of the last audit of each page you audited: its URL, the time, the score, and each check's status and issue count. It doesn't keep page content. It keeps at most 200 pages, and you can delete it all with **Export → Clear audit history**. It also keeps a few counters in local storage: how many audits you've run, whether you've answered the rating request, and which version's "What's new" note you've seen.
 
 **Site scan and Re-run on reload.** These features ask for access to the site you're auditing, and only that site. A site scan reads the site's robots.txt and sitemap to find pages, then opens them one at a time in a background tab that closes when the scan ends. The scan's results (page addresses, scores and problems found) are kept in local storage on your computer so you can view the last scan again; **Export → Clear audit history** deletes them too. Re-run on reload runs the audit again when that page reloads. You can remove a site's access at any time from `chrome://extensions`.
+
+**Run the steps.** If you press **Run the steps** after an Agent test, the extension opens the page in a background tab and does each step of the plan there (clicking, typing or choosing), the same way you could. It uses your existing login on that site. It never pays, places orders, deletes or cancels anything, and never types personal details such as an email, password or card number. Anything typed comes from the plan (for example a search term). The tab closes when the run ends, and nothing about it is sent anywhere.
 
 **Weekly re-scan.** If you turn on **Re-scan every week** after a site scan, the extension remembers that site's address and the pages it scanned, and the background part of the extension audits those same pages again about once a week, the same way a site scan does. It compares the new results with the last ones on your computer. If you allowed notifications, Chrome shows an alert when the average score drops or a new problem appears on most pages. Nothing is sent anywhere. Turn it off from the same tile in the Site scan tab; removing the site's access from `chrome://extensions` also stops it.
 
