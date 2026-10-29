@@ -9,7 +9,7 @@ AI エージェントは、あなたのサイトを本当に使えるでしょ�
 ★ キーボードとフォーカスのチェック: Tab キーで飛ばされるコントロールや、フォーカスが見えないコントロールを検出。
 ★ シャドウ DOM とフレーム: Web コンポーネントや同一サイトの iframe 内のボタンやフォームも診断します。
 ★ 名前のないボタンや画像に、デバイス上の AI が名前を提案。
-★ コマンドラインと MCP サーバー: CI、Claude Code、Cursor で使える npx agent-readiness。
+★ コマンドラインと MCP サーバー: CI、Claude Code、Cursor で使える npx agent-readiness-audit。
 ★ 6 言語対応: English、Español、Deutsch、日本語、Português (Brasil)、বাংলা。
 
 主な機能

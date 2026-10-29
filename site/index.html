@@ -340,7 +340,7 @@
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6-6-6"/><path d="M12 19h8"/></svg></div>
             <h3>Command line and MCP</h3>
-            <p>Fail a CI build below a score with <code>npx agent-readiness</code>, or let Claude Code and Cursor audit pages through MCP.</p>
+            <p>Fail a CI build below a score with <code>npx agent-readiness-audit</code>, or let Claude Code and Cursor audit pages through MCP.</p>
           </div>
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
@@ -426,7 +426,7 @@
         </details>
         <details>
           <summary>Can I run it in CI or from a coding agent?</summary>
-          <p>Yes. The same checks are available as a command line tool: <code>npx agent-readiness http://localhost:3000 --min-score 80</code> fails the build when the score drops below 80. Run <code>npx agent-readiness mcp</code> as an MCP server and coding agents like Claude Code or Cursor can audit a page, fix it and audit again on their own.</p>
+          <p>Yes. The same checks are available as a command line tool: <code>npx agent-readiness-audit http://localhost:3000 --min-score 80</code> fails the build when the score drops below 80. Run <code>npx agent-readiness-audit mcp</code> as an MCP server and coding agents like Claude Code or Cursor can audit a page, fix it and audit again on their own.</p>
         </details>
         <details>
           <summary>Which languages does it support?</summary>

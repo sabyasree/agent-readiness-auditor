@@ -1,6 +1,6 @@
 'use strict';
 
-const BIN = require('path').join(__dirname, '..', 'bin', 'agent-readiness.js');
+const BIN = require('path').join(__dirname, '..', 'bin', 'agent-readiness-audit.js');
 
 // Smoke test: serves a small page with known problems, runs the CLI on it,
 // then talks to the MCP server over stdio. Needs Playwright's Chromium.

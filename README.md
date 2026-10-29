@@ -133,7 +133,7 @@ _locales/              Generated translations; edit scripts/locales/<lang>.json 
 welcome/               Welcome tab shown on first install
 icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
-cli/                   npm package "agent-readiness": command line, CI score gate and MCP server; not part of the extension zip
+cli/                   npm package "agent-readiness-audit": command line, CI score gate and MCP server; not part of the extension zip
 netlify.toml           Netlify settings: publishes site/ only
 store/                 Chrome Web Store description and 1280×800 screenshots; not part of the extension zip
 site/                  Static website deployed to Netlify: homepage, privacy policy, demo store (demo/), uninstall survey (goodbye.html, a Netlify form); not part of the extension zip
@@ -175,6 +175,10 @@ Write summaries with `say('… $1 …', value)` or `sayN(count, singular, plural
 4. Listing assets you'll need: at least one 1280×800 screenshot of the side panel next to a page, a 440×280 small promo tile, and the 128 px icon from `icons/`.
 5. Netlify: under **Forms**, turn on form detection so the uninstall survey (`site/goodbye.html`) collects responses.
 6. Privacy tab: single purpose is "Audit web pages for AI-agent usability". Justify each permission using the table above. Declare that no user data is collected, and link to the hosted privacy policy (`site/privacy-policy.html`, deployed to Netlify).
+
+## Publishing the command-line tool to npm
+
+The `cli/` folder is published to npm as [`agent-readiness-audit`](https://www.npmjs.com/package/agent-readiness-audit) by the **Publish CLI to npm** workflow (`.github/workflows/publish-cli.yml`). It needs an npm access token saved as the repository secret `NPM_TOKEN`. To release a new version, raise `version` in `cli/package.json`, merge, and run the workflow from the **Actions** tab. It runs the smoke tests first and skips versions that are already on npm.
 
 ## Known limits
 

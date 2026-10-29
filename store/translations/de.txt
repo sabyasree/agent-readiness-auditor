@@ -9,7 +9,7 @@ NEU IN 1.5
 ★ Tastatur- und Fokusprüfungen: Bedienelemente, die die Tab-Taste überspringt, und solche ohne sichtbaren Fokus.
 ★ Shadow DOM und Frames: Buttons und Felder in Web Components und in iframes derselben Website werden jetzt mitgeprüft.
 ★ Namensvorschläge von der KI auf deinem Gerät für unbenannte Buttons und Bilder.
-★ Kommandozeile und MCP-Server: npx agent-readiness für CI, Claude Code und Cursor.
+★ Kommandozeile und MCP-Server: npx agent-readiness-audit für CI, Claude Code und Cursor.
 ★ In 6 Sprachen: English, Español, Deutsch, 日本語, Português (Brasil) und বাংলা.
 
 AUSSERDEM
