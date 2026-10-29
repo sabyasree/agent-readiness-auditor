@@ -1,0 +1,42 @@
+# Removes one version of the npm package. npm allows this only within 72 hours
+# of publishing that version, and a removed version number can never be used
+# again. Run it from the Actions tab ("Unpublish a CLI version"). Uses the
+# NPM_TOKEN repository secret, like the publish workflow.
+name: Unpublish a CLI version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to remove, such as 1.5.0
+        required: true
+      confirm:
+        description: Type the same version again to confirm
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  unpublish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Check the request
+        env:
+          VERSION: ${{ inputs.version }}
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          name=agent-readiness-audit
+          if [ "$VERSION" != "$CONFIRM" ]; then echo "The two versions don't match. Nothing was removed."; exit 1; fi
+          if ! npm view "$name@$VERSION" version >/dev/null 2>&1; then echo "$name@$VERSION isn't on npm."; exit 1; fi
+          latest=$(npm view "$name" dist-tags.latest)
+          if [ "$VERSION" = "$latest" ]; then echo "$VERSION is the latest version. Publish a newer one first."; exit 1; fi
+      - name: Unpublish
+        env:
+          VERSION: ${{ inputs.version }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm unpublish "agent-readiness-audit@$VERSION"
