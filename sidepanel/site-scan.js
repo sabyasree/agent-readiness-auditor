@@ -1,3 +1,5 @@
+// Agent-Readiness Auditor. Copyright (c) 2026 Sabyasachi Mondal. All rights reserved.
+// Use is subject to the LICENSE file; copying, modifying or redistributing this code is not permitted.
 'use strict';
 
 // Site scan: audit up to 25 pages of one site in a background tab, then show

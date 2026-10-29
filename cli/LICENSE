@@ -1,0 +1,65 @@
+Agent-Readiness Auditor
+Copyright (c) 2026 Sabyasachi Mondal. All rights reserved.
+
+This license covers everything in this repository and everything published
+from it, including the Agent-Readiness Auditor Chrome extension and the
+agent-readiness-audit npm package (together, the "Software").
+
+1. What you may do
+
+   You may install and run the Software, as published by the copyright
+   holder on the Chrome Web Store or on npm, to audit web pages and sites,
+   including your own, your employer's and your clients' sites, and
+   including in automated tests and CI pipelines. You may share and publish
+   the reports and results the Software produces.
+
+2. What you may not do
+
+   Except as allowed in section 1, or with the copyright holder's prior
+   written permission, you may not:
+
+   a. copy, reproduce or publish the source code, in whole or in part;
+   b. modify, translate, adapt or create derivative works of the Software
+      or its source code;
+   c. distribute, sell, sublicense, rent or otherwise make the Software or
+      its source code available to others, including by repackaging it or
+      publishing it under another name;
+   d. use the source code, or any part of it, in another product, service,
+      library, extension or tool;
+   e. use the source code, its checks, rules or texts to build or improve a
+      competing product or service;
+   f. remove or change any copyright or license notice in the Software;
+   g. use the source code to train, fine-tune or evaluate machine-learning
+      models, or include it in datasets.
+
+3. Viewing the source
+
+   The source code may be publicly visible, for example on GitHub. Being
+   able to view it gives you no rights beyond section 1. Any copy that
+   GitHub's Terms of Service allow (such as viewing or forking on GitHub)
+   is for viewing only and may not be used, modified or distributed.
+
+4. Ownership
+
+   The Software, its source code, design, texts, translations and the name
+   "Agent-Readiness Auditor" are owned by the copyright holder. This license
+   grants no rights to trademarks or names.
+
+5. Earlier versions
+
+   Version 1.5.0 of the agent-readiness-audit npm package was published by
+   mistake under the MIT license. This license applies to every other
+   version, and to all versions of the Chrome extension.
+
+6. No warranty and no liability
+
+   The Software is provided "as is", without warranty of any kind, express
+   or implied. The copyright holder is not liable for any claim, damages or
+   other liability arising from the Software or its use.
+
+7. Ending this license
+
+   Your rights under section 1 end automatically if you break this license.
+
+For permission to do anything not allowed here, contact
+sabyasachi.mondal1@gmail.com.

@@ -1,6 +1,6 @@
 {
   "name": "agent-readiness-audit",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Audit how well AI agents can use a web page or site, from the command line, in CI, or as an MCP server for coding agents.",
   "keywords": [
     "ai-agents",
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/sabyasree/agent-readiness-auditor.git",
     "directory": "cli"
   },
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "bin": {
     "agent-readiness-audit": "bin/agent-readiness-audit.js"
   },
@@ -27,7 +27,8 @@
     "bin/",
     "lib/",
     "engine/",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=18"

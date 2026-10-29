@@ -180,6 +180,10 @@ Write summaries with `say('… $1 …', value)` or `sayN(count, singular, plural
 
 The `cli/` folder is published to npm as [`agent-readiness-audit`](https://www.npmjs.com/package/agent-readiness-audit) by the **Publish CLI to npm** workflow (`.github/workflows/publish-cli.yml`). It needs an npm access token saved as the repository secret `NPM_TOKEN`. To release a new version, raise `version` in `cli/package.json`, merge, and run the workflow from the **Actions** tab. It runs the smoke tests first and skips versions that are already on npm.
 
+## License
+
+Copyright © 2026 Sabyasachi Mondal. All rights reserved. You may use the extension and the `agent-readiness-audit` CLI to audit sites, but not copy, modify, redistribute or reuse the code. See [LICENSE](LICENSE).
+
 ## Known limits
 
 - Cross-origin iframes and closed shadow roots can't be read; they're reported but not checked. Open shadow roots and same-site frames are checked.

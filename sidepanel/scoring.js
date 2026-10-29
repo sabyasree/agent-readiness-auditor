@@ -1,3 +1,5 @@
+// Agent-Readiness Auditor. Copyright (c) 2026 Sabyasachi Mondal. All rights reserved.
+// Use is subject to the LICENSE file; copying, modifying or redistributing this code is not permitted.
 'use strict';
 
 // Projects how the overall score would change if some checks passed, using
