@@ -1,3 +1,5 @@
+// Agent-Readiness Auditor. Copyright (c) 2026 Sabyasachi Mondal. All rights reserved.
+// Use is subject to the LICENSE file; copying, modifying or redistributing this code is not permitted.
 /*
  * Agent-Readiness Auditor: audit engine.
  * Injected on demand into the active tab. Runs entirely inside the page;

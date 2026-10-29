@@ -1,3 +1,5 @@
+// Agent-Readiness Auditor. Copyright (c) 2026 Sabyasachi Mondal. All rights reserved.
+// Use is subject to the LICENSE file; copying, modifying or redistributing this code is not permitted.
 // Copies the audit engine and scan helpers from the extension into the package.
 const fs = require('fs');
 const path = require('path');

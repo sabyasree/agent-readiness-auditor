@@ -74,3 +74,7 @@ Try asking your agent: *"Use audit_url on http://localhost:3000/product/1, fix t
 - Pages are loaded in headless Chromium with the page's own content-security policy bypassed so the engine can run. Nothing is sent anywhere except the requests the page itself makes, plus `/llms.txt`, `/robots.txt`, `/sitemap.xml` and a few `/.well-known/` files on the same site.
 - Results can differ slightly from the extension, which audits the page in your own browser with your cookies and window size.
 - Developing in the extension's repository: `npm test` copies the engine from `../content/auditor.js` and runs a smoke test; `npm pack` copies it into `engine/` for publishing.
+
+## License
+
+Copyright © 2026 Sabyasachi Mondal. All rights reserved. You may use this tool to audit web pages and sites, including in CI, but you may not copy, modify, redistribute or reuse its code. See [LICENSE](LICENSE).
