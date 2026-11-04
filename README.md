@@ -137,6 +137,7 @@ _locales/              Generated translations; edit scripts/locales/<lang>.json 
 welcome/               Welcome tab shown on first install
 icons/                 16, 32, 48 and 128 px icons
 PRIVACY.md             Privacy policy text for the Web Store listing
+skills/                Agent skill (SKILL.md) for coding agents, listed on Agensi; regenerate references/checks.md with scripts/build-skill-checks.js; not part of the extension zip
 cli/                   npm package "agent-readiness-audit": command line, CI score gate and MCP server; not part of the extension zip
 netlify.toml           Netlify settings: publishes site/ only
 store/                 Chrome Web Store description and 1280×800 screenshots; not part of the extension zip
@@ -174,7 +175,7 @@ Write summaries with `say('… $1 …', value)` or `sayN(count, singular, plural
 ## Publishing to the Chrome Web Store
 
 1. Bump `version` in `manifest.json`.
-2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x '.github/*' -x 'site/*' -x netlify.toml -x 'store/*' -x 'cli/*' -x 'scripts/*'`.
+2. Zip the contents of this folder (not the folder itself), leaving out the website files: `zip -r agent-readiness-auditor.zip . -x '*.DS_Store' -x '.git/*' -x '.github/*' -x 'site/*' -x netlify.toml -x 'store/*' -x 'cli/*' -x 'scripts/*' -x 'skills/*'`.
 3. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), create a new item and upload the zip.
 4. Listing assets you'll need: at least one 1280×800 screenshot of the side panel next to a page, a 440×280 small promo tile, and the 128 px icon from `icons/`.
 5. Netlify: under **Forms**, turn on form detection so the uninstall survey (`site/goodbye.html`) collects responses.
